@@ -1,5 +1,7 @@
 # react-native-swiper
 
+[![npm version](https://badge.fury.io/js/react-native-swiper.svg)](http://badge.fury.io/js/react-native-swiper)
+
 ![logo](http://i.imgur.com/P4cRUgD.png)
 
 The best Swiper component for React Native.
