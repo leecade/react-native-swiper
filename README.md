@@ -1,6 +1,6 @@
 # react-native-swiper
 
-![logo](https://d13yacurqjgara.cloudfront.net/users/60166/screenshots/1688473/sea_water.jpg)
+![logo](http://i.imgur.com/P4cRUgD.png)
 
 The best Swiper component for React Native.
 
