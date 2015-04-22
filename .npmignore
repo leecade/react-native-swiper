@@ -1,0 +1,13 @@
+.DS_Store
+logs
+*.log
+pids
+*.pid
+*.seed
+lib-cov
+coverage
+.lock-wscript
+build/Release
+node_modules
+res
+examples

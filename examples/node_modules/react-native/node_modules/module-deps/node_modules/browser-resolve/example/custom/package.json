@@ -1,0 +1,10 @@
+{
+  "name": "custom",
+  "version": "0.0.0",
+  "chromeapp": {
+    "./main.js": "custom-chromeapp.js"
+  },
+  "browser": {
+    "./main.js": "custom.js"
+  }
+}

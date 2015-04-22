@@ -2,9 +2,13 @@
   "name": "react-native-swiper",
   "version": "1.0.0",
   "description": "Swiper component for React Native.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "babel src --out-dir dist",
+    "watch": "babel src --out-dir dist --watch"
+  },
+  "bin": {
+      "babel": "./bin/babel"
   },
   "repository": {
     "type": "git",
@@ -15,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/leecade/react-native-swiper/issues"
   },
-  "homepage": "https://github.com/leecade/react-native-swiper#readme"
+  "homepage": "https://github.com/leecade/react-native-swiper#readme",
+  "devDependencies": {
+    "babel": "^5.1.11"
+  }
 }

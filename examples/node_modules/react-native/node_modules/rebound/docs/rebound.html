@@ -1,0 +1,2021 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Rebound</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              <h1 id="rebound">Rebound</h1>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p><strong>Rebound</strong> is a simple library that models Spring dynamics for the
+purpose of driving physical animations.</p>
+<h2 id="origin">Origin</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p><a href="http://facebook.github.io/rebound">Rebound</a> was originally written
+in Java to provide a lightweight physics system for
+<a href="https://play.google.com/store/apps/details?id=com.facebook.home">Home</a> and
+<a href="https://play.google.com/store/apps/details?id=com.facebook.orca">Chat Heads</a>
+on Android. It’s now been adopted by several other Android
+applications. This JavaScript port was written to provide a quick
+way to demonstrate Rebound animations on the web for a
+<a href="https://www.youtube.com/watch?v=s5kNm-DgyjY">conference talk</a>. Since then
+the JavaScript version has been used to build some really nice interfaces.
+Check out <a href="http://brandonwalkin.com">brandonwalkin.com</a> for an
+example.</p>
+<h2 id="overview">Overview</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>The Library provides a SpringSystem for maintaining a set of Spring
+objects and iterating those Springs through a physics solver loop
+until equilibrium is achieved. The Spring class is the basic
+animation driver provided by Rebound. By attaching a listener to
+a Spring, you can observe its motion. The observer function is
+notified of position changes on the spring as it solves for
+equilibrium. These position updates can be mapped to an animation
+range to drive animated property updates on your user interface
+elements (translation, rotation, scale, etc).</p>
+<h2 id="example">Example</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>Here’s a simple example. Pressing and releasing on the logo below
+will cause it to scale up and down with a springy animation.</p>
+<p><div style="text-align:center; margin-bottom:50px; margin-top:50px">
+  <img
+    src="http://facebook.github.io/rebound/images/rebound.png"
+    id="logo"
+  />
+</div></p>
+<script src="../rebound.min.js"></script>
+<script>
+
+function scale(el, val) {
+  el.style.mozTransform =
+  el.style.msTransform =
+  el.style.webkitTransform =
+  el.style.transform = 'scale3d(' + val + ', ' + val + ', 1)';
+}
+var el = document.getElementById('logo');
+
+var springSystem = new rebound.SpringSystem();
+var spring = springSystem.createSpring(50, 3);
+spring.addListener({
+  onSpringUpdate: function(spring) {
+    var val = spring.getCurrentValue();
+    val = rebound.MathUtil.mapValueInRange(val, 0, 1, 1, 0.5);
+    scale(el, val);
+  }
+});
+
+el.addEventListener('mousedown', function() {
+  spring.setEndValue(1);
+});
+
+el.addEventListener('mouseout', function() {
+  spring.setEndValue(0);
+});
+
+el.addEventListener('mouseup', function() {
+  spring.setEndValue(0);
+});
+
+</script>
+
+<p>Here’s how it works.</p>
+<pre><code><span class="hljs-comment">// Get a reference to the logo element.</span>
+<span class="hljs-keyword">var</span> el = <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'logo'</span>);
+
+<span class="hljs-comment">// create a SpringSystem and a Spring with a bouncy config.</span>
+<span class="hljs-keyword">var</span> springSystem = <span class="hljs-keyword">new</span> rebound.SpringSystem();
+<span class="hljs-keyword">var</span> spring = springSystem.createSpring(<span class="hljs-number">50</span>, <span class="hljs-number">3</span>);
+
+<span class="hljs-comment">// Add a listener to the spring. Every time the physics</span>
+<span class="hljs-comment">// solver updates the Spring's value onSpringUpdate will</span>
+<span class="hljs-comment">// be called.</span>
+spring.addListener({
+  onSpringUpdate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(spring)</span> </span>{
+    <span class="hljs-keyword">var</span> val = spring.getCurrentValue();
+    val = rebound.MathUtil
+                 .mapValueInRange(val, <span class="hljs-number">0</span>, <span class="hljs-number">1</span>, <span class="hljs-number">1</span>, <span class="hljs-number">0.5</span>);
+    scale(el, val);
+  }
+});
+
+<span class="hljs-comment">// Listen for mouse down/up/out and toggle the</span>
+<span class="hljs-comment">//springs endValue from 0 to 1.</span>
+el.addEventListener(<span class="hljs-string">'mousedown'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  spring.setEndValue(<span class="hljs-number">1</span>);
+});
+
+el.addEventListener(<span class="hljs-string">'mouseout'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  spring.setEndValue(<span class="hljs-number">0</span>);
+});
+
+el.addEventListener(<span class="hljs-string">'mouseup'</span>, <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  spring.setEndValue(<span class="hljs-number">0</span>);
+});
+
+<span class="hljs-comment">// Helper for scaling an element with css transforms.</span>
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">scale</span><span class="hljs-params">(el, val)</span> </span>{
+  el.style.mozTransform =
+  el.style.msTransform =
+  el.style.webkitTransform =
+  el.style.transform = <span class="hljs-string">'scale3d('</span> +
+    val + <span class="hljs-string">', '</span> + val + <span class="hljs-string">', 1)'</span>;
+}
+</code></pre>
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>
+(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-keyword">var</span> rebound = {};
+  <span class="hljs-keyword">var</span> util = rebound.util = {};
+  <span class="hljs-keyword">var</span> concat = <span class="hljs-built_in">Array</span>.prototype.concat;
+  <span class="hljs-keyword">var</span> slice = <span class="hljs-built_in">Array</span>.prototype.slice;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>Bind a function to a context object.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  util.bind = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">bind</span><span class="hljs-params">(func, context)</span> </span>{
+    <span class="hljs-keyword">var</span> args = slice.call(<span class="hljs-built_in">arguments</span>, <span class="hljs-number">2</span>);
+    <span class="hljs-keyword">return</span> <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      func.apply(context, concat.call(args, slice.call(<span class="hljs-built_in">arguments</span>)));
+    };
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>Add all the properties in the source to the target.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  util.extend = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">extend</span><span class="hljs-params">(target, source)</span> </span>{
+    <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> key <span class="hljs-keyword">in</span> source) {
+      <span class="hljs-keyword">if</span> (source.hasOwnProperty(key)) {
+        target[key] = source[key];
+      }
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <h2 id="springsystem">SpringSystem</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p><strong>SpringSystem</strong> is a set of Springs that all run on the same physics
+timing loop. To get started with a Rebound animation you first
+create a new SpringSystem and then add springs to it.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> SpringSystem = rebound.SpringSystem = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SpringSystem</span><span class="hljs-params">(looper)</span> </span>{
+    <span class="hljs-keyword">this</span>._springRegistry = {};
+    <span class="hljs-keyword">this</span>._activeSprings = [];
+    <span class="hljs-keyword">this</span>.listeners = [];
+    <span class="hljs-keyword">this</span>._idleSpringIndices = [];
+    <span class="hljs-keyword">this</span>.looper = looper || <span class="hljs-keyword">new</span> AnimationLooper();
+    <span class="hljs-keyword">this</span>.looper.springSystem = <span class="hljs-keyword">this</span>;
+  };
+
+  util.extend(SpringSystem.prototype, {
+
+    _springRegistry: <span class="hljs-literal">null</span>,
+
+    _isIdle: <span class="hljs-literal">true</span>,
+
+    _lastTimeMillis: -<span class="hljs-number">1</span>,
+
+    _activeSprings: <span class="hljs-literal">null</span>,
+
+    listeners: <span class="hljs-literal">null</span>,
+
+    _idleSpringIndices: <span class="hljs-literal">null</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>A SpringSystem is iterated by a looper. The looper is responsible
+for executing each frame as the SpringSystem is resolved to idle.
+There are three types of Loopers described below AnimationLooper,
+SimulationLooper, and SteppingSimulationLooper. AnimationLooper is
+the default as it is the most useful for common UI animations.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setLooper: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(looper)</span> </span>{
+      <span class="hljs-keyword">this</span>.looper = looper;
+      looper.springSystem = <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>Add a new spring to this SpringSystem. This Spring will now be solved for
+during the physics iteration loop. By default the spring will use the
+default Origami spring config with 40 tension and 7 friction, but you can
+also provide your own values here.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createSpring: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tension, friction)</span> </span>{
+      <span class="hljs-keyword">var</span> springConfig;
+      <span class="hljs-keyword">if</span> (tension === <span class="hljs-literal">undefined</span> || friction === <span class="hljs-literal">undefined</span>) {
+        springConfig = SpringConfig.DEFAULT_ORIGAMI_SPRING_CONFIG;
+      } <span class="hljs-keyword">else</span> {
+        springConfig =
+          SpringConfig.fromOrigamiTensionAndFriction(tension, friction);
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.createSpringWithConfig(springConfig);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>Add a spring with a specified bounciness and speed. To replicate Origami
+compositions based on PopAnimation patches, use this factory method to
+create matching springs.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createSpringWithBouncinessAndSpeed: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bounciness, speed)</span> </span>{
+      <span class="hljs-keyword">var</span> springConfig;
+      <span class="hljs-keyword">if</span> (bounciness === <span class="hljs-literal">undefined</span> || speed === <span class="hljs-literal">undefined</span>) {
+        springConfig = SpringConfig.DEFAULT_ORIGAMI_SPRING_CONFIG;
+      } <span class="hljs-keyword">else</span> {
+        springConfig =
+          SpringConfig.fromBouncinessAndSpeed(bounciness, speed);
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.createSpringWithConfig(springConfig);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-13">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-13">&#182;</a>
+              </div>
+              <p>Add a spring with the provided SpringConfig.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    createSpringWithConfig: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(springConfig)</span> </span>{
+      <span class="hljs-keyword">var</span> spring = <span class="hljs-keyword">new</span> Spring(<span class="hljs-keyword">this</span>);
+      <span class="hljs-keyword">this</span>.registerSpring(spring);
+      spring.setSpringConfig(springConfig);
+      <span class="hljs-keyword">return</span> spring;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-14">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-14">&#182;</a>
+              </div>
+              <p>You can check if a SpringSystem is idle or active by calling
+getIsIdle. If all of the Springs in the SpringSystem are at rest,
+i.e. the physics forces have reached equilibrium, then this
+method will return true.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getIsIdle: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._isIdle;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-15">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-15">&#182;</a>
+              </div>
+              <p>Retrieve a specific Spring from the SpringSystem by id. This
+can be useful for inspecting the state of a spring before
+or after an integration loop in the SpringSystem executes.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getSpringById: <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-params">(id)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._springRegistry[id];
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-16">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-16">&#182;</a>
+              </div>
+              <p>Get a listing of all the springs registered with this
+SpringSystem.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getAllSprings: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> vals = [];
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> id <span class="hljs-keyword">in</span> <span class="hljs-keyword">this</span>._springRegistry) {
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._springRegistry.hasOwnProperty(id)) {
+          vals.push(<span class="hljs-keyword">this</span>._springRegistry[id]);
+        }
+      }
+      <span class="hljs-keyword">return</span> vals;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-17">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-17">&#182;</a>
+              </div>
+              <p>registerSpring is called automatically as soon as you create
+a Spring with SpringSystem#createSpring. This method sets the
+spring up in the registry so that it can be solved in the
+solver loop.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    registerSpring: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(spring)</span> </span>{
+      <span class="hljs-keyword">this</span>._springRegistry[spring.getId()] = spring;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-18">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-18">&#182;</a>
+              </div>
+              <p>Deregister a spring with this SpringSystem. The SpringSystem will
+no longer consider this Spring during its integration loop once
+this is called. This is normally done automatically for you when
+you call Spring#destroy.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    deregisterSpring: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(spring)</span> </span>{
+      removeFirst(<span class="hljs-keyword">this</span>._activeSprings, spring);
+      <span class="hljs-keyword">delete</span> <span class="hljs-keyword">this</span>._springRegistry[spring.getId()];
+    },
+
+    advance: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(time, deltaTime)</span> </span>{
+      <span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>._idleSpringIndices.length &gt; <span class="hljs-number">0</span>) <span class="hljs-keyword">this</span>._idleSpringIndices.pop();
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = <span class="hljs-keyword">this</span>._activeSprings.length; i &lt; len; i++) {
+        <span class="hljs-keyword">var</span> spring = <span class="hljs-keyword">this</span>._activeSprings[i];
+        <span class="hljs-keyword">if</span> (spring.systemShouldAdvance()) {
+          spring.advance(time / <span class="hljs-number">1000.0</span>, deltaTime / <span class="hljs-number">1000.0</span>);
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">this</span>._idleSpringIndices.push(<span class="hljs-keyword">this</span>._activeSprings.indexOf(spring));
+        }
+      }
+      <span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>._idleSpringIndices.length &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">var</span> idx = <span class="hljs-keyword">this</span>._idleSpringIndices.pop();
+        idx &gt;= <span class="hljs-number">0</span> &amp;&amp; <span class="hljs-keyword">this</span>._activeSprings.splice(idx, <span class="hljs-number">1</span>);
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-19">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-19">&#182;</a>
+              </div>
+              <p>This is our main solver loop called to move the simulation
+forward through time. Before each pass in the solver loop
+onBeforeIntegrate is called on an any listeners that have
+registered themeselves with the SpringSystem. This gives you
+an opportunity to apply any constraints or adjustments to
+the springs that should be enforced before each iteration
+loop. Next the advance method is called to move each Spring in
+the systemShouldAdvance forward to the current time. After the
+integration step runs in advance, onAfterIntegrate is called
+on any listeners that have registered themselves with the
+SpringSystem. This gives you an opportunity to run any post
+integration constraints or adjustments on the Springs in the
+SpringSystem.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    loop: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentTimeMillis)</span> </span>{
+      <span class="hljs-keyword">var</span> listener;
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._lastTimeMillis === -<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">this</span>._lastTimeMillis = currentTimeMillis -<span class="hljs-number">1</span>;
+      }
+      <span class="hljs-keyword">var</span> ellapsedMillis = currentTimeMillis - <span class="hljs-keyword">this</span>._lastTimeMillis;
+      <span class="hljs-keyword">this</span>._lastTimeMillis = currentTimeMillis;
+
+      <span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = <span class="hljs-keyword">this</span>.listeners.length;
+      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i++) {
+        listener = <span class="hljs-keyword">this</span>.listeners[i];
+        listener.onBeforeIntegrate &amp;&amp; listener.onBeforeIntegrate(<span class="hljs-keyword">this</span>);
+      }
+
+      <span class="hljs-keyword">this</span>.advance(currentTimeMillis, ellapsedMillis);
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._activeSprings.length === <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">this</span>._isIdle = <span class="hljs-literal">true</span>;
+        <span class="hljs-keyword">this</span>._lastTimeMillis = -<span class="hljs-number">1</span>;
+      }
+
+      <span class="hljs-keyword">for</span> (i = <span class="hljs-number">0</span>; i &lt; len; i++) {
+        listener = <span class="hljs-keyword">this</span>.listeners[i];
+        listener.onAfterIntegrate &amp;&amp; listener.onAfterIntegrate(<span class="hljs-keyword">this</span>);
+      }
+
+      <span class="hljs-keyword">if</span> (!<span class="hljs-keyword">this</span>._isIdle) {
+        <span class="hljs-keyword">this</span>.looper.run();
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-20">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-20">&#182;</a>
+              </div>
+              <p>activateSpring is used to notify the SpringSystem that a Spring
+has become displaced. The system responds by starting its solver
+loop up if it is currently idle.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    activateSpring: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(springId)</span> </span>{
+      <span class="hljs-keyword">var</span> spring = <span class="hljs-keyword">this</span>._springRegistry[springId];
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._activeSprings.indexOf(spring) == -<span class="hljs-number">1</span>) {
+        <span class="hljs-keyword">this</span>._activeSprings.push(spring);
+      }
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.getIsIdle()) {
+        <span class="hljs-keyword">this</span>._isIdle = <span class="hljs-literal">false</span>;
+        <span class="hljs-keyword">this</span>.looper.run();
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-21">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-21">&#182;</a>
+              </div>
+              <p>Add a listener to the SpringSystem so that you can receive
+before/after integration notifications allowing Springs to be
+constrained or adjusted.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    addListener: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(listener)</span> </span>{
+      <span class="hljs-keyword">this</span>.listeners.push(listener);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-22">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-22">&#182;</a>
+              </div>
+              <p>Remove a previously added listener on the SpringSystem.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    removeListener: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(listener)</span> </span>{
+      removeFirst(<span class="hljs-keyword">this</span>.listeners, listener);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-23">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-23">&#182;</a>
+              </div>
+              <p>Remove all previously added listeners on the SpringSystem.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    removeAllListeners: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.listeners = [];
+    }
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-24">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-24">&#182;</a>
+              </div>
+              <h2 id="spring">Spring</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-25">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-25">&#182;</a>
+              </div>
+              <p><strong>Spring</strong> provides a model of a classical spring acting to
+resolve a body to equilibrium. Springs have configurable
+tension which is a force multipler on the displacement of the
+spring from its rest point or <code>endValue</code> as defined by <a href="http://en.wikipedia.org/wiki/Hooke&#39;s_law">Hooke’s
+law</a>. Springs also have
+configurable friction, which ensures that they do not oscillate
+infinitely. When a Spring is displaced by updating it’s resting
+or <code>currentValue</code>, the SpringSystems that contain that Spring
+will automatically start looping to solve for equilibrium. As each
+timestep passes, <code>SpringListener</code> objects attached to the Spring
+will be notified of the updates providing a way to drive an
+animation off of the spring’s resolution curve.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> Spring = rebound.Spring = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Spring</span><span class="hljs-params">(springSystem)</span> </span>{
+    <span class="hljs-keyword">this</span>._id = <span class="hljs-string">'s'</span> + Spring._ID++;
+    <span class="hljs-keyword">this</span>._springSystem = springSystem;
+    <span class="hljs-keyword">this</span>.listeners = [];
+    <span class="hljs-keyword">this</span>._currentState = <span class="hljs-keyword">new</span> PhysicsState();
+    <span class="hljs-keyword">this</span>._previousState = <span class="hljs-keyword">new</span> PhysicsState();
+    <span class="hljs-keyword">this</span>._tempState = <span class="hljs-keyword">new</span> PhysicsState();
+  };
+
+  util.extend(Spring, {
+    _ID: <span class="hljs-number">0</span>,
+
+    MAX_DELTA_TIME_SEC: <span class="hljs-number">0.064</span>,
+
+    SOLVER_TIMESTEP_SEC: <span class="hljs-number">0.001</span>
+
+  });
+
+  util.extend(Spring.prototype, {
+
+    _id: <span class="hljs-number">0</span>,
+
+    _springConfig: <span class="hljs-literal">null</span>,
+
+    _overshootClampingEnabled: <span class="hljs-literal">false</span>,
+
+    _currentState: <span class="hljs-literal">null</span>,
+
+    _previousState: <span class="hljs-literal">null</span>,
+
+    _tempState: <span class="hljs-literal">null</span>,
+
+    _startValue: <span class="hljs-number">0</span>,
+
+    _endValue: <span class="hljs-number">0</span>,
+
+    _wasAtRest: <span class="hljs-literal">true</span>,
+
+    _restSpeedThreshold: <span class="hljs-number">0.001</span>,
+
+    _displacementFromRestThreshold: <span class="hljs-number">0.001</span>,
+
+    listeners: <span class="hljs-literal">null</span>,
+
+    _timeAccumulator: <span class="hljs-number">0</span>,
+
+    _springSystem: <span class="hljs-literal">null</span>,</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-26">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-26">&#182;</a>
+              </div>
+              <p>Remove a Spring from simulation and clear its listeners.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    destroy: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.listeners = [];
+      <span class="hljs-keyword">this</span>.frames = [];
+      <span class="hljs-keyword">this</span>._springSystem.deregisterSpring(<span class="hljs-keyword">this</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-27">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-27">&#182;</a>
+              </div>
+              <p>Get the id of the spring, which can be used to retrieve it from
+the SpringSystems it participates in later.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getId: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._id;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-28">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-28">&#182;</a>
+              </div>
+              <p>Set the configuration values for this Spring. A SpringConfig
+contains the tension and friction values used to solve for the
+equilibrium of the Spring in the physics loop.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setSpringConfig: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(springConfig)</span> </span>{
+      <span class="hljs-keyword">this</span>._springConfig = springConfig;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-29">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-29">&#182;</a>
+              </div>
+              <p>Retrieve the SpringConfig used by this Spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getSpringConfig: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._springConfig;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-30">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-30">&#182;</a>
+              </div>
+              <p>Set the current position of this Spring. Listeners will be updated
+with this value immediately. If the rest or <code>endValue</code> is not
+updated to match this value, then the spring will be dispalced and
+the SpringSystem will start to loop to restore the spring to the
+<code>endValue</code>.</p>
+<p>A common pattern is to move a Spring around without animation by
+calling.</p>
+<pre><code>spring.setCurrentValue(n).setAtRest();
+</code></pre><p>This moves the Spring to a new position <code>n</code>, sets the endValue
+to <code>n</code>, and removes any velocity from the <code>Spring</code>. By doing
+this you can allow the <code>SpringListener</code> to manage the position
+of UI elements attached to the spring even when moving without
+animation. For example, when dragging an element you can
+update the position of an attached view through a spring
+by calling <code>spring.setCurrentValue(x)</code>. When
+the gesture ends you can update the Springs
+velocity and endValue
+<code>spring.setVelocity(gestureEndVelocity).setEndValue(flingTarget)</code>
+to cause it to naturally animate the UI element to the resting
+position taking into account existing velocity. The codepaths for
+synchronous movement and spring driven animation can
+be unified using this technique.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setCurrentValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(currentValue, skipSetAtRest)</span> </span>{
+      <span class="hljs-keyword">this</span>._startValue = currentValue;
+      <span class="hljs-keyword">this</span>._currentState.position = currentValue;
+      <span class="hljs-keyword">if</span> (!skipSetAtRest) {
+        <span class="hljs-keyword">this</span>.setAtRest();
+      }
+      <span class="hljs-keyword">this</span>.notifyPositionUpdated(<span class="hljs-literal">false</span>, <span class="hljs-literal">false</span>);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-31">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-31">&#182;</a>
+              </div>
+              <p>Get the position that the most recent animation started at. This
+can be useful for determining the number off oscillations that
+have occurred.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getStartValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._startValue;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-32">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-32">&#182;</a>
+              </div>
+              <p>Retrieve the current value of the Spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getCurrentValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._currentState.position;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-33">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-33">&#182;</a>
+              </div>
+              <p>Get the absolute distance of the Spring from it’s resting endValue
+position.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getCurrentDisplacementDistance: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.getDisplacementDistanceForState(<span class="hljs-keyword">this</span>._currentState);
+    },
+
+    getDisplacementDistanceForState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(state)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.abs(<span class="hljs-keyword">this</span>._endValue - state.position);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-34">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-34">&#182;</a>
+              </div>
+              <p>Set the endValue or resting position of the spring. If this
+value is different than the current value, the SpringSystem will
+be notified and will begin running its solver loop to resolve
+the Spring to equilibrium. Any listeners that are registered
+for onSpringEndStateChange will also be notified of this update
+immediately.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setEndValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(endValue)</span> </span>{
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._endValue == endValue &amp;&amp; <span class="hljs-keyword">this</span>.isAtRest())  {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+      }
+      <span class="hljs-keyword">this</span>._startValue = <span class="hljs-keyword">this</span>.getCurrentValue();
+      <span class="hljs-keyword">this</span>._endValue = endValue;
+      <span class="hljs-keyword">this</span>._springSystem.activateSpring(<span class="hljs-keyword">this</span>.getId());
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = <span class="hljs-keyword">this</span>.listeners.length; i &lt; len; i++) {
+        <span class="hljs-keyword">var</span> listener = <span class="hljs-keyword">this</span>.listeners[i];
+        <span class="hljs-keyword">var</span> onChange = listener.onSpringEndStateChange;
+        onChange &amp;&amp; onChange(<span class="hljs-keyword">this</span>);
+      }
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-35">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-35">&#182;</a>
+              </div>
+              <p>Retrieve the endValue or resting position of this spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getEndValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._endValue;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-36">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-36">&#182;</a>
+              </div>
+              <p>Set the current velocity of the Spring. As previously mentioned,
+this can be useful when you are performing a direct manipulation
+gesture. When a UI element is released you may call setVelocity
+on its animation Spring so that the Spring continues with the
+same velocity as the gesture ended with. The friction, tension,
+and displacement of the Spring will then govern its motion to
+return to rest on a natural feeling curve.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setVelocity: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(velocity)</span> </span>{
+      <span class="hljs-keyword">if</span> (velocity === <span class="hljs-keyword">this</span>._currentState.velocity) {
+        <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+      }
+      <span class="hljs-keyword">this</span>._currentState.velocity = velocity;
+      <span class="hljs-keyword">this</span>._springSystem.activateSpring(<span class="hljs-keyword">this</span>.getId());
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-37">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-37">&#182;</a>
+              </div>
+              <p>Get the current velocity of the Spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getVelocity: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._currentState.velocity;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-38">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-38">&#182;</a>
+              </div>
+              <p>Set a threshold value for the movement speed of the Spring below
+which it will be considered to be not moving or resting.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setRestSpeedThreshold: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(restSpeedThreshold)</span> </span>{
+      <span class="hljs-keyword">this</span>._restSpeedThreshold = restSpeedThreshold;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-39">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-39">&#182;</a>
+              </div>
+              <p>Retrieve the rest speed threshold for this Spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getRestSpeedThreshold: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._restSpeedThreshold;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-40">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-40">&#182;</a>
+              </div>
+              <p>Set a threshold value for displacement below which the Spring
+will be considered to be not displaced i.e. at its resting
+<code>endValue</code>.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setRestDisplacementThreshold: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(displacementFromRestThreshold)</span> </span>{
+      <span class="hljs-keyword">this</span>._displacementFromRestThreshold = displacementFromRestThreshold;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-41">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-41">&#182;</a>
+              </div>
+              <p>Retrieve the rest displacement threshold for this spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    getRestDisplacementThreshold: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._displacementFromRestThreshold;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-42">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-42">&#182;</a>
+              </div>
+              <p>Enable overshoot clamping. This means that the Spring will stop
+immediately when it reaches its resting position regardless of
+any existing momentum it may have. This can be useful for certain
+types of animations that should not oscillate such as a scale
+down to 0 or alpha fade.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setOvershootClampingEnabled: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(enabled)</span> </span>{
+      <span class="hljs-keyword">this</span>._overshootClampingEnabled = enabled;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-43">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-43">&#182;</a>
+              </div>
+              <p>Check if overshoot clamping is enabled for this spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isOvershootClampingEnabled: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._overshootClampingEnabled;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-44">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-44">&#182;</a>
+              </div>
+              <p>Check if the Spring has gone past its end point by comparing
+the direction it was moving in when it started to the current
+position and end value.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isOvershooting: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">var</span> start = <span class="hljs-keyword">this</span>._startValue;
+      <span class="hljs-keyword">var</span> end = <span class="hljs-keyword">this</span>._endValue;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._springConfig.tension &gt; <span class="hljs-number">0</span> &amp;&amp;
+       ((start &lt; end &amp;&amp; <span class="hljs-keyword">this</span>.getCurrentValue() &gt; end) ||
+       (start &gt; end &amp;&amp; <span class="hljs-keyword">this</span>.getCurrentValue() &lt; end));
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-45">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-45">&#182;</a>
+              </div>
+              <p>Spring.advance is the main solver method for the Spring. It takes
+the current time and delta since the last time step and performs
+an RK4 integration to get the new position and velocity state
+for the Spring based on the tension, friction, velocity, and
+displacement of the Spring.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    advance: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(time, realDeltaTime)</span> </span>{
+      <span class="hljs-keyword">var</span> isAtRest = <span class="hljs-keyword">this</span>.isAtRest();
+
+      <span class="hljs-keyword">if</span> (isAtRest &amp;&amp; <span class="hljs-keyword">this</span>._wasAtRest) {
+        <span class="hljs-keyword">return</span>;
+      }
+
+      <span class="hljs-keyword">var</span> adjustedDeltaTime = realDeltaTime;
+      <span class="hljs-keyword">if</span> (realDeltaTime &gt; Spring.MAX_DELTA_TIME_SEC) {
+        adjustedDeltaTime = Spring.MAX_DELTA_TIME_SEC;
+      }
+
+      <span class="hljs-keyword">this</span>._timeAccumulator += adjustedDeltaTime;
+
+      <span class="hljs-keyword">var</span> tension = <span class="hljs-keyword">this</span>._springConfig.tension,
+          friction = <span class="hljs-keyword">this</span>._springConfig.friction,
+
+          position = <span class="hljs-keyword">this</span>._currentState.position,
+          velocity = <span class="hljs-keyword">this</span>._currentState.velocity,
+          tempPosition = <span class="hljs-keyword">this</span>._tempState.position,
+          tempVelocity = <span class="hljs-keyword">this</span>._tempState.velocity,
+
+          aVelocity, aAcceleration,
+          bVelocity, bAcceleration,
+          cVelocity, cAcceleration,
+          dVelocity, dAcceleration,
+
+          dxdt, dvdt;
+
+      <span class="hljs-keyword">while</span>(<span class="hljs-keyword">this</span>._timeAccumulator &gt;= Spring.SOLVER_TIMESTEP_SEC) {
+
+        <span class="hljs-keyword">this</span>._timeAccumulator -= Spring.SOLVER_TIMESTEP_SEC;
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._timeAccumulator &lt; Spring.SOLVER_TIMESTEP_SEC) {
+          <span class="hljs-keyword">this</span>._previousState.position = position;
+          <span class="hljs-keyword">this</span>._previousState.velocity = velocity;
+        }
+
+        aVelocity = velocity;
+        aAcceleration =
+          (tension * (<span class="hljs-keyword">this</span>._endValue - tempPosition)) - friction * velocity;
+
+        tempPosition = position + aVelocity * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        tempVelocity =
+          velocity + aAcceleration * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        bVelocity = tempVelocity;
+        bAcceleration =
+          (tension * (<span class="hljs-keyword">this</span>._endValue - tempPosition)) - friction * tempVelocity;
+
+        tempPosition = position + bVelocity * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        tempVelocity =
+          velocity + bAcceleration * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        cVelocity = tempVelocity;
+        cAcceleration =
+          (tension * (<span class="hljs-keyword">this</span>._endValue - tempPosition)) - friction * tempVelocity;
+
+        tempPosition = position + cVelocity * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        tempVelocity =
+          velocity + cAcceleration * Spring.SOLVER_TIMESTEP_SEC * <span class="hljs-number">0.5</span>;
+        dVelocity = tempVelocity;
+        dAcceleration =
+          (tension * (<span class="hljs-keyword">this</span>._endValue - tempPosition)) - friction * tempVelocity;
+
+        dxdt =
+          <span class="hljs-number">1.0</span>/<span class="hljs-number">6.0</span> * (aVelocity + <span class="hljs-number">2.0</span> * (bVelocity + cVelocity) + dVelocity);
+        dvdt = <span class="hljs-number">1.0</span>/<span class="hljs-number">6.0</span> * (
+          aAcceleration + <span class="hljs-number">2.0</span> * (bAcceleration + cAcceleration) + dAcceleration
+        );
+
+        position += dxdt * Spring.SOLVER_TIMESTEP_SEC;
+        velocity += dvdt * Spring.SOLVER_TIMESTEP_SEC;
+      }
+
+      <span class="hljs-keyword">this</span>._tempState.position = tempPosition;
+      <span class="hljs-keyword">this</span>._tempState.velocity = tempVelocity;
+
+      <span class="hljs-keyword">this</span>._currentState.position = position;
+      <span class="hljs-keyword">this</span>._currentState.velocity = velocity;
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._timeAccumulator &gt; <span class="hljs-number">0</span>) {
+        <span class="hljs-keyword">this</span>.interpolate(<span class="hljs-keyword">this</span>._timeAccumulator / Spring.SOLVER_TIMESTEP_SEC);
+      }
+
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>.isAtRest() ||
+          <span class="hljs-keyword">this</span>._overshootClampingEnabled &amp;&amp; <span class="hljs-keyword">this</span>.isOvershooting()) {
+
+        <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._springConfig.tension &gt; <span class="hljs-number">0</span>) {
+          <span class="hljs-keyword">this</span>._startValue = <span class="hljs-keyword">this</span>._endValue;
+          <span class="hljs-keyword">this</span>._currentState.position = <span class="hljs-keyword">this</span>._endValue;
+        } <span class="hljs-keyword">else</span> {
+          <span class="hljs-keyword">this</span>._endValue = <span class="hljs-keyword">this</span>._currentState.position;
+          <span class="hljs-keyword">this</span>._startValue = <span class="hljs-keyword">this</span>._endValue;
+        }
+        <span class="hljs-keyword">this</span>.setVelocity(<span class="hljs-number">0</span>);
+        isAtRest = <span class="hljs-literal">true</span>;
+      }
+
+      <span class="hljs-keyword">var</span> notifyActivate = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">if</span> (<span class="hljs-keyword">this</span>._wasAtRest) {
+        <span class="hljs-keyword">this</span>._wasAtRest = <span class="hljs-literal">false</span>;
+        notifyActivate = <span class="hljs-literal">true</span>;
+      }
+
+      <span class="hljs-keyword">var</span> notifyAtRest = <span class="hljs-literal">false</span>;
+      <span class="hljs-keyword">if</span> (isAtRest) {
+        <span class="hljs-keyword">this</span>._wasAtRest = <span class="hljs-literal">true</span>;
+        notifyAtRest = <span class="hljs-literal">true</span>;
+      }
+
+      <span class="hljs-keyword">this</span>.notifyPositionUpdated(notifyActivate, notifyAtRest);
+    },
+
+    notifyPositionUpdated: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(notifyActivate, notifyAtRest)</span> </span>{
+      <span class="hljs-keyword">for</span> (<span class="hljs-keyword">var</span> i = <span class="hljs-number">0</span>, len = <span class="hljs-keyword">this</span>.listeners.length; i &lt; len; i++) {
+        <span class="hljs-keyword">var</span> listener = <span class="hljs-keyword">this</span>.listeners[i];
+        <span class="hljs-keyword">if</span> (notifyActivate &amp;&amp; listener.onSpringActivate) {
+          listener.onSpringActivate(<span class="hljs-keyword">this</span>);
+        }
+
+        <span class="hljs-keyword">if</span> (listener.onSpringUpdate) {
+          listener.onSpringUpdate(<span class="hljs-keyword">this</span>);
+        }
+
+        <span class="hljs-keyword">if</span> (notifyAtRest &amp;&amp; listener.onSpringAtRest) {
+          listener.onSpringAtRest(<span class="hljs-keyword">this</span>);
+        }
+      }
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-46">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-46">&#182;</a>
+              </div>
+              <p>Check if the SpringSystem should advance. Springs are advanced
+a final frame after they reach equilibrium to ensure that the
+currentValue is exactly the requested endValue regardless of the
+displacement threshold.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    systemShouldAdvance: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> !<span class="hljs-keyword">this</span>.isAtRest() || !<span class="hljs-keyword">this</span>.wasAtRest();
+    },
+
+    wasAtRest: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>._wasAtRest;
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-47">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-47">&#182;</a>
+              </div>
+              <p>Check if the Spring is atRest meaning that it’s currentValue and
+endValue are the same and that it has no velocity. The previously
+described thresholds for speed and displacement define the bounds
+of this equivalence check. If the Spring has 0 tension, then it will
+be considered at rest whenever its absolute velocity drops below the
+restSpeedThreshold.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    isAtRest: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.abs(<span class="hljs-keyword">this</span>._currentState.velocity) &lt; <span class="hljs-keyword">this</span>._restSpeedThreshold &amp;&amp;
+        (<span class="hljs-keyword">this</span>.getDisplacementDistanceForState(<span class="hljs-keyword">this</span>._currentState) &lt;=
+          <span class="hljs-keyword">this</span>._displacementFromRestThreshold ||
+        <span class="hljs-keyword">this</span>._springConfig.tension === <span class="hljs-number">0</span>);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-48">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-48">&#182;</a>
+              </div>
+              <p>Force the spring to be at rest at its current position. As
+described in the documentation for setCurrentValue, this method
+makes it easy to do synchronous non-animated updates to ui
+elements that are attached to springs via SpringListeners.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    setAtRest: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>._endValue = <span class="hljs-keyword">this</span>._currentState.position;
+      <span class="hljs-keyword">this</span>._tempState.position = <span class="hljs-keyword">this</span>._currentState.position;
+      <span class="hljs-keyword">this</span>._currentState.velocity = <span class="hljs-number">0</span>;
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+
+    interpolate: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(alpha)</span> </span>{
+      <span class="hljs-keyword">this</span>._currentState.position = <span class="hljs-keyword">this</span>._currentState.position *
+        alpha + <span class="hljs-keyword">this</span>._previousState.position * (<span class="hljs-number">1</span> - alpha);
+      <span class="hljs-keyword">this</span>._currentState.velocity = <span class="hljs-keyword">this</span>._currentState.velocity *
+        alpha + <span class="hljs-keyword">this</span>._previousState.velocity * (<span class="hljs-number">1</span> - alpha);
+    },
+
+    getListeners: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.listeners;
+    },
+
+    addListener: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(newListener)</span> </span>{
+      <span class="hljs-keyword">this</span>.listeners.push(newListener);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+
+    removeListener: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(listenerToRemove)</span> </span>{
+      removeFirst(<span class="hljs-keyword">this</span>.listeners, listenerToRemove);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+
+    removeAllListeners: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">this</span>.listeners = [];
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>;
+    },
+
+    currentValueIsApproximately: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-built_in">Math</span>.abs(<span class="hljs-keyword">this</span>.getCurrentValue() - value) &lt;=
+        <span class="hljs-keyword">this</span>.getRestDisplacementThreshold();
+    }
+
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-49">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-49">&#182;</a>
+              </div>
+              <h2 id="physicsstate">PhysicsState</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-50">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-50">&#182;</a>
+              </div>
+              <p><strong>PhysicsState</strong> consists of a position and velocity. A Spring uses
+this internally to keep track of its current and prior position and
+velocity values.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> PhysicsState = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">PhysicsState</span><span class="hljs-params">()</span> </span>{};
+
+  util.extend(PhysicsState.prototype, {
+    position: <span class="hljs-number">0</span>,
+    velocity: <span class="hljs-number">0</span>
+  });</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-51">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-51">&#182;</a>
+              </div>
+              <h2 id="springconfig">SpringConfig</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-52">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-52">&#182;</a>
+              </div>
+              <p><strong>SpringConfig</strong> maintains a set of tension and friction constants
+for a Spring. You can use fromOrigamiTensionAndFriction to convert
+values from the <a href="http://facebook.github.io/origami/">Origami</a>
+design tool directly to Rebound spring constants.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> SpringConfig = rebound.SpringConfig =
+    <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SpringConfig</span><span class="hljs-params">(tension, friction)</span> </span>{
+      <span class="hljs-keyword">this</span>.tension = tension;
+      <span class="hljs-keyword">this</span>.friction = friction;
+    };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-53">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-53">&#182;</a>
+              </div>
+              <h2 id="loopers">Loopers</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-54">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-54">&#182;</a>
+              </div>
+              <p><strong>AnimationLooper</strong> plays each frame of the SpringSystem on animation
+timing loop. This is the default type of looper for a new spring system
+as it is the most common when developing UI.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> AnimationLooper = rebound.AnimationLooper = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">AnimationLooper</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-keyword">this</span>.springSystem = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> _this = <span class="hljs-keyword">this</span>;
+    <span class="hljs-keyword">var</span> _run = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      _this.springSystem.loop(<span class="hljs-built_in">Date</span>.now());
+    };
+
+    <span class="hljs-keyword">this</span>.run = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      util.onFrame(_run);
+    };
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-55">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-55">&#182;</a>
+              </div>
+              <p><strong>SimulationLooper</strong> resolves the SpringSystem to a resting state in a
+tight and blocking loop. This is useful for synchronously generating
+pre-recorded animations that can then be played on a timing loop later.
+Sometimes this lead to better performance to pre-record a single spring
+curve and use it to drive many animations; however, it can make dynamic
+response to user input a bit trickier to implement.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  rebound.SimulationLooper = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">SimulationLooper</span><span class="hljs-params">(timestep)</span> </span>{
+    <span class="hljs-keyword">this</span>.springSystem = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> time = <span class="hljs-number">0</span>;
+    <span class="hljs-keyword">var</span> running = <span class="hljs-literal">false</span>;
+    timestep=timestep || <span class="hljs-number">16.667</span>;
+
+    <span class="hljs-keyword">this</span>.run = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+      <span class="hljs-keyword">if</span> (running) {
+        <span class="hljs-keyword">return</span>;
+      }
+      running = <span class="hljs-literal">true</span>;
+      <span class="hljs-keyword">while</span>(!<span class="hljs-keyword">this</span>.springSystem.getIsIdle()) {
+        <span class="hljs-keyword">this</span>.springSystem.loop(time+=timestep);
+      }
+      running = <span class="hljs-literal">false</span>;
+    };
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-56">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-56">&#182;</a>
+              </div>
+              <p><strong>SteppingSimulationLooper</strong> resolves the SpringSystem one step at a
+time controlled by an outside loop. This is useful for testing and
+verifying the behavior of a SpringSystem or if you want to control your own
+timing loop for some reason e.g. slowing down or speeding up the
+simulation.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  rebound.SteppingSimulationLooper = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(timestep)</span> </span>{
+    <span class="hljs-keyword">this</span>.springSystem = <span class="hljs-literal">null</span>;
+    <span class="hljs-keyword">var</span> time = <span class="hljs-number">0</span>;</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-57">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-57">&#182;</a>
+              </div>
+              <p>this.run is NOOP’d here to allow control from the outside using
+this.step.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.run = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{};</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-58">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-58">&#182;</a>
+              </div>
+              <p>Perform one step toward resolving the SpringSystem.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.step = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(timestep)</span> </span>{
+      <span class="hljs-keyword">this</span>.springSystem.loop(time+=timestep);
+    };
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-59">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-59">&#182;</a>
+              </div>
+              <p>Math for converting from
+<a href="http://facebook.github.io/origami/">Origami</a> to
+<a href="http://facebook.github.io/rebound">Rebound</a>.
+You mostly don’t need to worry about this, just use
+SpringConfig.fromOrigamiTensionAndFriction(v, v);</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> OrigamiValueConverter = rebound.OrigamiValueConverter = {
+    tensionFromOrigamiValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(oValue)</span> </span>{
+      <span class="hljs-keyword">return</span> (oValue - <span class="hljs-number">30.0</span>) * <span class="hljs-number">3.62</span> + <span class="hljs-number">194.0</span>;
+    },
+
+    origamiValueFromTension: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tension)</span> </span>{
+      <span class="hljs-keyword">return</span> (tension - <span class="hljs-number">194.0</span>) / <span class="hljs-number">3.62</span> + <span class="hljs-number">30.0</span>;
+    },
+
+    frictionFromOrigamiValue: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(oValue)</span> </span>{
+      <span class="hljs-keyword">return</span> (oValue - <span class="hljs-number">8.0</span>) * <span class="hljs-number">3.0</span> + <span class="hljs-number">25.0</span>;
+    },
+
+    origamiFromFriction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(friction)</span> </span>{
+      <span class="hljs-keyword">return</span> (friction - <span class="hljs-number">25.0</span>) / <span class="hljs-number">3.0</span> + <span class="hljs-number">8.0</span>;
+    }
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-60">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-60">&#182;</a>
+              </div>
+              <p>BouncyConversion provides math for converting from Origami PopAnimation
+config values to regular Origami tension and friction values. If you are
+trying to replicate prototypes made with PopAnimation patches in Origami,
+then you should create your springs with
+SpringSystem.createSpringWithBouncinessAndSpeed, which uses this Math
+internally to create a spring to match the provided PopAnimation
+configuration from Origami.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> BouncyConversion = rebound.BouncyConversion = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bounciness, speed)</span></span>{
+    <span class="hljs-keyword">this</span>.bounciness = bounciness;
+    <span class="hljs-keyword">this</span>.speed = speed;
+    <span class="hljs-keyword">var</span> b = <span class="hljs-keyword">this</span>.normalize(bounciness / <span class="hljs-number">1.7</span>, <span class="hljs-number">0</span>, <span class="hljs-number">20.0</span>);
+    b = <span class="hljs-keyword">this</span>.projectNormal(b, <span class="hljs-number">0.0</span>, <span class="hljs-number">0.8</span>);
+    <span class="hljs-keyword">var</span> s = <span class="hljs-keyword">this</span>.normalize(speed / <span class="hljs-number">1.7</span>, <span class="hljs-number">0</span>, <span class="hljs-number">20.0</span>);
+    <span class="hljs-keyword">this</span>.bouncyTension = <span class="hljs-keyword">this</span>.projectNormal(s, <span class="hljs-number">0.5</span>, <span class="hljs-number">200</span>)
+    <span class="hljs-keyword">this</span>.bouncyFriction = <span class="hljs-keyword">this</span>.quadraticOutInterpolation(
+      b,
+      <span class="hljs-keyword">this</span>.b3Nobounce(<span class="hljs-keyword">this</span>.bouncyTension),
+      <span class="hljs-number">0.01</span>);
+  }
+
+  util.extend(BouncyConversion.prototype, {
+
+    normalize: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value, startValue, endValue)</span> </span>{
+      <span class="hljs-keyword">return</span> (value - startValue) / (endValue - startValue);
+    },
+
+    projectNormal: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(n, start, end)</span> </span>{
+      <span class="hljs-keyword">return</span> start + (n * (end - start));
+    },
+
+    linearInterpolation: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(t, start, end)</span> </span>{
+      <span class="hljs-keyword">return</span> t * end + (<span class="hljs-number">1.0</span> - t) * start;
+    },
+
+    quadraticOutInterpolation: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(t, start, end)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.linearInterpolation(<span class="hljs-number">2</span>*t - t*t, start, end);
+    },
+
+    b3Friction1: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+      <span class="hljs-keyword">return</span> (<span class="hljs-number">0.0007</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">3</span>)) -
+        (<span class="hljs-number">0.031</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">2</span>)) + <span class="hljs-number">0.64</span> * x + <span class="hljs-number">1.28</span>;
+    },
+
+    b3Friction2: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+      <span class="hljs-keyword">return</span> (<span class="hljs-number">0.000044</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">3</span>)) -
+        (<span class="hljs-number">0.006</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">2</span>)) + <span class="hljs-number">0.36</span> * x + <span class="hljs-number">2.</span>;
+    },
+
+    b3Friction3: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(x)</span> </span>{
+      <span class="hljs-keyword">return</span> (<span class="hljs-number">0.00000045</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">3</span>)) -
+        (<span class="hljs-number">0.000332</span> * <span class="hljs-built_in">Math</span>.pow(x, <span class="hljs-number">2</span>)) + <span class="hljs-number">0.1078</span> * x + <span class="hljs-number">5.84</span>;
+    },
+
+    b3Nobounce: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tension)</span> </span>{
+      <span class="hljs-keyword">var</span> friction = <span class="hljs-number">0</span>;
+      <span class="hljs-keyword">if</span> (tension &lt;= <span class="hljs-number">18</span>) {
+        friction = <span class="hljs-keyword">this</span>.b3Friction1(tension);
+      } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (tension &gt; <span class="hljs-number">18</span> &amp;&amp; tension &lt;= <span class="hljs-number">44</span>) {
+        friction = <span class="hljs-keyword">this</span>.b3Friction2(tension);
+      } <span class="hljs-keyword">else</span> {
+        friction = <span class="hljs-keyword">this</span>.b3Friction3(tension);
+      }
+      <span class="hljs-keyword">return</span> friction;
+    }
+  });
+
+  util.extend(SpringConfig, {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-61">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-61">&#182;</a>
+              </div>
+              <p>Convert an origami Spring tension and friction to Rebound spring
+constants. If you are prototyping a design with Origami, this
+makes it easy to make your springs behave exactly the same in
+Rebound.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fromOrigamiTensionAndFriction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(tension, friction)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SpringConfig(
+        OrigamiValueConverter.tensionFromOrigamiValue(tension),
+        OrigamiValueConverter.frictionFromOrigamiValue(friction));
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-62">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-62">&#182;</a>
+              </div>
+              <p>Convert an origami PopAnimation Spring bounciness and speed to Rebound
+spring constants. If you are using PopAnimation patches in Origami, this
+utility will provide springs that match your prototype.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    fromBouncinessAndSpeed: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(bounciness, speed)</span> </span>{
+      <span class="hljs-keyword">var</span> bouncyConversion = <span class="hljs-keyword">new</span> rebound.BouncyConversion(bounciness, speed);
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>.fromOrigamiTensionAndFriction(
+        bouncyConversion.bouncyTension,
+        bouncyConversion.bouncyFriction);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-63">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-63">&#182;</a>
+              </div>
+              <p>Create a SpringConfig with no tension or a coasting spring with some
+amount of Friction so that it does not coast infininitely.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    coastingConfigWithOrigamiFriction: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(friction)</span> </span>{
+      <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> SpringConfig(
+        <span class="hljs-number">0</span>,
+        OrigamiValueConverter.frictionFromOrigamiValue(friction)
+      );
+    }
+  });
+
+  SpringConfig.DEFAULT_ORIGAMI_SPRING_CONFIG =
+    SpringConfig.fromOrigamiTensionAndFriction(<span class="hljs-number">40</span>, <span class="hljs-number">7</span>);
+
+  util.extend(SpringConfig.prototype, {friction: <span class="hljs-number">0</span>, tension: <span class="hljs-number">0</span>});</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-64">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-64">&#182;</a>
+              </div>
+              <p>Here are a couple of function to convert colors between hex codes and RGB
+component values. These are handy when performing color
+tweening animations.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> colorCache = {};
+  util.hexToRGB = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(color)</span> </span>{
+    <span class="hljs-keyword">if</span> (colorCache[color]) {
+      <span class="hljs-keyword">return</span> colorCache[color];
+    }
+    color = color.replace(<span class="hljs-string">'#'</span>, <span class="hljs-string">''</span>);
+    <span class="hljs-keyword">if</span> (color.length === <span class="hljs-number">3</span>) {
+      color = color[<span class="hljs-number">0</span>] + color[<span class="hljs-number">0</span>] + color[<span class="hljs-number">1</span>] + color[<span class="hljs-number">1</span>] + color[<span class="hljs-number">2</span>] + color[<span class="hljs-number">2</span>];
+    }
+    <span class="hljs-keyword">var</span> parts = color.match(<span class="hljs-regexp">/.{2}/g</span>);
+
+    <span class="hljs-keyword">var</span> ret = {
+      r: <span class="hljs-built_in">parseInt</span>(parts[<span class="hljs-number">0</span>], <span class="hljs-number">16</span>),
+      g: <span class="hljs-built_in">parseInt</span>(parts[<span class="hljs-number">1</span>], <span class="hljs-number">16</span>),
+      b: <span class="hljs-built_in">parseInt</span>(parts[<span class="hljs-number">2</span>], <span class="hljs-number">16</span>)
+    };
+
+    colorCache[color] = ret;
+    <span class="hljs-keyword">return</span> ret;
+  };
+
+  util.rgbToHex = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(r, g, b)</span> </span>{
+    r = r.toString(<span class="hljs-number">16</span>);
+    g = g.toString(<span class="hljs-number">16</span>);
+    b = b.toString(<span class="hljs-number">16</span>);
+    r = r.length &lt; <span class="hljs-number">2</span> ? <span class="hljs-string">'0'</span> + r : r;
+    g = g.length &lt; <span class="hljs-number">2</span> ? <span class="hljs-string">'0'</span> + g : g;
+    b = b.length &lt; <span class="hljs-number">2</span> ? <span class="hljs-string">'0'</span> + b : b;
+    <span class="hljs-keyword">return</span> <span class="hljs-string">'#'</span> + r + g + b;
+  };
+
+  <span class="hljs-keyword">var</span> MathUtil = rebound.MathUtil = {</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-65">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-65">&#182;</a>
+              </div>
+              <p>This helper function does a linear interpolation of a value from
+one range to another. This can be very useful for converting the
+motion of a Spring to a range of UI property values. For example a
+spring moving from position 0 to 1 could be interpolated to move a
+view from pixel 300 to 350 and scale it from 0.5 to 1. The current
+position of the <code>Spring</code> just needs to be run through this method
+taking its input range in the <em>from</em> parameters with the property
+animation range in the <em>to</em> parameters.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    mapValueInRange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value, fromLow, fromHigh, toLow, toHigh)</span> </span>{
+      <span class="hljs-keyword">var</span> fromRangeSize = fromHigh - fromLow;
+      <span class="hljs-keyword">var</span> toRangeSize = toHigh - toLow;
+      <span class="hljs-keyword">var</span> valueScale = (value - fromLow) / fromRangeSize;
+      <span class="hljs-keyword">return</span> toLow + (valueScale * toRangeSize);
+    },</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-66">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-66">&#182;</a>
+              </div>
+              <p>Interpolate two hex colors in a 0 - 1 range or optionally provide a
+custom range with fromLow,fromHight. The output will be in hex by default
+unless asRGB is true in which case it will be returned as an rgb string.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    interpolateColor:
+      <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(val, startColor, endColor, fromLow, fromHigh, asRGB)</span> </span>{
+      fromLow = fromLow === <span class="hljs-literal">undefined</span> ? <span class="hljs-number">0</span> : fromLow;
+      fromHigh = fromHigh === <span class="hljs-literal">undefined</span> ? <span class="hljs-number">1</span> : fromHigh;
+      startColor = util.hexToRGB(startColor);
+      endColor = util.hexToRGB(endColor);
+      <span class="hljs-keyword">var</span> r = <span class="hljs-built_in">Math</span>.floor(
+        util.mapValueInRange(val, fromLow, fromHigh, startColor.r, endColor.r)
+      );
+      <span class="hljs-keyword">var</span> g = <span class="hljs-built_in">Math</span>.floor(
+        util.mapValueInRange(val, fromLow, fromHigh, startColor.g, endColor.g)
+      );
+      <span class="hljs-keyword">var</span> b = <span class="hljs-built_in">Math</span>.floor(
+        util.mapValueInRange(val, fromLow, fromHigh, startColor.b, endColor.b)
+      );
+      <span class="hljs-keyword">if</span> (asRGB) {
+        <span class="hljs-keyword">return</span> <span class="hljs-string">'rgb('</span> + r + <span class="hljs-string">','</span> + g + <span class="hljs-string">','</span> + b + <span class="hljs-string">')'</span>;
+      } <span class="hljs-keyword">else</span> {
+        <span class="hljs-keyword">return</span> util.rgbToHex(r, g, b);
+      }
+    },
+
+    degreesToRadians: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(deg)</span> </span>{
+      <span class="hljs-keyword">return</span> (deg * <span class="hljs-built_in">Math</span>.PI) / <span class="hljs-number">180</span>;
+    },
+
+    radiansToDegrees: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(rad)</span> </span>{
+      <span class="hljs-keyword">return</span> (rad * <span class="hljs-number">180</span>) / <span class="hljs-built_in">Math</span>.PI;
+    }
+
+  }
+
+  util.extend(util, MathUtil);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-67">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-67">&#182;</a>
+              </div>
+              <h2 id="utilities">Utilities</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-68">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-68">&#182;</a>
+              </div>
+              <p>Here are a few useful JavaScript utilities.</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-69">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-69">&#182;</a>
+              </div>
+              <p>Lop off the first occurence of the reference in the Array.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">removeFirst</span><span class="hljs-params">(array, item)</span> </span>{
+    <span class="hljs-keyword">var</span> idx = array.indexOf(item);
+    idx != -<span class="hljs-number">1</span> &amp;&amp; array.splice(idx, <span class="hljs-number">1</span>);
+  }
+
+  <span class="hljs-keyword">var</span> _onFrame;
+  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> !== <span class="hljs-string">'undefined'</span>) {
+    _onFrame = <span class="hljs-built_in">window</span>.requestAnimationFrame ||
+      <span class="hljs-built_in">window</span>.webkitRequestAnimationFrame ||
+      <span class="hljs-built_in">window</span>.mozRequestAnimationFrame ||
+      <span class="hljs-built_in">window</span>.msRequestAnimationFrame ||
+      <span class="hljs-built_in">window</span>.oRequestAnimationFrame;
+  }
+  <span class="hljs-keyword">if</span> (!_onFrame &amp;&amp; <span class="hljs-keyword">typeof</span> process !== <span class="hljs-string">'undefined'</span> &amp;&amp; process.title === <span class="hljs-string">'node'</span>) {
+    _onFrame = setImmediate;
+  }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-70">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-70">&#182;</a>
+              </div>
+              <p>Cross browser/node timer functions.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  util.onFrame = <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onFrame</span><span class="hljs-params">(func)</span> </span>{
+    <span class="hljs-keyword">return</span> _onFrame(func);
+  };</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-71">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-71">&#182;</a>
+              </div>
+              <p>Export the public api using exports for common js or the window for
+normal browser inclusion.</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> exports != <span class="hljs-string">'undefined'</span>) {
+    util.extend(exports, rebound);
+  } <span class="hljs-keyword">else</span> <span class="hljs-keyword">if</span> (<span class="hljs-keyword">typeof</span> <span class="hljs-built_in">window</span> != <span class="hljs-string">'undefined'</span>) {
+    <span class="hljs-built_in">window</span>.rebound = rebound;
+  }
+})();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-72">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-72">&#182;</a>
+              </div>
+              <h2 id="legal-stuff">Legal Stuff</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-73">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-73">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-comment">/**
+ *  Copyright (c) 2013, Facebook, Inc.
+ *  All rights reserved.
+ *
+ *  This source code is licensed under the BSD-style license found in the
+ *  LICENSE file in the root directory of this source tree. An additional grant
+ *  of patent rights can be found in the PATENTS file in the same directory.
+ */</span></pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

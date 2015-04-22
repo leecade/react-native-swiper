@@ -1,0 +1,41 @@
+root = true
+
+[*]
+charset = utf-8
+indent_style = space
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[**.js]
+indent_style = space
+indent_size = 2
+quote_type = single
+space_after_anon_function = true
+curly_bracket_next_line = true
+brace_style = end-expand
+
+[**.jsx]
+indent_style = space
+indent_size = 2
+quote_type = single
+space_after_anon_function = true
+curly_bracket_next_line = true
+brace_style = end-expand
+
+[**.css]
+indent_style = space
+indent_size = 4
+
+[**.html]
+indent_style = space
+indent_size = 4
+max_char = 78
+brace_style = expand
+
+[node_modules/**.js]
+codepaint = false
+
+[*.json]
+indent_style = space
+indent_size = 2
