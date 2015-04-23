@@ -38,15 +38,15 @@ The best Swiper component for React Native.
 
 > Try these cases by yourself very easy, Just open `examples/swiper.xcodeproj` with Xcode, then press `Cmd + R`; you may edit `examples/index.ios.js` for switch cases.
 
-### [examples/basic.js](#11)
+### [examples/basic.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/basic.js)
 
 ![](http://i.imgur.com/zrsazAG.gif =300x)
 
-### [examples/swiper.js](#11)
+### [examples/swiper.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/swiper.js)
 
 ![](http://i.imgur.com/hP3f3oO.gif =300x)
 
-### [examples/phone.js](#11)
+### [examples/phone.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/phone.js)
 
 ![](http://i.imgur.com/c1BhjZm.gif =300x)
 
@@ -216,7 +216,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 ### Examples
 
-@TODO, see code in [examples](#1) first.
+@TODO, see code in [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/examples) first.
 
 ### Development
 
@@ -230,6 +230,6 @@ $ npm start
 
 ## Questions
 
-Feel free to [contact me](mailto:leecade@163.com) or [create an issue](#1)
+Feel free to [contact me](mailto:leecade@163.com) or [create an issue](https://github.com/leecade/react-native-swiper/issues/new)
 
 > Inspired by [nolimits4web/Swiper](https://github.com/nolimits4web/swiper/) & Design material from [Dribbble](https://dribbble.com/) & made with ♥.

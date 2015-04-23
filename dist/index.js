@@ -125,7 +125,6 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     horizontal: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     children: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.node.isRequired,
     style: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View.propTypes.style,
-    horizontal: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     pagingEnabled: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     showsHorizontalScrollIndicator: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     showsVerticalScrollIndicator: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,

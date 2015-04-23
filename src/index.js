@@ -116,7 +116,6 @@ export default React.createClass({
     horizontal                       : React.PropTypes.bool,
     children                         : React.PropTypes.node.isRequired,
     style                            : View.propTypes.style,
-    horizontal                       : React.PropTypes.bool,
     pagingEnabled                    : React.PropTypes.bool,
     showsHorizontalScrollIndicator   : React.PropTypes.bool,
     showsVerticalScrollIndicator     : React.PropTypes.bool,
