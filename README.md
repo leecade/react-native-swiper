@@ -6,7 +6,7 @@
 
 The best Swiper component for React Native.
 
-## Feature & TODO
+## Feature
 
 - [x] Infinite loop
 
@@ -24,7 +24,7 @@ The best Swiper component for React Native.
 
 - [x] Autoplay
 
-## Changelog & TODO
+## Changelogs & TODO
 
 - [ ] More switch effects
 
@@ -36,7 +36,9 @@ The best Swiper component for React Native.
 
 - [ ] Making the `width` / `height` optional prop, use `measure` function instead
 
-- [x] **1.0.4** fixes #2 Solve the problem of installation. (thanks @jamwaffles)
+- [x] **[v1.0.3]** fixes [#1](issues/1) Two 'horizontal' in propTypes. (thanks [@MacyzZ](https://github.com/MacyzZ))
+
+- [x] **[v1.0.4]** fixes [#2](issues/2) Solve the problem of installation. (thanks [@jamwaffles](https://github.com/jamwaffles))
 
 ## Show Cases
 
