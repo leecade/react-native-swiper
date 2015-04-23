@@ -36,9 +36,9 @@ The best Swiper component for React Native.
 
 - [ ] Making the `width` / `height` optional prop, use `measure` function instead
 
-- [x] **[v1.0.3]** fixes [#1](issues/1) Two 'horizontal' in propTypes. (thanks [@MacyzZ](https://github.com/MacyzZ))
+- [x] **[v1.0.3]** fixes [#1](https://github.com/leecade/react-native-swiper/issues/1) Two 'horizontal' in propTypes. (thanks [@MacyzZ](https://github.com/MacyzZ))
 
-- [x] **[v1.0.4]** fixes [#2](issues/2) Solve the problem of installation. (thanks [@jamwaffles](https://github.com/jamwaffles))
+- [x] **[v1.0.4]** fixes [#2](https://github.com/leecade/react-native-swiper/issues/2) Solve the problem of installation. (thanks [@jamwaffles](https://github.com/jamwaffles))
 
 ## Show Cases
 
