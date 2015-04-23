@@ -5,15 +5,12 @@
     "react-native",
     "ios"
   ],
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Swiper component for React Native.",
   "main": "dist/index.js",
   "scripts": {
-    "start": "babel src --out-dir dist",
-    "watch": "babel src --out-dir dist --watch"
-  },
-  "bin": {
-      "babel": "./bin/babel"
+    "start": "node_modules/.bin/babel src --out-dir dist",
+    "watch": "node_modules/.bin/babel src --out-dir dist --watch"
   },
   "repository": {
     "type": "git",

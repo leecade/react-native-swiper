@@ -24,15 +24,19 @@ The best Swiper component for React Native.
 
 - [x] Autoplay
 
-- [x] Design logo
-
-- [x] More usage cases
+## Changelog & TODO
 
 - [ ] More switch effects
 
 - [ ] Unit tests
 
-- [ ] Check typo - Need Improve My English :(
+- [ ] Check typo
+
+- [ ] Optimal performance when `<Image />` re-render
+
+- [ ] Making the `width` / `height` optional prop, use `measure` function instead
+
+- [x] **1.0.4** fixes #2 Solve the problem of installation. (thanks @jamwaffles)
 
 ## Show Cases
 

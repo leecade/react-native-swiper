@@ -27,3 +27,8 @@ build/Release
 # Dependency directory
 # https://www.npmjs.org/doc/misc/npm-faq.html#should-i-check-my-node_modules-folder-into-git
 /node_modules
+
+# Xcode
+*.xcuserstate
+examples/swiper.xcodeproj/project.xcworkspace/
+examples/swiper.xcodeproj/xcuserdata
