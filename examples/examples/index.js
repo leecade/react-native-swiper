@@ -138,7 +138,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     autoplay: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     autoplayTimeout: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
     autoplayDirection: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    index: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number },
+    index: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
+    renderPagination: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes['function'] },
 
   mixins: [_TimerMixin2['default']],
 
@@ -268,7 +269,11 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @return {object} react-dom
    */
   renderPagination: function renderPagination() {
-    var dots = [];
+
+    // By default, dots only show when `total` > 2
+    if (this.state.total <= 1) {
+      return null;
+    }var dots = [];
     for (var i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index ? this.props.activeDot || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(_React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View, { style: {
           backgroundColor: '#007aff',
@@ -409,7 +414,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
         }, props),
         pages
       ),
-      props.showsPagination && total > 1 && this.renderPagination(),
+      props.showsPagination && (props.renderPagination ? this.props.renderPagination(state.index, state.total) : this.renderPagination()),
       this.renderTitle(),
       this.props.showsButtons && this.renderButtons()
     );

@@ -130,6 +130,7 @@ export default React.createClass({
     autoplayTimeout                  : React.PropTypes.number,
     autoplayDirection                : React.PropTypes.bool,
     index                            : React.PropTypes.number,
+    renderPagination                 : React.PropTypes.function,
   },
 
   mixins: [TimerMixin],
@@ -265,6 +266,10 @@ export default React.createClass({
    * @return {object} react-dom
    */
   renderPagination() {
+
+    // By default, dots only show when `total` > 2
+    if(this.state.total <= 1) return null
+
     let dots = []
     for(let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
@@ -385,7 +390,9 @@ export default React.createClass({
           {...props}>
           {pages}
         </ScrollView>
-        {props.showsPagination && total > 1 && this.renderPagination()}
+        {props.showsPagination && (props.renderPagination
+          ? this.props.renderPagination(state.index, state.total)
+          : this.renderPagination())}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}
       </View>

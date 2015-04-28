@@ -157,6 +157,30 @@ describe('StackTraceParser', function() {
             column: 580 } ]
       }
     ],
+    'JavaScriptCore': [
+      {
+        from: "timeoutWithName@stack_traces/test:83:55\nwrapped@bandage.js:51:30",
+        to: [ { file: 'stack_traces/test',
+            methodName: 'timeoutWithName',
+            lineNumber: 83,
+            column: 55 },
+          { file: 'bandage.js',
+            methodName: 'wrapped',
+            lineNumber: 51,
+            column: 30 } ]
+      },
+      {
+        from: "timeoutWithName@stack_traces/test:83:55\nwrapped@42start-with-number.js:51:30",
+        to: [ { file: 'stack_traces/test',
+            methodName: 'timeoutWithName',
+            lineNumber: 83,
+            column: 55 },
+          { file: '42start-with-number.js',
+            methodName: 'wrapped',
+            lineNumber: 51,
+            column: 30 } ]
+      }
+    ],
     'Internet Explorer': [
       {
         from: "Error: with timeout and named func\n   at timeoutWithName (http://bandage.jaz-lounge.com/stack_traces/test:83:9)\n   at wrapped (http://bandage.jaz-lounge.com/bandage.js:51:13)",
