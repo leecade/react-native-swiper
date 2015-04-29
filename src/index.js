@@ -383,15 +383,15 @@ export default React.createClass({
         height: state.height
       }]}>
         <ScrollView ref="scrollView"
+          {...props}
           contentContainerStyle={[styles.wrapper, props.style]}
           contentOffset={initOffset}
-          key={key}
           onMomentumScrollEnd={this.onScrollEnd}
-          {...props}>
+          key={key}>
           {pages}
         </ScrollView>
         {props.showsPagination && (props.renderPagination
-          ? this.props.renderPagination(state.index, state.total)
+          ? this.props.renderPagination.call(this, state.index, state.total)
           : this.renderPagination())}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}

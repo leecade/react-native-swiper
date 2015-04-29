@@ -406,15 +406,15 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
         }] },
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.ScrollView,
-        _extends({ ref: 'scrollView',
+        _extends({ ref: 'scrollView'
+        }, props, {
           contentContainerStyle: [styles.wrapper, props.style],
           contentOffset: initOffset,
-          key: key,
-          onMomentumScrollEnd: this.onScrollEnd
-        }, props),
+          onMomentumScrollEnd: this.onScrollEnd,
+          key: key }),
         pages
       ),
-      props.showsPagination && (props.renderPagination ? this.props.renderPagination(state.index, state.total) : this.renderPagination()),
+      props.showsPagination && (props.renderPagination ? this.props.renderPagination.call(this, state.index, state.total) : this.renderPagination()),
       this.renderTitle(),
       this.props.showsButtons && this.renderButtons()
     );

@@ -6,7 +6,15 @@
 
 The best Swiper component for React Native.
 
-## Feature
+## Feature & TODO
+
+- [ ] More switch effects
+
+- [ ] Unit tests
+
+- [ ] Check typo
+
+- [ ] Optimal performance when `<Image />` re-render
 
 - [x] Infinite loop
 
@@ -24,21 +32,21 @@ The best Swiper component for React Native.
 
 - [x] Autoplay
 
-## Changelogs & TODO
+- [x] Custom pagination style
 
-- [ ] More switch effects
+## Changelogs
 
-- [ ] Unit tests
+- **[v1.1.0]**
 
-- [ ] Check typo
+  + [5de06a7](https://github.com/leecade/react-native-swiper/commit/5de06a7aa86318ad38720728022b80e5cf98a2ab) New prop: `renderPagination`. (thanks [@aksonov](https://github.com/aksonov))
 
-- [ ] Optimal performance when `<Image />` re-render
+- **[v1.0.4]**
 
-- [ ] Making the `width` / `height` optional prop, use `measure` function instead
+  + [21cb373](https://github.com/leecade/react-native-swiper/commit/21cb3732578588f9d47ee7ddda541577ad691970) fixes [#2](https://github.com/leecade/react-native-swiper/issues/2) Solve the problem of installation. (thanks [@jamwaffles](https://github.com/jamwaffles))
 
-- [x] **[v1.0.3]** fixes [#1](https://github.com/leecade/react-native-swiper/issues/1) Two 'horizontal' in propTypes. (thanks [@MacyzZ](https://github.com/MacyzZ))
+- [v1.0.3]
 
-- [x] **[v1.0.4]** fixes [#2](https://github.com/leecade/react-native-swiper/issues/2) Solve the problem of installation. (thanks [@jamwaffles](https://github.com/jamwaffles))
+  + [0f796f3](https://github.com/leecade/react-native-swiper/commit/0f796f3557b5aeb1772573cd7ecae2e835bccc0b) fixes [#1](https://github.com/leecade/react-native-swiper/issues/1) Two 'horizontal' in propTypes. (thanks [@MacyzZ](https://github.com/MacyzZ))
 
 ## Show Cases
 
@@ -51,6 +59,10 @@ The best Swiper component for React Native.
 ### [examples/swiper.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/swiper.js)
 
 ![](http://i.imgur.com/hP3f3oO.gif =300x)
+
+### [examples/swiper_number.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/swiper_number.js)
+
+![](http://i.imgur.com/0rqESVb.gif =300x)
 
 ### [examples/phone.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/phone.js)
 
@@ -165,8 +177,9 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | :------------ |:---------------:| :---------------:| :-----|
 | showsPagination | true | `bool` | Set to `true` make pagination visible. |
 | paginationStyle | {...} | `style` | Custom styles will merge with the default styles. |
-| dot | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the dot element |
-| activeDot | `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the active-dot element |
+| renderPagination | - | `function` | Complete control how to render pagination with two params (`index`, `total`) ref to `this.state.index` / `this.state.total`, For example: show numbers instead of dots. |
+| dot | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the dot element. |
+| activeDot | `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the active-dot element. |
 
 #### Autoplay
 
