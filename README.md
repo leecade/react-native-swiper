@@ -38,6 +38,8 @@ The best Swiper component for React Native.
 
 - **[v1.1.0]**
 
+  + [44ec630](https://github.com/leecade/react-native-swiper/commit/44ec630b62844dbeaccee73adaa0996e319ebffb) fixes [#4](https://github.com/leecade/react-native-swiper/issues/4) `onMoementumScrollEnd` gets overridden. (thanks [@subpublicanders](https://github.com/subpublicanders))
+
   + [5de06a7](https://github.com/leecade/react-native-swiper/commit/5de06a7aa86318ad38720728022b80e5cf98a2ab) New prop: `renderPagination`. (thanks [@aksonov](https://github.com/aksonov))
 
 - **[v1.0.4]**
