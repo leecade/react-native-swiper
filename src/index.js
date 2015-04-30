@@ -130,7 +130,7 @@ export default React.createClass({
     autoplayTimeout                  : React.PropTypes.number,
     autoplayDirection                : React.PropTypes.bool,
     index                            : React.PropTypes.number,
-    renderPagination                 : React.PropTypes.function,
+    renderPagination                 : React.PropTypes.func,
   },
 
   mixins: [TimerMixin],

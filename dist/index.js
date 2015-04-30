@@ -139,7 +139,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     autoplayTimeout: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
     autoplayDirection: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
     index: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
-    renderPagination: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes['function'] },
+    renderPagination: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.func },
 
   mixins: [_TimerMixin2['default']],
 
