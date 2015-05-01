@@ -34,8 +34,12 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.1.1]**
-  + [21f0b00](https://github.com/leecade/react-native-swiper/commit/21f0b00138b6936cd3dfac2eb107a14c99c7392b) fixes [#6](https://github.com/leecade/react-native-swiper/issues/6) a define-propType error. (thanks [@benjamingeorge ](https://github.com/benjamingeorge))
+- **[v1.2.0]**
+  + [838b24c](https://github.com/leecade/react-native-swiper/commit/838b24cbeaf49b9ca1dabb4eed8305e314503fb1) Re-design a loop model for avoid img flickering.
+  + [9cb91c5](https://github.com/leecade/react-native-swiper/commit/9cb91c58c84034b0b8b874dbfc2a44da982686a8) fixes [#7](https://github.com/leecade/react-native-swiper/issues/6) `onMomentumScrollEnd` lost `event` param. (thanks [@smothers](https://github.com/smothers))
+
+- [v1.1.1]
+  + [21f0b00](https://github.com/leecade/react-native-swiper/commit/21f0b00138b6936cd3dfac2eb107a14c99c7392b) fixes [#6](https://github.com/leecade/react-native-swiper/issues/6) a define-propType error. (thanks [@benjamingeorge](https://github.com/benjamingeorge))
 
 - [v1.1.0]
   + [44ec630](https://github.com/leecade/react-native-swiper/commit/44ec630b62844dbeaccee73adaa0996e319ebffb) fixes [#4](https://github.com/leecade/react-native-swiper/issues/4) `onMoementumScrollEnd` gets overridden. (thanks [@subpublicanders](https://github.com/subpublicanders))
