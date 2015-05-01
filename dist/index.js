@@ -11,28 +11,18 @@ Object.defineProperty(exports, '__esModule', {
 /*
 react-native-swiper
 
-feaure:
-[x] loop
-[x] dir
-[x] custom style
-[x] title
-[x] multiple instances
-[x] custom size
-[x] control buttons
-[x] autoplay
-[ ] more switch effect
-
-params(props):
-- dir "x" || "y" @default: "x"
-
--dot Optionally provide the dot object show in pagination
+@author leecade<leecade@163.com>
  */
 
 var _React$StyleSheet$Text$View$ScrollView$TouchableOpacity = require('react-native');
 
 var _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2 = _interopRequireWildcard(_React$StyleSheet$Text$View$ScrollView$TouchableOpacity);
 
-// Using bare setTimeout, setInterval, setImmediate and requestAnimationFrame calls is very dangerous because if you forget to cancel the request before the component is unmounted, you risk the callback throwing an exception.
+// Using bare setTimeout, setInterval, setImmediate
+// and requestAnimationFrame calls is very dangerous
+// because if you forget to cancel the request before
+// the component is unmounted, you risk the callback
+// throwing an exception.
 
 var _TimerMixin = require('react-timer-mixin');
 
@@ -173,15 +163,27 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    */
   getInitialState: function getInitialState() {
     var props = this.props;
-    var length = props.children ? props.children.length || 1 : 0;
-    return {
-      index: length > 1 ? props.index : 0,
-      total: length,
-      dir: props.horizontal == false ? 'y' : 'x',
-      width: props.width || width,
-      height: props.height || height,
+
+    var initState = {
       isScrolling: false,
       autoplayEnd: false };
+
+    initState.total = props.children ? props.children.length || 1 : 0;
+
+    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0;
+
+    // Default: horizontal
+    initState.dir = props.horizontal == false ? 'y' : 'x';
+    initState.width = props.width || width;
+    initState.height = props.height || height;
+    initState.offset = {};
+
+    if (initState.total > 1) {
+      var setup = props.loop ? 1 : initState.index;
+      initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
+    }
+
+    return initState;
   },
 
   /**
@@ -190,14 +192,20 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    */
   autoplayTimer: null,
 
-  componentDidMount: function componentDidMount() {},
+  componentDidMount: function componentDidMount() {
+    this.autoplay();
+  },
 
+  /**
+   * Automatic rolling
+   */
   autoplay: function autoplay() {
     var _this = this;
 
     if (!this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) {
       return;
     }clearTimeout(this.autoplayTimer);
+
     this.autoplayTimer = this.setTimeout(function () {
       if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index == _this.state.total - 1 : _this.state.index == 0)) return _this.setState({
         autoplayEnd: true
@@ -207,21 +215,38 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   },
 
   /**
+   * Scroll begin handle
+   * @param  {object} e native event
+   */
+  onScrollBegin: function onScrollBegin(e) {
+    // update scroll state
+    this.setState({
+      isScrolling: true
+    });
+
+    this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e);
+  },
+
+  /**
    * Scroll end handle
    * @param  {object} e native event
    */
   onScrollEnd: function onScrollEnd(e) {
+    var _this2 = this;
 
     // update scroll state
     this.setState({
       isScrolling: false
     });
 
-    var offset = e.nativeEvent.contentOffset;
-    this.updateIndex(offset, this.state.dir);
+    this.updateIndex(e.nativeEvent.contentOffset, this.state.dir);
+
+    this.setTimeout(function () {
+      _this2.autoplay();
+    });
 
     // if `onMomentumScrollEnd` registered will be called here
-    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this);
+    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e);
   },
 
   /**
@@ -230,17 +255,31 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @param  {string} dir    'x' || 'y'
    */
   updateIndex: function updateIndex(offset, dir) {
-    offset = offset[dir];
+
     var state = this.state;
     var index = state.index;
-    var diff = dir == 'x' ? state.width : state.height;
+    var diff = offset[dir] - state.offset[dir];
+    var step = dir == 'x' ? state.width : state.height;
+
+    // Do nothing if offset no change.
+    if (!diff) {
+      return;
+    } // Note: if touch very very quickly and continuous,
+    // the variation of `index` more than 1.
+    index = index + diff / step;
     if (this.props.loop) {
-      if (offset > diff) index++;else if (offset < diff) index--;
-      if (index == -1) index = state.total - 1;else if (index == state.total) index = 0;
-    } else index = Math.floor((offset - diff / 2) / diff) + 1;
+      if (index <= -1) {
+        index = state.total - 1;
+        offset[dir] = step * state.total;
+      } else if (index >= state.total) {
+        index = 0;
+        offset[dir] = step;
+      }
+    }
+
     this.setState({
-      index: index
-    });
+      index: index,
+      offset: offset });
   },
 
   /**
@@ -251,7 +290,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     if (this.state.isScrolling) {
       return;
     }var state = this.state;
-    var diff = (this.props.loop ? 1 : this.state.index) + index;
+    var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
     var x = 0;
     var y = 0;
     if (state.dir == 'x') x = diff * state.width;
@@ -312,7 +351,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   },
 
   renderButtons: function renderButtons() {
-    var _this2 = this;
+    var _this3 = this;
 
     var nextButton = this.props.nextButton || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.Text,
@@ -332,7 +371,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
         { onPress: function () {
-            return !(!_this2.props.loop && _this2.state.index == 0) && _this2.scrollTo.call(_this2, -1);
+            return !(!_this3.props.loop && _this3.state.index == 0) && _this3.scrollTo.call(_this3, -1);
           } },
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
           _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
@@ -343,7 +382,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
         { onPress: function () {
-            return !(!_this2.props.loop && _this2.state.index == _this2.state.total - 1) && _this2.scrollTo.call(_this2, 1);
+            return !(!_this3.props.loop && _this3.state.index == _this3.state.total - 1) && _this3.scrollTo.call(_this3, 1);
           } },
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
           _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
@@ -366,7 +405,6 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     var total = state.total;
     var loop = props.loop;
     var dir = state.dir;
-    var initOffset = {};
     var key = 0;
 
     var pages = [];
@@ -374,12 +412,14 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
 
     // For make infinite at least total > 1
     if (total > 1) {
+
+      // Re-design a loop model for avoid img flickering
+      pages = Object.keys(children);
       if (loop) {
-        pages.push(index == 0 ? total - 1 : index - 1);
-        pages.push(index);
-        pages.push(index == total - 1 ? 0 : index + 1);
-        key = index;
-      } else pages = Object.keys(children);
+        pages.unshift(total - 1);
+        pages.push(0);
+      }
+
       pages = pages.map(function (page, i) {
         return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
           _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
@@ -387,16 +427,11 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
           children[page]
         );
       });
-
-      var setup = loop ? 1 : index;
-      initOffset[dir] = dir == 'y' ? state.height * setup : state.width * setup;
     } else pages = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
       { style: pageStyle },
       children
     );
-
-    this.autoplay();
 
     return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
@@ -409,9 +444,9 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
         _extends({ ref: 'scrollView'
         }, props, {
           contentContainerStyle: [styles.wrapper, props.style],
-          contentOffset: initOffset,
-          onMomentumScrollEnd: this.onScrollEnd,
-          key: key }),
+          contentOffset: state.offset,
+          onScrollBeginDrag: this.onScrollBegin,
+          onMomentumScrollEnd: this.onScrollEnd }),
         pages
       ),
       props.showsPagination && (props.renderPagination ? this.props.renderPagination.call(this, state.index, state.total) : this.renderPagination()),

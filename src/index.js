@@ -2,21 +2,7 @@
 /*
 react-native-swiper
 
-feaure:
-[x] loop
-[x] dir
-[x] custom style
-[x] title
-[x] multiple instances
-[x] custom size
-[x] control buttons
-[x] autoplay
-[ ] more switch effect
-
-params(props):
-- dir "x" || "y" @default: "x"
-
--dot Optionally provide the dot object show in pagination
+@author leecade<leecade@163.com>
  */
 import React, {
   StyleSheet,
@@ -26,7 +12,11 @@ import React, {
   TouchableOpacity,
 } from 'react-native'
 
-// Using bare setTimeout, setInterval, setImmediate and requestAnimationFrame calls is very dangerous because if you forget to cancel the request before the component is unmounted, you risk the callback throwing an exception.
+// Using bare setTimeout, setInterval, setImmediate
+// and requestAnimationFrame calls is very dangerous
+// because if you forget to cancel the request before
+// the component is unmounted, you risk the callback
+// throwing an exception.
 import TimerMixin from 'react-timer-mixin'
 import Dimensions from 'Dimensions'
 
@@ -166,16 +156,34 @@ export default React.createClass({
    */
   getInitialState() {
     let props = this.props
-    let length = props.children ? (props.children.length || 1) : 0
-    return {
-      index: length > 1 ? props.index : 0,
-      total: length,
-      dir: props.horizontal == false ? 'y' : 'x',
-      width: props.width || width,
-      height: props.height || height,
+
+    let initState = {
       isScrolling: false,
       autoplayEnd: false,
     }
+
+    initState.total = props.children
+      ? (props.children.length || 1)
+      : 0
+
+    initState.index = initState.total > 1
+      ? Math.min(props.index, initState.total - 1)
+      : 0
+
+    // Default: horizontal
+    initState.dir = props.horizontal == false ? 'y' : 'x'
+    initState.width = props.width || width
+    initState.height = props.height || height
+    initState.offset = {}
+
+    if(initState.total > 1) {
+      let setup = props.loop ? 1 : initState.index
+      initState.offset[initState.dir] = initState.dir == 'y'
+        ? initState.height * setup
+        : initState.width * setup
+    }
+
+    return initState
   },
 
   /**
@@ -185,11 +193,19 @@ export default React.createClass({
   autoplayTimer: null,
 
   componentDidMount() {
+    this.autoplay()
   },
 
+  /**
+   * Automatic rolling
+   */
   autoplay() {
-    if(!this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) return
+    if(!this.props.autoplay
+      || this.state.isScrolling
+      || this.state.autoplayEnd) return
+
     clearTimeout(this.autoplayTimer)
+
     this.autoplayTimer = this.setTimeout(() => {
       if(!this.props.loop && (this.props.autoplayDirection
           ? this.state.index == this.state.total - 1
@@ -198,6 +214,19 @@ export default React.createClass({
       })
       this.scrollTo(this.props.autoplayDirection ? 1 : -1)
     }, this.props.autoplayTimeout * 1000)
+  },
+
+  /**
+   * Scroll begin handle
+   * @param  {object} e native event
+   */
+  onScrollBegin(e) {
+    // update scroll state
+    this.setState({
+      isScrolling: true
+    })
+
+    this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e)
   },
 
   /**
@@ -211,11 +240,14 @@ export default React.createClass({
       isScrolling: false
     })
 
-    let offset = e.nativeEvent.contentOffset
-    this.updateIndex(offset, this.state.dir)
+    this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
+
+    this.setTimeout(() => {
+      this.autoplay()
+    })
 
     // if `onMomentumScrollEnd` registered will be called here
-    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this)
+    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e)
   },
 
   /**
@@ -224,19 +256,32 @@ export default React.createClass({
    * @param  {string} dir    'x' || 'y'
    */
   updateIndex(offset, dir) {
-    offset = offset[dir]
+
     let state = this.state
     let index = state.index
-    let diff = dir == 'x' ? state.width : state.height
+    let diff = offset[dir] - state.offset[dir]
+    let step = dir == 'x' ? state.width : state.height
+
+    // Do nothing if offset no change.
+    if(!diff) return
+
+    // Note: if touch very very quickly and continuous,
+    // the variation of `index` more than 1.
+    index = index + diff / step
     if(this.props.loop) {
-      if(offset > diff) index++
-      else if(offset < diff) index--
-      if(index == -1) index = state.total - 1
-      else if(index == state.total) index = 0
+      if(index <= -1) {
+        index = state.total - 1
+        offset[dir] = step * state.total
+      }
+      else if(index >= state.total) {
+        index = 0
+        offset[dir] = step
+      }
     }
-    else index = Math.floor((offset - diff / 2) / diff) + 1
+
     this.setState({
-      index: index
+      index: index,
+      offset: offset,
     })
   },
 
@@ -247,7 +292,7 @@ export default React.createClass({
   scrollTo(index) {
     if(this.state.isScrolling) return
     let state = this.state
-    let diff = (this.props.loop ? 1 : this.state.index) + index
+    let diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
     if(state.dir == 'x') x = diff * state.width
@@ -349,7 +394,6 @@ export default React.createClass({
     let total = state.total
     let loop = props.loop
     let dir = state.dir
-    let initOffset = {}
     let key = 0
 
     let pages = []
@@ -357,25 +401,19 @@ export default React.createClass({
 
     // For make infinite at least total > 1
     if(total > 1) {
+
+      // Re-design a loop model for avoid img flickering
+      pages = Object.keys(children)
       if(loop) {
-        pages.push(index == 0 ? total - 1 : index - 1)
-        pages.push(index)
-        pages.push(index == total - 1 ? 0 : index + 1)
-        key = index
+        pages.unshift(total - 1)
+        pages.push(0)
       }
-      else pages = Object.keys(children)
+
       pages = pages.map((page, i) =>
         <View style={pageStyle} key={i}>{children[page]}</View>
       )
-
-      let setup = loop ? 1 : index
-      initOffset[dir] = dir == 'y'
-        ? state.height * setup
-        : state.width * setup
     }
     else pages = <View style={pageStyle}>{children}</View>
-
-    this.autoplay()
 
     return (
       <View style={[styles.container, {
@@ -385,9 +423,9 @@ export default React.createClass({
         <ScrollView ref="scrollView"
           {...props}
           contentContainerStyle={[styles.wrapper, props.style]}
-          contentOffset={initOffset}
-          onMomentumScrollEnd={this.onScrollEnd}
-          key={key}>
+          contentOffset={state.offset}
+          onScrollBeginDrag={this.onScrollBegin}
+          onMomentumScrollEnd={this.onScrollEnd}>
           {pages}
         </ScrollView>
         {props.showsPagination && (props.renderPagination

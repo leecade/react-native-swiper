@@ -14,8 +14,6 @@ The best Swiper component for React Native.
 
 - [ ] Check typo
 
-- [ ] Optimal performance when `<Image />` re-render
-
 - [x] Infinite loop
 
 - [x] Direction control
