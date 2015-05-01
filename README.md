@@ -95,13 +95,16 @@ $ npm i react-native-swiper --save
 
 ```jsx
 var Swiper = require('react-native-swiper')
-
 // es6
 // import Swiper from 'react-native-swiper'
 
+var React = require('react-native');
 var {
   AppRegistry,
-} = React
+  StyleSheet,
+  Text,
+  View,
+} = React;
 
 var styles = StyleSheet.create({
   wrapper: {
