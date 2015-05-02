@@ -34,7 +34,7 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.2.1]**
+- **[v1.2.2]**
   + [890c0ce](https://github.com/leecade/react-native-swiper/commit/890c0ce64e2192c2ca7830e6699f67b88171e74b) ensure `onMomentumScrollEnd` synchronous update `index`.
 
 - [v1.2.0]
