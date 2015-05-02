@@ -226,7 +226,9 @@ export default React.createClass({
       isScrolling: true
     })
 
-    this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e)
+    this.setTimeout(() => {
+      this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e)
+    })
   },
 
   /**
@@ -242,12 +244,14 @@ export default React.createClass({
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
 
+    // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
+    // in setTimeout to ensure synchronous update `index`
     this.setTimeout(() => {
       this.autoplay()
-    })
 
-    // if `onMomentumScrollEnd` registered will be called here
-    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e)
+      // if `onMomentumScrollEnd` registered will be called here
+      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e)
+    })
   },
 
   /**
@@ -268,6 +272,7 @@ export default React.createClass({
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     index = index + diff / step
+
     if(this.props.loop) {
       if(index <= -1) {
         index = state.total - 1

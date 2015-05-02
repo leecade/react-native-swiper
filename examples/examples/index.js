@@ -219,12 +219,16 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @param  {object} e native event
    */
   onScrollBegin: function onScrollBegin(e) {
+    var _this2 = this;
+
     // update scroll state
     this.setState({
       isScrolling: true
     });
 
-    this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e);
+    this.setTimeout(function () {
+      _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag.call(_this2, e);
+    });
   },
 
   /**
@@ -232,7 +236,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @param  {object} e native event
    */
   onScrollEnd: function onScrollEnd(e) {
-    var _this2 = this;
+    var _this3 = this;
 
     // update scroll state
     this.setState({
@@ -241,12 +245,14 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir);
 
+    // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
+    // in setTimeout to ensure synchronous update `index`
     this.setTimeout(function () {
-      _this2.autoplay();
-    });
+      _this3.autoplay();
 
-    // if `onMomentumScrollEnd` registered will be called here
-    this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e);
+      // if `onMomentumScrollEnd` registered will be called here
+      _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd.call(_this3, e);
+    });
   },
 
   /**
@@ -267,6 +273,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     } // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     index = index + diff / step;
+
     if (this.props.loop) {
       if (index <= -1) {
         index = state.total - 1;
@@ -351,7 +358,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   },
 
   renderButtons: function renderButtons() {
-    var _this3 = this;
+    var _this4 = this;
 
     var nextButton = this.props.nextButton || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.Text,
@@ -371,7 +378,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
         { onPress: function () {
-            return !(!_this3.props.loop && _this3.state.index == 0) && _this3.scrollTo.call(_this3, -1);
+            return !(!_this4.props.loop && _this4.state.index == 0) && _this4.scrollTo.call(_this4, -1);
           } },
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
           _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
@@ -382,7 +389,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
         { onPress: function () {
-            return !(!_this3.props.loop && _this3.state.index == _this3.state.total - 1) && _this3.scrollTo.call(_this3, 1);
+            return !(!_this4.props.loop && _this4.state.index == _this4.state.total - 1) && _this4.scrollTo.call(_this4, 1);
           } },
         _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
           _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,

@@ -60,11 +60,12 @@ var swiper = React.createClass({
         </Swiper>
 
         <Swiper style={styles.wrapper} height={240}
+          onMomentumScrollEnd={function(){console.log('this.state.index:', this.state.index)}}
           dot={<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 5, height: 5,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
           activeDot={<View style={{backgroundColor: '#000', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />}
           paginationStyle={{
             bottom: -23, left: null, right: 10,
-          }} loop={false}>
+          }} loop={true}>
           <View style={styles.slide} title={<Text numberOfLines={1}>Aussie tourist dies at Bali hotel</Text>}>
             <Image style={styles.image} source={{uri: 'http://c.hiphotos.baidu.com/image/w%3D310/sign=0dff10a81c30e924cfa49a307c096e66/7acb0a46f21fbe096194ceb468600c338644ad43.jpg'}} />
           </View>
