@@ -39,7 +39,10 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.2.2]**
+- **[v1.3.0]**
+  + [8d6d75c](https://github.com/leecade/react-native-swiper/commit/8d6d75c00edf87b603c218aad0018932277814b5) inject `state` in ScrollResponders (@thanks [@smothers](https://github.com/smothers)).
+
+- [v1.2.2]
   + [890c0ce](https://github.com/leecade/react-native-swiper/commit/890c0ce64e2192c2ca7830e6699f67b88171e74b) ensure `onMomentumScrollEnd` synchronous update `index`.
 
 - [v1.2.0]
