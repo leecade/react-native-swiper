@@ -35,6 +35,8 @@ The best Swiper component for React Native.
 
 - [x] Custom pagination style
 
+- [x] State inject
+
 ## Changelogs
 
 - **[v1.2.2]**
@@ -167,7 +169,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Basic
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | horizontal | true | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
 | loop | true | `bool` | Set to `true` to enable continuous loop mode. |
@@ -177,7 +179,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Custom basic style & content
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
 | height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
@@ -185,17 +187,17 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Pagination
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | showsPagination | true | `bool` | Set to `true` make pagination visible. |
 | paginationStyle | {...} | `style` | Custom styles will merge with the default styles. |
-| renderPagination | - | `function` | Complete control how to render pagination with two params (`index`, `total`) ref to `this.state.index` / `this.state.total`, For example: show numbers instead of dots. |
+| renderPagination | - | `function` | Complete control how to render pagination with three params (`index`, `total`, `context`) ref to `this.state.index` / `this.state.total` / `this`, For example: show numbers instead of dots. |
 | dot | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the dot element. |
 | activeDot | `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the active-dot element. |
 
 #### Autoplay
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | autoplay | true | `bool` | Set to `true` enable auto play mode. |
 | autoplayTimeout | 2.5 | `number` | Delay between auto play transitions (in second). |
@@ -203,7 +205,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Control buttons
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | showsButtons | true | `bool` | Set to `true` make control buttons visible. |
 | buttonWrapperStyle | `{backgroundColor: 'transparent', flexDirection: 'row', position: 'absolute', top: 0, left: 0, flex: 1, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', alignItems: 'center'}` | `style` | Custom styles. |
@@ -212,14 +214,14 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Props of Children
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | style | {...} | `style` | Custom styles will merge with the default styles. |
 | title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. |
 
 #### Basic props of `<ScrollView />`
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | horizontal | true | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
 | pagingEnabled | true | `bool` | If true, the scroll view stops on multiples of the scroll view's size when scrolling. This can be used for horizontal pagination.  |
@@ -234,16 +236,34 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 #### Supported ScrollResponder
 
-| Prop  | Default  | Type | Describe |
+| Prop  | Params  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
-| onMomentumScrollBegin | - | `function` | When animation begins after letting up |
-| onMomentumScrollEnd | - | `function` | Makes no sense why this occurs first during bounce |
-| onTouchStartCapture | - | `function` | Immediately after `onMomentumScrollEnd` |
-| onTouchStart | - | `function` | Same, but bubble phase |
-| onTouchEnd | - | `function` | You could hold the touch start for a long time |
-| onResponderRelease | - | `function` | When lifting up - you could pause forever before * lifting |
+| onMomentumScrollBegin | `e` / `state` / `context` | `function` | When animation begins after letting up |
+| onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce |
+| onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd` |
+| onTouchStart | `e` / `state` / `context` | `function` | Same, but bubble phase |
+| onTouchEnd | `e` / `state` / `context` | `function` | You could hold the touch start for a long time |
+| onResponderRelease | `e` / `state` / `context` | `function` | When lifting up - you could pause forever before * lifting |
 
-> @see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
+> Note: each ScrollResponder be injected with two params: `state` and `context`, you can get `state` and `this`(ref to swiper's context) from params, for example:
+
+```jsx
+var swiper = React.createClass({
+  _onMomentumScrollEnd: function (e, state, context) {
+    console.log(state, context.state)
+  },
+  render: function() {
+    return (
+      <Swiper style={styles.wrapper}
+      onMomentumScrollEnd ={this._onMomentumScrollEnd}
+     ...
+      </Swiper>
+    )
+  }
+})
+```
+
+> More ScrollResponder info, see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
 
 ### Examples
 

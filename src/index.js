@@ -192,6 +192,10 @@ export default React.createClass({
    */
   autoplayTimer: null,
 
+  componentWillMount() {
+    this.props = this.injectState(this.props)
+  },
+
   componentDidMount() {
     this.autoplay()
   },
@@ -227,7 +231,7 @@ export default React.createClass({
     })
 
     this.setTimeout(() => {
-      this.props.onScrollBeginDrag && this.props.onScrollBeginDrag.call(this, e)
+      this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.state, this)
     })
   },
 
@@ -250,7 +254,7 @@ export default React.createClass({
       this.autoplay()
 
       // if `onMomentumScrollEnd` registered will be called here
-      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd.call(this, e)
+      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.state, this)
     })
   },
 
@@ -388,6 +392,35 @@ export default React.createClass({
   },
 
   /**
+   * Inject state to ScrollResponder
+   * @param  {object} props origin props
+   * @return {object} props injected props
+   */
+  injectState(props) {
+/*    const scrollResponders = [
+      'onMomentumScrollBegin',
+      'onTouchStartCapture',
+      'onTouchStart',
+      'onTouchEnd',
+      'onResponderRelease',
+    ]*/
+
+    for(let prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if(typeof props[prop] === 'function'
+        && prop !== 'onMomentumScrollEnd'
+        && prop !== 'renderPagination'
+        && prop !== 'onScrollBeginDrag'
+      ) {
+        let originResponder = props[prop]
+        props[prop] = (e) => originResponder(e, this.state, this)
+      }
+    }
+
+    return props
+  },
+
+  /**
    * Default render
    * @return {object} react-dom
    */
@@ -434,7 +467,7 @@ export default React.createClass({
           {pages}
         </ScrollView>
         {props.showsPagination && (props.renderPagination
-          ? this.props.renderPagination.call(this, state.index, state.total)
+          ? this.props.renderPagination(state.index, state.total, this)
           : this.renderPagination())}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}

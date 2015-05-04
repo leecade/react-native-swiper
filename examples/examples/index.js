@@ -192,6 +192,10 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    */
   autoplayTimer: null,
 
+  componentWillMount: function componentWillMount() {
+    this.props = this.injectState(this.props);
+  },
+
   componentDidMount: function componentDidMount() {
     this.autoplay();
   },
@@ -227,7 +231,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     });
 
     this.setTimeout(function () {
-      _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag.call(_this2, e);
+      _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag(e, _this2.state, _this2);
     });
   },
 
@@ -251,7 +255,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       _this3.autoplay();
 
       // if `onMomentumScrollEnd` registered will be called here
-      _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd.call(_this3, e);
+      _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd(e, _this3.state, _this3);
     });
   },
 
@@ -401,6 +405,37 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   },
 
   /**
+   * Inject state to ScrollResponder
+   * @param  {object} props origin props
+   * @return {object} props injected props
+   */
+  injectState: function injectState(props) {
+    var _this5 = this;
+
+    /*    const scrollResponders = [
+          'onMomentumScrollBegin',
+          'onTouchStartCapture',
+          'onTouchStart',
+          'onTouchEnd',
+          'onResponderRelease',
+        ]*/
+
+    for (var prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if (typeof props[prop] === 'function' && prop !== 'onMomentumScrollEnd' && prop !== 'renderPagination' && prop !== 'onScrollBeginDrag') {
+        (function () {
+          var originResponder = props[prop];
+          props[prop] = function (e) {
+            return originResponder(e, _this5.state, _this5);
+          };
+        })();
+      }
+    }
+
+    return props;
+  },
+
+  /**
    * Default render
    * @return {object} react-dom
    */
@@ -456,7 +491,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
           onMomentumScrollEnd: this.onScrollEnd }),
         pages
       ),
-      props.showsPagination && (props.renderPagination ? this.props.renderPagination.call(this, state.index, state.total) : this.renderPagination()),
+      props.showsPagination && (props.renderPagination ? this.props.renderPagination(state.index, state.total, this) : this.renderPagination()),
       this.renderTitle(),
       this.props.showsButtons && this.renderButtons()
     );

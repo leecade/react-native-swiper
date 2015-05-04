@@ -25,7 +25,7 @@ var styles = StyleSheet.create({
   }
 })
 
-var renderPagination = function (index, total) {
+var renderPagination = function (index, total, context) {
   return (
     <View style={{
       position: 'absolute',

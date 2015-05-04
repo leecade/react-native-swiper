@@ -35,9 +35,15 @@ var styles = StyleSheet.create({
 })
 
 var swiper = React.createClass({
+  _onMomentumScrollEnd: function (e, state, context) {
+    // you can get `state` and `this`(ref to swiper's context) from params
+    console.log(state, context.state)
+  },
   render: function() {
     return (
-      <Swiper style={styles.wrapper} showsButtons={true}>
+      <Swiper style={styles.wrapper}
+      onMomentumScrollEnd={this._onMomentumScrollEnd}
+      showsButtons={true}>
         <View style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>
         </View>
