@@ -103,6 +103,20 @@ $ npm i react-native-swiper --save
 
 ### Basic Usage
 
+- Install `react-native` first
+
+```bash
+$ npm i react-native -g
+```
+
+- Initialization of a react-native project
+
+```bash
+$ react-native init myproject
+```
+
+- Then, edit `myproject/index.ios.js`, like this:
+
 ```jsx
 var Swiper = require('react-native-swiper')
 // es6
@@ -245,7 +259,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | onTouchEnd | `e` / `state` / `context` | `function` | You could hold the touch start for a long time |
 | onResponderRelease | `e` / `state` / `context` | `function` | When lifting up - you could pause forever before * lifting |
 
-> Note: each ScrollResponder be injected with two params: `state` and `context`, you can get `state` and `this`(ref to swiper's context) from params, for example:
+> Note: each ScrollResponder be injected with two params: `state` and `context`, you can get `state` and `context`(ref to swiper's `this`) from params, for example:
 
 ```jsx
 var swiper = React.createClass({
