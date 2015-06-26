@@ -196,7 +196,7 @@ export default React.createClass({
 
     if(newState.total > 1) {
       let setup = this.props.loop ? 1 : newState.index
-      newState.offset[this.state.dir] = newState.dir == 'y'
+      newState.offset[this.state.dir] = this.state.dir == 'y'
         ? this.state.height * setup
         : this.state.width * setup
     }
