@@ -369,24 +369,43 @@ export default React.createClass({
       : null
   },
 
-  renderButtons() {
+  renderNextButton() {
+    let button;
 
-    let nextButton = this.props.nextButton || <Text style={[styles.buttonText, {color: !this.props.loop && this.state.index == this.state.total - 1 ? 'rgba(0,0,0,0)' : '#007aff'}]}>›</Text>
-
-    let prevButton = this.props.prevButton || <Text style={[styles.buttonText, {color: !this.props.loop && this.state.index == 0 ? 'rgba(0,0,0,0)' : '#007aff'}]}>‹</Text>
+    if (this.props.loop || this.state.index != this.state.total - 1) {
+      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+    }
 
     return (
+      <TouchableOpacity onPress={() => button !== null && this.scrollTo.call(this, 1)}>
+        <View>
+          {button}
+        </View>
+      </TouchableOpacity>
+    )
+  },
+
+  renderPrevButton() {
+    let button = null
+
+    if (this.props.loop || this.state.index != 0) {
+       button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+    }
+
+    return (
+      <TouchableOpacity onPress={() => button !== null && this.scrollTo.call(this, -1)}>
+        <View>
+          {button}
+        </View>
+      </TouchableOpacity>
+    )
+  },
+
+  renderButtons() {
+    return (
       <View pointerEvents='box-none' style={[styles.buttonWrapper, {width: this.state.width, height: this.state.height}, this.props.buttonWrapperStyle]}>
-        <TouchableOpacity onPress={() => !(!this.props.loop && this.state.index == 0) && this.scrollTo.call(this, -1)}>
-          <View>
-            {prevButton}
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => !(!this.props.loop && this.state.index == this.state.total - 1) && this.scrollTo.call(this, 1)}>
-          <View>
-            {nextButton}
-          </View>
-        </TouchableOpacity>
+        {this.renderPrevButton()}
+        {this.renderNextButton()}
       </View>
     )
   },

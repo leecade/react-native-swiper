@@ -85,4 +85,3 @@ var swiper = React.createClass({
 })
 
 module.exports = swiper
-
