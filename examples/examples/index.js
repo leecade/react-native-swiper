@@ -1,12 +1,11 @@
 'use strict';
-
-var _interopRequireWildcard = function (obj) { return obj && obj.__esModule ? obj : { 'default': obj }; };
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
 /*
 react-native-swiper
@@ -14,9 +13,9 @@ react-native-swiper
 @author leecade<leecade@163.com>
  */
 
-var _React$StyleSheet$Text$View$ScrollView$TouchableOpacity = require('react-native');
+var _reactNative = require('react-native');
 
-var _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2 = _interopRequireWildcard(_React$StyleSheet$Text$View$ScrollView$TouchableOpacity);
+var _reactNative2 = _interopRequireDefault(_reactNative);
 
 // Using bare setTimeout, setInterval, setImmediate
 // and requestAnimationFrame calls is very dangerous
@@ -24,15 +23,14 @@ var _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2 = _interopRequireWi
 // the component is unmounted, you risk the callback
 // throwing an exception.
 
-var _TimerMixin = require('react-timer-mixin');
+var _reactTimerMixin = require('react-timer-mixin');
 
-var _TimerMixin2 = _interopRequireWildcard(_TimerMixin);
+var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 
 var _Dimensions = require('Dimensions');
 
-var _Dimensions2 = _interopRequireWildcard(_Dimensions);
+var _Dimensions2 = _interopRequireDefault(_Dimensions);
 
-'use strict';
 var _Dimensions$get = _Dimensions2['default'].get('window');
 
 var width = _Dimensions$get.width;
@@ -42,16 +40,19 @@ var height = _Dimensions$get.height;
  * Default styles
  * @type {StyleSheetPropType}
  */
-var styles = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.StyleSheet.create({
+var styles = _reactNative.StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
-    position: 'relative' },
+    position: 'relative'
+  },
 
   wrapper: {
-    backgroundColor: 'transparent' },
+    backgroundColor: 'transparent'
+  },
 
   slide: {
-    backgroundColor: 'transparent' },
+    backgroundColor: 'transparent'
+  },
 
   pagination_x: {
     position: 'absolute',
@@ -62,7 +63,8 @@ var styles = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.StyleSheet.
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent' },
+    backgroundColor: 'transparent'
+  },
 
   pagination_y: {
     position: 'absolute',
@@ -73,7 +75,8 @@ var styles = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.StyleSheet.
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'transparent' },
+    backgroundColor: 'transparent'
+  },
 
   title: {
     height: 30,
@@ -84,7 +87,8 @@ var styles = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.StyleSheet.
     left: 0,
     flexWrap: 'nowrap',
     width: 250,
-    backgroundColor: 'transparent' },
+    backgroundColor: 'transparent'
+  },
 
   buttonWrapper: {
     backgroundColor: 'transparent',
@@ -102,9 +106,11 @@ var styles = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.StyleSheet.
   buttonText: {
     fontSize: 50,
     color: '#007aff',
-    fontFamily: 'Arial' } });
+    fontFamily: 'Arial'
+  }
+});
 
-exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createClass({
+exports['default'] = _reactNative2['default'].createClass({
   displayName: 'index',
 
   /**
@@ -112,26 +118,27 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @type {Object}
    */
   propTypes: {
-    horizontal: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    children: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.node.isRequired,
-    style: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View.propTypes.style,
-    pagingEnabled: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    showsHorizontalScrollIndicator: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    showsVerticalScrollIndicator: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    bounces: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    scrollsToTop: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    removeClippedSubviews: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    automaticallyAdjustContentInsets: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    showsPagination: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    showsButtons: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    loop: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    autoplay: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    autoplayTimeout: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
-    autoplayDirection: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.bool,
-    index: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.number,
-    renderPagination: _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].PropTypes.func },
+    horizontal: _reactNative2['default'].PropTypes.bool,
+    children: _reactNative2['default'].PropTypes.node.isRequired,
+    style: _reactNative.View.propTypes.style,
+    pagingEnabled: _reactNative2['default'].PropTypes.bool,
+    showsHorizontalScrollIndicator: _reactNative2['default'].PropTypes.bool,
+    showsVerticalScrollIndicator: _reactNative2['default'].PropTypes.bool,
+    bounces: _reactNative2['default'].PropTypes.bool,
+    scrollsToTop: _reactNative2['default'].PropTypes.bool,
+    removeClippedSubviews: _reactNative2['default'].PropTypes.bool,
+    automaticallyAdjustContentInsets: _reactNative2['default'].PropTypes.bool,
+    showsPagination: _reactNative2['default'].PropTypes.bool,
+    showsButtons: _reactNative2['default'].PropTypes.bool,
+    loop: _reactNative2['default'].PropTypes.bool,
+    autoplay: _reactNative2['default'].PropTypes.bool,
+    autoplayTimeout: _reactNative2['default'].PropTypes.number,
+    autoplayDirection: _reactNative2['default'].PropTypes.bool,
+    index: _reactNative2['default'].PropTypes.number,
+    renderPagination: _reactNative2['default'].PropTypes.func
+  },
 
-  mixins: [_TimerMixin2['default']],
+  mixins: [_reactTimerMixin2['default']],
 
   /**
    * Default props
@@ -154,7 +161,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       autoplay: false,
       autoplayTimeout: 2.5,
       autoplayDirection: true,
-      index: 0 };
+      index: 0
+    };
   },
 
   /**
@@ -166,7 +174,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
 
     var initState = {
       isScrolling: false,
-      autoplayEnd: false };
+      autoplayEnd: false
+    };
 
     initState.total = props.children ? props.children.length || 1 : 0;
 
@@ -206,9 +215,9 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   autoplay: function autoplay() {
     var _this = this;
 
-    if (!this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) {
-      return;
-    }clearTimeout(this.autoplayTimer);
+    if (!this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) return;
+
+    clearTimeout(this.autoplayTimer);
 
     this.autoplayTimer = this.setTimeout(function () {
       if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index == _this.state.total - 1 : _this.state.index == 0)) return _this.setState({
@@ -272,9 +281,9 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     var step = dir == 'x' ? state.width : state.height;
 
     // Do nothing if offset no change.
-    if (!diff) {
-      return;
-    } // Note: if touch very very quickly and continuous,
+    if (!diff) return;
+
+    // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     index = index + diff / step;
 
@@ -290,7 +299,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
 
     this.setState({
       index: index,
-      offset: offset });
+      offset: offset
+    });
   },
 
   /**
@@ -298,9 +308,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @param  {number} index offset index
    */
   scrollTo: function scrollTo(index) {
-    if (this.state.isScrolling) {
-      return;
-    }var state = this.state;
+    if (this.state.isScrolling) return;
+    var state = this.state;
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
     var x = 0;
     var y = 0;
@@ -311,7 +320,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
     // update scroll state
     this.setState({
       isScrolling: true,
-      autoplayEnd: false });
+      autoplayEnd: false
+    });
   },
 
   /**
@@ -321,11 +331,11 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   renderPagination: function renderPagination() {
 
     // By default, dots only show when `total` > 2
-    if (this.state.total <= 1) {
-      return null;
-    }var dots = [];
+    if (this.state.total <= 1) return null;
+
+    var dots = [];
     for (var i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index ? this.props.activeDot || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(_React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View, { style: {
+      dots.push(i === this.state.index ? this.props.activeDot || _reactNative2['default'].createElement(_reactNative.View, { style: {
           backgroundColor: '#007aff',
           width: 8,
           height: 8,
@@ -333,7 +343,8 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
           marginLeft: 3,
           marginRight: 3,
           marginTop: 3,
-          marginBottom: 3 } }) : this.props.dot || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(_React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View, { style: {
+          marginBottom: 3
+        } }) : this.props.dot || _reactNative2['default'].createElement(_reactNative.View, { style: {
           backgroundColor: 'rgba(0,0,0,.2)',
           width: 8,
           height: 8,
@@ -341,11 +352,12 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
           marginLeft: 3,
           marginRight: 3,
           marginTop: 3,
-          marginBottom: 3 } }));
+          marginBottom: 3
+        } }));
     }
 
-    return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
+    return _reactNative2['default'].createElement(
+      _reactNative.View,
       { pointerEvents: 'none', style: [styles['pagination_' + this.state.dir], this.props.paginationStyle] },
       dots
     );
@@ -354,53 +366,71 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
   renderTitle: function renderTitle() {
     var child = this.props.children[this.state.index];
     var title = child && child.props.title;
-    return title ? _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
+    return title ? _reactNative2['default'].createElement(
+      _reactNative.View,
       { style: styles.title },
       this.props.children[this.state.index].props.title
     ) : null;
   },
 
-  renderButtons: function renderButtons() {
+  renderNextButton: function renderNextButton() {
     var _this4 = this;
 
-    var nextButton = this.props.nextButton || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.Text,
-      { style: [styles.buttonText, { color: !this.props.loop && this.state.index == this.state.total - 1 ? 'rgba(0,0,0,0)' : '#007aff' }] },
-      '›'
-    );
+    var button = undefined;
 
-    var prevButton = this.props.prevButton || _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.Text,
-      { style: [styles.buttonText, { color: !this.props.loop && this.state.index == 0 ? 'rgba(0,0,0,0)' : '#007aff' }] },
-      '‹'
-    );
+    if (this.props.loop || this.state.index != this.state.total - 1) {
+      button = this.props.nextButton || _reactNative2['default'].createElement(
+        _reactNative.Text,
+        { style: styles.buttonText },
+        '›'
+      );
+    }
 
-    return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
-      { pointerEvents: 'box-none', style: [styles.buttonWrapper, { width: this.state.width, height: this.state.height }, this.props.buttonWrapperStyle] },
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-        _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
-        { onPress: function () {
-            return !(!_this4.props.loop && _this4.state.index == 0) && _this4.scrollTo.call(_this4, -1);
-          } },
-        _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-          _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
-          null,
-          prevButton
-        )
-      ),
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-        _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.TouchableOpacity,
-        { onPress: function () {
-            return !(!_this4.props.loop && _this4.state.index == _this4.state.total - 1) && _this4.scrollTo.call(_this4, 1);
-          } },
-        _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-          _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
-          null,
-          nextButton
-        )
+    return _reactNative2['default'].createElement(
+      _reactNative.TouchableOpacity,
+      { onPress: function () {
+          return button !== null && _this4.scrollTo.call(_this4, 1);
+        } },
+      _reactNative2['default'].createElement(
+        _reactNative.View,
+        null,
+        button
       )
+    );
+  },
+
+  renderPrevButton: function renderPrevButton() {
+    var _this5 = this;
+
+    var button = null;
+
+    if (this.props.loop || this.state.index != 0) {
+      button = this.props.prevButton || _reactNative2['default'].createElement(
+        _reactNative.Text,
+        { style: styles.buttonText },
+        '‹'
+      );
+    }
+
+    return _reactNative2['default'].createElement(
+      _reactNative.TouchableOpacity,
+      { onPress: function () {
+          return button !== null && _this5.scrollTo.call(_this5, -1);
+        } },
+      _reactNative2['default'].createElement(
+        _reactNative.View,
+        null,
+        button
+      )
+    );
+  },
+
+  renderButtons: function renderButtons() {
+    return _reactNative2['default'].createElement(
+      _reactNative.View,
+      { pointerEvents: 'box-none', style: [styles.buttonWrapper, { width: this.state.width, height: this.state.height }, this.props.buttonWrapperStyle] },
+      this.renderPrevButton(),
+      this.renderNextButton()
     );
   },
 
@@ -410,7 +440,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
    * @return {object} props injected props
    */
   injectState: function injectState(props) {
-    var _this5 = this;
+    var _this6 = this;
 
     /*    const scrollResponders = [
           'onMomentumScrollBegin',
@@ -426,7 +456,7 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
         (function () {
           var originResponder = props[prop];
           props[prop] = function (e) {
-            return originResponder(e, _this5.state, _this5);
+            return originResponder(e, _this6.state, _this6);
           };
         })();
       }
@@ -463,26 +493,26 @@ exports['default'] = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['d
       }
 
       pages = pages.map(function (page, i) {
-        return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-          _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
+        return _reactNative2['default'].createElement(
+          _reactNative.View,
           { style: pageStyle, key: i },
           children[page]
         );
       });
-    } else pages = _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
+    } else pages = _reactNative2['default'].createElement(
+      _reactNative.View,
       { style: pageStyle },
       children
     );
 
-    return _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.View,
+    return _reactNative2['default'].createElement(
+      _reactNative.View,
       { style: [styles.container, {
           width: state.width,
           height: state.height
         }] },
-      _React$StyleSheet$Text$View$ScrollView$TouchableOpacity2['default'].createElement(
-        _React$StyleSheet$Text$View$ScrollView$TouchableOpacity.ScrollView,
+      _reactNative2['default'].createElement(
+        _reactNative.ScrollView,
         _extends({ ref: 'scrollView'
         }, props, {
           contentContainerStyle: [styles.wrapper, props.style],

@@ -226,8 +226,8 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | :------------ |:---------------:| :---------------:| :-----|
 | showsButtons | true | `bool` | Set to `true` make control buttons visible. |
 | buttonWrapperStyle | `{backgroundColor: 'transparent', flexDirection: 'row', position: 'absolute', top: 0, left: 0, flex: 1, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', alignItems: 'center'}` | `style` | Custom styles. |
-| nextButton | `<Text style={[styles.buttonText, {color: !this.props.loop && this.state.index == this.state.total - 1 ? 'rgba(0,0,0,0)' : '#007aff'}]}>›</Text>` | `element` | Allow custom the next button. |
-| prevButton | `<Text style={[styles.buttonText, {color: !this.props.loop && this.state.index == 0 ? 'rgba(0,0,0,0)' : '#007aff'}]}>‹</Text>` | `element` | Allow custom the prev button. |
+| nextButton | `<Text style={styles.buttonText}>›</Text>` | `element` | Allow custom the next button. |
+| prevButton | `<Text style={styles.buttonText}>‹</Text>` | `element` | Allow custom the prev button. |
 
 #### Props of Children
 

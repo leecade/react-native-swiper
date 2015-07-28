@@ -31,7 +31,7 @@ var swiper = React.createClass({
             paginationStyle={{
               bottom: 70,
             }}
-          loop={false}>
+            loop={false}>
             <View style={styles.slide}>
               <Image style={styles.image} source={{uri: 'http://i.imgur.com/u3kXqo7.png'}} />
             </View>
@@ -49,4 +49,3 @@ var swiper = React.createClass({
 })
 
 module.exports = swiper
-
