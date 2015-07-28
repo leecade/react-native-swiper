@@ -162,26 +162,11 @@ export default React.createClass({
       autoplayEnd: false,
     }
 
-    initState.total = props.children
-      ? (props.children.length || 1)
-      : 0
-
-    initState.index = initState.total > 1
-      ? Math.min(props.index, initState.total - 1)
-      : 0
-
     // Default: horizontal
     initState.dir = props.horizontal == false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
     initState.offset = {}
-
-    if(initState.total > 1) {
-      let setup = props.loop ? 1 : initState.index
-      initState.offset[initState.dir] = initState.dir == 'y'
-        ? initState.height * setup
-        : initState.width * setup
-    }
 
     return initState
   },
@@ -194,6 +179,29 @@ export default React.createClass({
 
   componentWillMount() {
     this.props = this.injectState(this.props)
+  },
+
+  componentWillReceiveProps(newProps) {
+    let newState = {}
+
+    newState.total = newProps.children
+      ? (newProps.children.length || 1)
+      : 0
+
+    newState.index = newState.total > 1
+      ? Math.min(this.props.index, newState.total - 1)
+      : 0
+
+    newState.offset = {}
+
+    if(newState.total > 1) {
+      let setup = this.props.loop ? 1 : newState.index
+      newState.offset[this.state.dir] = this.state.dir == 'y'
+        ? this.state.height * setup
+        : this.state.width * setup
+    }
+
+    this.setState(newState);
   },
 
   componentDidMount() {
