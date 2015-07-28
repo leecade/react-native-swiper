@@ -1,4 +1,9 @@
 'use strict';
+/*
+react-native-swiper
+
+@author leecade<leecade@163.com>
+ */
 Object.defineProperty(exports, '__esModule', {
   value: true
 });
@@ -7,21 +12,15 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-/*
-react-native-swiper
-
-@author leecade<leecade@163.com>
- */
-
 var _reactNative = require('react-native');
-
-var _reactNative2 = _interopRequireDefault(_reactNative);
 
 // Using bare setTimeout, setInterval, setImmediate
 // and requestAnimationFrame calls is very dangerous
 // because if you forget to cancel the request before
 // the component is unmounted, you risk the callback
 // throwing an exception.
+
+var _reactNative2 = _interopRequireDefault(_reactNative);
 
 var _reactTimerMixin = require('react-timer-mixin');
 
@@ -33,13 +32,12 @@ var _Dimensions2 = _interopRequireDefault(_Dimensions);
 
 var _Dimensions$get = _Dimensions2['default'].get('window');
 
-var width = _Dimensions$get.width;
-var height = _Dimensions$get.height;
-
 /**
  * Default styles
  * @type {StyleSheetPropType}
  */
+var width = _Dimensions$get.width;
+var height = _Dimensions$get.height;
 var styles = _reactNative.StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
@@ -177,20 +175,11 @@ exports['default'] = _reactNative2['default'].createClass({
       autoplayEnd: false
     };
 
-    initState.total = props.children ? props.children.length || 1 : 0;
-
-    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0;
-
     // Default: horizontal
     initState.dir = props.horizontal == false ? 'y' : 'x';
     initState.width = props.width || width;
     initState.height = props.height || height;
     initState.offset = {};
-
-    if (initState.total > 1) {
-      var setup = props.loop ? 1 : initState.index;
-      initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
-    }
 
     return initState;
   },
@@ -203,6 +192,23 @@ exports['default'] = _reactNative2['default'].createClass({
 
   componentWillMount: function componentWillMount() {
     this.props = this.injectState(this.props);
+  },
+
+  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
+    var newState = {};
+
+    newState.total = newProps.children ? newProps.children.length || 1 : 0;
+
+    newState.index = newState.total > 1 ? Math.min(this.props.index, newState.total - 1) : 0;
+
+    newState.offset = {};
+
+    if (newState.total > 1) {
+      var setup = this.props.loop ? 1 : newState.index;
+      newState.offset[this.state.dir] = this.state.dir == 'y' ? this.state.height * setup : this.state.width * setup;
+    }
+
+    this.setState(newState);
   },
 
   componentDidMount: function componentDidMount() {
@@ -513,7 +519,7 @@ exports['default'] = _reactNative2['default'].createClass({
         }] },
       _reactNative2['default'].createElement(
         _reactNative.ScrollView,
-        _extends({ ref: 'scrollView'
+        _extends({ ref: "scrollView"
         }, props, {
           contentContainerStyle: [styles.wrapper, props.style],
           contentOffset: state.offset,
