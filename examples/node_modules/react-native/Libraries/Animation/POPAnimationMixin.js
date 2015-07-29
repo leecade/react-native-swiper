@@ -12,6 +12,7 @@
 'use strict';
 
 var POPAnimationOrNull = require('POPAnimation');
+var React = require('React');
 
 if (!POPAnimationOrNull) {
   // POP animation isn't available in the OSS fork - this is a temporary
@@ -35,6 +36,7 @@ var POPAnimationMixin = {
   AnimationProperties: POPAnimation.Properties,
 
   getInitialState: function(): Object {
+    this._popAnimationEnqueuedAnimationTimeouts = [];
     return {
       _currentAnimationsByNodeHandle: {},
     };
@@ -83,7 +85,7 @@ var POPAnimationMixin = {
       'Invalid refKey ' + refKey + ' for anim:\n' + JSON.stringify(anim) +
         '\nvalid refs: ' + JSON.stringify(Object.keys(this.refs))
     );
-    var refNodeHandle = this.refs[refKey].getNodeHandle();
+    var refNodeHandle = React.findNodeHandle(this.refs[refKey]);
     this.startAnimationWithNodeHandle(refNodeHandle, animID, doneCallback);
   },
 
@@ -119,7 +121,11 @@ var POPAnimationMixin = {
       }
       doneCallback && doneCallback(finished);
     };
-    POPAnimation.addAnimation(nodeHandle, animID, cleanupWrapper);
+    // Hack to aviod race condition in POP:
+    var animationTimeoutHandler = setTimeout(() => {
+      POPAnimation.addAnimation(nodeHandle, animID, cleanupWrapper);
+    }, 1);
+    this._popAnimationEnqueuedAnimationTimeouts.push(animationTimeoutHandler);
   },
 
   /**
@@ -192,7 +198,7 @@ var POPAnimationMixin = {
    */
   stopAnimations: function(refKey: string) {
     invariant(this.refs[refKey], 'invalid ref');
-    this.stopNodeHandleAnimations(this.refs[refKey].getNodeHandle());
+    this.stopNodeHandleAnimations(React.findNodeHandle(this.refs[refKey]));
   },
 
   /**
@@ -250,6 +256,10 @@ var POPAnimationMixin = {
   // Cleanup any potentially leaked animations.
   componentWillUnmount: function() {
     this.stopAllAnimations();
+    this._popAnimationEnqueuedAnimationTimeouts.forEach(animationTimeoutHandler => {
+      clearTimeout(animationTimeoutHandler);
+    });
+    this._popAnimationEnqueuedAnimationTimeouts = [];
   }
 };
 

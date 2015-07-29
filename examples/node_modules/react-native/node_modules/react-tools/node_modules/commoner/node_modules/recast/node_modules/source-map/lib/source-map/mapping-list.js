@@ -22,7 +22,7 @@ define(function (require, exports, module) {
     var columnA = mappingA.generatedColumn;
     var columnB = mappingB.generatedColumn;
     return lineB > lineA || lineB == lineA && columnB >= columnA ||
-           util.compareByGeneratedPositions(mappingA, mappingB) <= 0;
+           util.compareByGeneratedPositionsInflated(mappingA, mappingB) <= 0;
   }
 
   /**
@@ -75,7 +75,7 @@ define(function (require, exports, module) {
    */
   MappingList.prototype.toArray = function MappingList_toArray() {
     if (!this._sorted) {
-      this._array.sort(util.compareByGeneratedPositions);
+      this._array.sort(util.compareByGeneratedPositionsInflated);
       this._sorted = true;
     }
     return this._array;

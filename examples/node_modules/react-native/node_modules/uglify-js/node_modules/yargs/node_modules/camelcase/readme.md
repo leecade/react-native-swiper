@@ -40,6 +40,11 @@ camelCase(process.argv[3]);
 ```
 
 
+## Related
+
+See [`decamelize`](https://github.com/sindresorhus/decamelize) for the inverse.
+
+
 ## License
 
 MIT © [Sindre Sorhus](http://sindresorhus.com)

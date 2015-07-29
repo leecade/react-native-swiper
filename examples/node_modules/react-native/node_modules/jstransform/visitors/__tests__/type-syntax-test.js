@@ -1,3 +1,12 @@
+/**
+ * Copyright 2013-present, Facebook, Inc.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree. An additional grant
+ * of patent rights can be found in the PATENTS file in the same directory.
+ */
+
 /*jshint evil: true*/
 /*jshint loopfunc: true*/
 
@@ -166,29 +175,33 @@ if (!!module.parent) {
   };
 } else {
   require('mock-modules').autoMockOff();
-  var tests = require("./gen/type-syntax-test.rec.js");
-  var jstransform = require('../../src/jstransform');
+  var tests = require('./gen/type-syntax-test.rec.js');
+  var transform = require('../../src/jstransform').transform;
   var visitors = require('../type-syntax').visitorList;
 
-  describe('transforms match expectations', function () {
-    for (var section in tests) {
-      for (var test in tests[section]) {
-        it('transforms "'+test+'"', function (section, test) { return function () {
-          var transformed = jstransform.transform(visitors, test).code;
-          expect(transformed).toBe(tests[section][test].transformed);
-        }; } (section, test));
-        it('evals "'+test+'"', function (section, test) { return function () {
-          var evalResult;
-          var transformed = jstransform.transform(visitors, test).code;
-          try {
+  describe('transforms match expectations', function() {
+    Object.keys(tests).forEach(function(sectionName) {
+      var section = tests[sectionName];
+      Object.keys(section).forEach(function(testCode) {
+        it('transforms "' + testCode + '"', function() {
+          expect(transform(visitors, testCode).code).toBe(section[testCode].transformed);
+        });
+
+        it('evals "' + testCode + '"', function() {
+          var transformed = transform(visitors, testCode).code;
+          var expected = section[testCode].eval;
+
+          var evalFn = function() {
             eval(transformed);
-            evalResult = "No error";
-          } catch (e) {
-            evalResult = e.message;
+          };
+
+          if (expected === 'No error') {
+            expect(evalFn).not.toThrow();
+          } else {
+            expect(evalFn).toThrow(expected);
           }
-          expect(evalResult).toBe(tests[section][test].eval);
-        }; } (section, test));
-      }
-    }
+        });
+      });
+    });
   });
 }

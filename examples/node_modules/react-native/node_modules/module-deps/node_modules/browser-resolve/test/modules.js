@@ -263,3 +263,19 @@ test('alt-browser deep module reference mapping', function(done) {
         done();
     });
 });
+
+test('alt-browser fallback to "browser" on deps of deps', function(done) {
+    var parent = {
+        filename: fixtures_dir + '/alt-browser-field/foo.js',
+        package: { main: './index.js' },
+        browser: 'chromeapp'
+    };
+
+    resolve('foobar', parent, function(err, path, pkg) {
+        assert.ifError(err);
+        assert.equal(path, require.resolve('./fixtures/node_modules/module-k/browser'));
+        assert.equal(pkg.main, './browser.js');
+        assert.equal(pkg.browser['./index.js'], './browser.js');
+        done();
+    });
+});

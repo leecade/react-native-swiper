@@ -24,7 +24,7 @@ util.inherits(Walker, EventEmitter)
  * Errors of this type are thrown when the type of a file could not be
  * determined.
  */
-UnknownFileTypeError = Walker.UnknownFileTypeError = makeError(
+var UnknownFileTypeError = Walker.UnknownFileTypeError = makeError(
   'UnknownFileTypeError',
   'The type of this file could not be determined.'
 )

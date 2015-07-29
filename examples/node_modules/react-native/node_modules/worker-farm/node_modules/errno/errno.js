@@ -1,5 +1,10 @@
 var all = module.exports.all = [
   {
+    errorno: -2,
+    code: 'ENOENT',
+    description: 'no such file or directory'
+  },
+  {
     errno: -1,
     code: 'UNKNOWN',
     description: 'unknown error'

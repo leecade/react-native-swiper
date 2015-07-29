@@ -101,6 +101,10 @@ This creates and returns a new promise.  `resolver` must be a function.  The `re
 
 Converts values and foreign promises into Promises/A+ promises.  If you pass it a value then it returns a Promise for that value.  If you pass it something that is close to a promise (such as a jQuery attempt at a promise) it returns a Promise that takes on the state of `value` (rejected or fulfilled).
 
+#### Promise.reject(value)
+
+Returns a rejected promise with the given value.
+
 #### Promise.all(array)
 
 Returns a promise for an array.  If it is called with a single argument that `Array.isArray` then this returns a promise for a copy of that array with any promises replaced by their fulfilled values.  e.g.

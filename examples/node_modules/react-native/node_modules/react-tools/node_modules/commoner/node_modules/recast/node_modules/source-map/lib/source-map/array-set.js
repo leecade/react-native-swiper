@@ -34,6 +34,16 @@ define(function (require, exports, module) {
   };
 
   /**
+   * Return how many unique items are in this ArraySet. If duplicates have been
+   * added, than those do not count towards the size.
+   *
+   * @returns Number
+   */
+  ArraySet.prototype.size = function ArraySet_size() {
+    return Object.getOwnPropertyNames(this._set).length;
+  };
+
+  /**
    * Add the given string to this set.
    *
    * @param String aStr

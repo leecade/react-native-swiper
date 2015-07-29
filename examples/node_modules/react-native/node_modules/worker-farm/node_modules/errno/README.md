@@ -1,6 +1,6 @@
 # node-errno
 
-Better [libuv](https://github.com/joyent/libuv)/[Node.js](http://nodejs.org) error handling & reporting. Available in npm as *errno*.
+Better [libuv](https://github.com/libuv/libuv)/[Node.js](https://nodejs.org)/[io.js](https://iojs.org) error handling & reporting. Available in npm as *errno*.
 
 * [errno exposed](#errnoexposed)
 * [Custom errors](#customerrors)

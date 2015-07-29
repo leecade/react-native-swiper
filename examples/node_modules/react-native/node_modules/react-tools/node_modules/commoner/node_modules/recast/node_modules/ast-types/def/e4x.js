@@ -2,9 +2,6 @@ require("./core");
 var types = require("../lib/types");
 var def = types.Type.def;
 var or = types.Type.or;
-var builtin = types.builtInTypes;
-var isString = builtin.string;
-var isBoolean = builtin.boolean;
 
 // Note that none of these types are buildable because the Mozilla Parser
 // API doesn't specify any builder functions, and nobody uses E4X anymore.
@@ -19,12 +16,12 @@ def("XMLQualifiedIdentifier")
     .bases("Expression")
     .field("left", or(def("Identifier"), def("XMLAnyName")))
     .field("right", or(def("Identifier"), def("Expression")))
-    .field("computed", isBoolean);
+    .field("computed", Boolean);
 
 def("XMLFunctionQualifiedIdentifier")
     .bases("Expression")
     .field("right", or(def("Identifier"), def("Expression")))
-    .field("computed", isBoolean);
+    .field("computed", Boolean);
 
 def("XMLAttributeSelector")
     .bases("Expression")
@@ -51,7 +48,7 @@ def("XMLEscape")
 
 def("XMLText")
     .bases("XML")
-    .field("text", isString);
+    .field("text", String);
 
 def("XMLStartTag")
     .bases("XML")
@@ -67,21 +64,21 @@ def("XMLPointTag")
 
 def("XMLName")
     .bases("XML")
-    .field("contents", or(isString, [def("XML")]));
+    .field("contents", or(String, [def("XML")]));
 
 def("XMLAttribute")
     .bases("XML")
-    .field("value", isString);
+    .field("value", String);
 
 def("XMLCdata")
     .bases("XML")
-    .field("contents", isString);
+    .field("contents", String);
 
 def("XMLComment")
     .bases("XML")
-    .field("contents", isString);
+    .field("contents", String);
 
 def("XMLProcessingInstruction")
     .bases("XML")
-    .field("target", isString)
-    .field("contents", or(isString, null));
+    .field("target", String)
+    .field("contents", or(String, null));

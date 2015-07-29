@@ -2,7 +2,6 @@ language: node_js
 node_js:
   - "0.11"
   - "0.10"
-
-matrix:
-  allow_failures:
-    - node_js: "0.8"
+  - "0.8"
+before_install:
+  - npm install -g npm@2.1.10

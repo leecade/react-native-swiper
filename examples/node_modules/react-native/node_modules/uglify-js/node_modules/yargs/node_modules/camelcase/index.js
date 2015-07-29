@@ -3,7 +3,11 @@ module.exports = function (str) {
 	str = str.trim();
 
 	if (str.length === 1 || !(/[_.\- ]+/).test(str) ) {
-		return str;
+		if (str[0] === str[0].toLowerCase() && str.slice(1) !== str.slice(1).toLowerCase()) {
+			return str;
+		}
+
+		return str.toLowerCase();
 	}
 
 	return str

@@ -12,20 +12,22 @@
 'use strict';
 
 var NativeMethodsMixin = require('NativeMethodsMixin');
+var Platform = require('Platform');
 var React = require('React');
-var ReactIOSViewAttributes = require('ReactIOSViewAttributes');
+var ReactInstanceMap = require('ReactInstanceMap');
+var ReactNativeViewAttributes = require('ReactNativeViewAttributes');
 var StyleSheetPropType = require('StyleSheetPropType');
 var TextStylePropTypes = require('TextStylePropTypes');
 var Touchable = require('Touchable');
 
-var createReactIOSNativeComponentClass =
-  require('createReactIOSNativeComponentClass');
+var createReactNativeComponentClass =
+  require('createReactNativeComponentClass');
 var merge = require('merge');
 
 var stylePropType = StyleSheetPropType(TextStylePropTypes);
 
 var viewConfig = {
-  validAttributes: merge(ReactIOSViewAttributes.UIView, {
+  validAttributes: merge(ReactNativeViewAttributes.UIView, {
     isHighlighted: true,
     numberOfLines: true,
   }),
@@ -33,7 +35,7 @@ var viewConfig = {
 };
 
 /**
- * A react component for displaying text which supports nesting,
+ * A React component for displaying text which supports nesting,
  * styling, and touch handling.  In the following example, the nested title and
  * body text will inherit the `fontFamily` from `styles.baseText`, but the title
  * provides its own additional styles.  The title and body will stack on top of
@@ -92,6 +94,12 @@ var Text = React.createClass({
      * Used to locate this view in end-to-end tests.
      */
     testID: React.PropTypes.string,
+    /**
+     * Invoked on mount and layout changes with
+     *
+     *   {nativeEvent: {layout: {x, y, width, height}}}.
+     */
+     onLayout: React.PropTypes.func,
   },
 
   viewConfig: viewConfig,
@@ -171,12 +179,19 @@ var Text = React.createClass({
     return PRESS_RECT_OFFSET;
   },
 
+  getChildContext: function(): Object {
+    return {isInAParentText: true};
+  },
+
+  childContextTypes: {
+    isInAParentText: React.PropTypes.bool
+  },
+
   render: function() {
     var props = {};
     for (var key in this.props) {
       props[key] = this.props[key];
     }
-    props.ref = this.getNodeHandle();
     // Text is accessible by default
     if (props.accessible !== false) {
       props.accessible = true;
@@ -189,7 +204,14 @@ var Text = React.createClass({
     props.onResponderMove = this.handleResponderMove;
     props.onResponderRelease = this.handleResponderRelease;
     props.onResponderTerminate = this.handleResponderTerminate;
-    return <RCTText {...props} />;
+
+    // TODO: Switch to use contextTypes and this.context after React upgrade
+    var context = ReactInstanceMap.get(this)._context;
+    if (context.isInAParentText) {
+      return <RCTVirtualText {...props} />;
+    } else {
+      return <RCTText {...props} />;
+    }
   },
 });
 
@@ -202,6 +224,16 @@ type RectOffset = {
 
 var PRESS_RECT_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
 
-var RCTText = createReactIOSNativeComponentClass(viewConfig);
+var RCTText = createReactNativeComponentClass(viewConfig);
+var RCTVirtualText = RCTText;
+
+if (Platform.OS === 'android') {
+  RCTVirtualText = createReactNativeComponentClass({
+    validAttributes: merge(ReactNativeViewAttributes.UIView, {
+      isHighlighted: true,
+    }),
+    uiViewClassName: 'RCTVirtualText',
+  });
+}
 
 module.exports = Text;

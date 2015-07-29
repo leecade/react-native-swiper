@@ -40,6 +40,8 @@ var code = [
 var ast = recast.parse(code);
 ```
 Now do *whatever* you want to `ast`. Really, anything at all!
+
+See [ast-types](https://github.com/benjamn/ast-types) (especially the [def/core.js](https://github.com/benjamn/ast-types/blob/master/def/core.js)) module for a thorough overview of the `ast` api.
 ```js
 // Grab a reference to the function declaration we just parsed.
 var add = ast.program.body[0];

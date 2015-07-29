@@ -50,12 +50,17 @@ var defaults = {
     // If you want esprima not to throw exceptions when it encounters
     // non-fatal errors, keep this option true.
     tolerant: true,
-    
+
     // If you want to override the quotes used in string literals, specify
-    // either "single", "double", or "auto" here ("auto" will select the one 
+    // either "single", "double", or "auto" here ("auto" will select the one
     // which results in the shorter literal)
     // Otherwise, the input marks will be preserved
     quote: null,
+
+    // If you want to print trailing commas in object literals,
+    // array expressions, functions calls and function definitions pass true
+    // for this option.
+    trailingComma: false,
 }, hasOwn = defaults.hasOwnProperty;
 
 // Copy options and fill in default values.
@@ -81,5 +86,6 @@ exports.normalize = function(options) {
         range: get("range"),
         tolerant: get("tolerant"),
         quote: get("quote"),
+        trailingComma: get("trailingComma"),
     };
 };

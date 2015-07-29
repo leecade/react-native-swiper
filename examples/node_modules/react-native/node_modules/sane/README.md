@@ -48,7 +48,7 @@ options:
 
 * `glob`: a single string glob pattern or an array of them.
 * `poll`: puts the watcher in polling mode. Under the hood that means `fs.watchFile`.
-* `watchman`: makes the watcher use [watchman](https://facebook.github.io/watchman/)
+* `watchman`: makes the watcher use [watchman](https://facebook.github.io/watchman/).
 * `dot`: enables watching files/directories that start with a dot.
 
 For the glob pattern documentation, see [minimatch](https://github.com/isaacs/minimatch).
@@ -82,6 +82,44 @@ All events are passed the file/dir path relative to the root directory
 * `add` when a file or directory has been added
 * `delete` when a file or directory has been deleted
 
+## CLI
+
+This module includes a simple command line interface, which you can install with `npm install sane -g`.
+
+```
+Usage: sane <command> [...directory] [--glob=<filePattern>] [--poll] [--watchman] [--dot] [--wait=<seconds>]
+
+OPTIONS:
+    --glob=<filePattern>
+        A single string glob pattern or an array of them.
+
+    --poll, -p
+      Use polling mode.
+
+    --watchman, -w
+      Use watchman (if available).
+
+    --dot, -d
+      Enables watching files/directories that start with a dot.
+
+    --wait=<seconds>
+        Duration, in seconds, that watching will be disabled
+        after running <command>. Setting this option will
+        throttle calls to <command> for the specified duration.
+```
+
+It will watch the given `directory` and run the given <command> every time a file changes.
+
+### CLI example usage
+- `sane 'echo "A command ran"'`
+- `sane 'echo "A command ran"' --glob='**/*.css'`
+- `sane 'echo "A command ran"' site/assets/css --glob='**/*.css'`
+- `sane 'echo "A command ran"' --wait=3`
+- `sane 'echo "A command ran"' -p`
+
 ## License
 
 MIT
+
+## Credits
+The CLI was originally based on the [watch CLI](https://github.com/mikeal/watch). Watch is licensed under the Apache License Version 2.0.

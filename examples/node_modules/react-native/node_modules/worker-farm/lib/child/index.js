@@ -15,12 +15,16 @@ function handle (data) {
     , callback = function () {
         var _args = Array.prototype.slice.call(arguments)
         if (_args[0] instanceof Error) {
+          var e = _args[0]
           _args[0] = {
               '$error'  : '$error'
-            , 'type'    : _args[0].constructor.name
-            , 'message' : _args[0].message
-            , 'stack'   : _args[0].stack
+            , 'type'    : e.constructor.name
+            , 'message' : e.message
+            , 'stack'   : e.stack
           }
+          Object.keys(e).forEach(function(key) {
+            _args[0][key] = e[key]
+          })
         }
         process.send({ idx: idx, child: child, args: _args })
       }

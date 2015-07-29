@@ -59,7 +59,7 @@ intercept module affects all .js files loaded in the Node app, and it is
 inconsiderate to modify global state like that unless you are also controlling
 the top level app.
 
-#### Why distribute AMD-style nodes via npm?
+#### Why distribute AMD-style modules via npm?
 
 npm has a lot of weaknesses for front-end use (installed layout is not great,
 should have better support for the `baseUrl + moduleID + '.js' style of loading,
