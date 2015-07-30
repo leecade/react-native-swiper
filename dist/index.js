@@ -341,25 +341,33 @@ exports['default'] = _reactNative2['default'].createClass({
 
     var dots = [];
     for (var i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index ? this.props.activeDot || _reactNative2['default'].createElement(_reactNative.View, { style: {
-          backgroundColor: '#007aff',
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          marginLeft: 3,
-          marginRight: 3,
-          marginTop: 3,
-          marginBottom: 3
-        } }) : this.props.dot || _reactNative2['default'].createElement(_reactNative.View, { style: {
-          backgroundColor: 'rgba(0,0,0,.2)',
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          marginLeft: 3,
-          marginRight: 3,
-          marginTop: 3,
-          marginBottom: 3
-        } }));
+      if (i === this.state.index) {
+        var key = "swiperActiveDot" + i;
+        dots.push(this.props.activeDot ? _reactNative2['default'].cloneElement(this.props.activeDot, { key: key }) : _reactNative2['default'].createElement(_reactNative.View, { key: key,
+          style: {
+            backgroundColor: '#007aff',
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            marginLeft: 3,
+            marginRight: 3,
+            marginTop: 3,
+            marginBottom: 3
+          } }));
+      } else {
+        var key = "swiperDot" + i;
+        dots.push(this.props.dot ? _reactNative2['default'].cloneElement(this.props.dot, { key: key }) : _reactNative2['default'].createElement(_reactNative.View, { key: key,
+          style: {
+            backgroundColor: 'rgba(0,0,0,.2)',
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            marginLeft: 3,
+            marginRight: 3,
+            marginTop: 3,
+            marginBottom: 3
+          } }));
+      }
     }
 
     return _reactNative2['default'].createElement(
