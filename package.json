@@ -22,6 +22,9 @@
     "url": "https://github.com/leecade/react-native-swiper/issues"
   },
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
+  "dependencies": {
+    "react-timer-mixin": "^0.13.2"
+  },
   "devDependencies": {
     "babel": "^5.1.11"
   }
