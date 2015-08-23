@@ -334,28 +334,38 @@ export default React.createClass({
 
     let dots = []
     for(let i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index
-        ? (this.props.activeDot || <View style={{
-            backgroundColor: '#007aff',
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginLeft: 3,
-            marginRight: 3,
-            marginTop: 3,
-            marginBottom: 3,
-          }} />)
-        : (this.props.dot || <View style={{
-            backgroundColor:'rgba(0,0,0,.2)',
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginLeft: 3,
-            marginRight: 3,
-            marginTop: 3,
-            marginBottom: 3,
-          }} />)
-      )
+      if (i === this.state.index) {
+        let key = "swiperActiveDot" + i
+        dots.push(this.props.activeDot ?
+            React.cloneElement(this.props.activeDot, { key: key }) :
+            <View key={key}
+                  style={{
+                    backgroundColor: '#007aff',
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    marginLeft: 3,
+                    marginRight: 3,
+                    marginTop: 3,
+                    marginBottom: 3,
+                  }} />)
+      }
+      else {
+        let key = "swiperDot" + i
+        dots.push(this.props.dot ?
+            React.cloneElement(this.props.dot, { key: key }) :
+            <View key={key}
+                  style={{
+                    backgroundColor:'rgba(0,0,0,.2)',
+                    width: 8,
+                    height: 8,
+                    borderRadius: 4,
+                    marginLeft: 3,
+                    marginRight: 3,
+                    marginTop: 3,
+                    marginBottom: 3,
+                  }} />)
+      }
     }
 
     return (
