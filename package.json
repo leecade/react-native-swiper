@@ -26,6 +26,6 @@
     "babel": "^5.1.11"
   },
   "dependencies": {
-    "react-timer-mixin" : "^0.13.3"
+    "react-timer-mixin": "^0.13.3"
   }
 }
