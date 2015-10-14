@@ -333,27 +333,23 @@ export default React.createClass({
     if(this.state.total <= 1) return null
 
     let dots = []
+    let CustomDot = this.props.dot
+    let CustomActiveDot = this.props.activeDot
     for(let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
-        ? (this.props.activeDot || <View style={{
+        ? (<CustomActiveDot key={i} /> || <View key={i} style={{
             backgroundColor: '#007aff',
             width: 8,
             height: 8,
             borderRadius: 4,
-            marginLeft: 3,
-            marginRight: 3,
-            marginTop: 3,
-            marginBottom: 3,
+            margin: 3
           }} />)
-        : (this.props.dot || <View style={{
+        : (<CustomDot key={i} /> || <View key={i} style={{
             backgroundColor:'rgba(0,0,0,.2)',
             width: 8,
             height: 8,
             borderRadius: 4,
-            marginLeft: 3,
-            marginRight: 3,
-            marginTop: 3,
-            marginBottom: 3,
+            margin: 3
           }} />)
       )
     }
