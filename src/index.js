@@ -10,6 +10,7 @@ import React, {
   View,
   ScrollView,
   TouchableOpacity,
+  Dimensions,
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -17,8 +18,7 @@ import React, {
 // because if you forget to cancel the request before
 // the component is unmounted, you risk the callback
 // throwing an exception.
-import TimerMixin from 'react-timer-mixin'
-import Dimensions from 'Dimensions'
+import TimerMixin from 'react-timer-mixin'Dimensions,
 
 let { width, height } = Dimensions.get('window')
 
