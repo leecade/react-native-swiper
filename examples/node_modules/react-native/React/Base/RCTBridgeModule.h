@@ -12,6 +12,7 @@
 #import "RCTDefines.h"
 
 @class RCTBridge;
+@protocol RCTBridgeMethod;
 
 /**
  * The type of a block that is capable of sending a response to a bridged
@@ -52,6 +53,21 @@ extern dispatch_queue_t RCTJSThread;
  * Provides the interface needed to register a bridge module.
  */
 @protocol RCTBridgeModule <NSObject>
+
+/**
+ * Place this macro in your class implementation to automatically register
+ * your module with the bridge when it loads. The optional js_name argument
+ * will be used as the JS module name. If omitted, the JS module name will
+ * match the Objective-C class name.
+ */
+#define RCT_EXPORT_MODULE(js_name) \
+RCT_EXTERN void RCTRegisterModule(Class); \
++ (NSString *)moduleName { return @#js_name; } \
++ (void)load { RCTRegisterModule(self); }
+
+// Implemented by RCT_EXPORT_MODULE
++ (NSString *)moduleName;
+
 @optional
 
 /**
@@ -60,7 +76,7 @@ extern dispatch_queue_t RCTJSThread;
  * will be set automatically by the bridge when it initializes the module.
  * To implement this in your module, just add `@synthesize bridge = _bridge;`
  */
-@property (nonatomic, weak) RCTBridge *bridge;
+@property (nonatomic, weak, readonly) RCTBridge *bridge;
 
 /**
  * The queue that will be used to call all exported methods. If omitted, this
@@ -84,17 +100,6 @@ extern dispatch_queue_t RCTJSThread;
  * when it initializes the module.
  */
 @property (nonatomic, strong, readonly) dispatch_queue_t methodQueue;
-
-/**
- * Place this macro in your class implementation to automatically register
- * your module with the bridge when it loads. The optional js_name argument
- * will be used as the JS module name. If omitted, the JS module name will
- * match the Objective-C class name.
- */
-#define RCT_EXPORT_MODULE(js_name) \
-  RCT_EXTERN void RCTRegisterModule(Class); \
-  + (NSString *)moduleName { return @#js_name; } \
-  + (void)load { RCTRegisterModule([self class]); }
 
 /**
  * Wrap the parameter line of your method implementation with this macro to
@@ -204,23 +209,38 @@ extern dispatch_queue_t RCTJSThread;
  * Like RCT_EXTERN_REMAP_METHOD, but allows setting a custom JavaScript name.
  */
 #define RCT_EXTERN_REMAP_METHOD(js_name, method) \
-  + (NSArray *)RCT_CONCAT(__rct_export__, RCT_CONCAT(js_name, RCT_CONCAT(__LINE__, __COUNTER__))) { \
+  + (NSArray<NSString *> *)RCT_CONCAT(__rct_export__, \
+    RCT_CONCAT(js_name, RCT_CONCAT(__LINE__, __COUNTER__))) { \
     return @[@#js_name, @#method]; \
-  } \
+  }
+
+/**
+ * Injects methods into JS.  Entries in this array are used in addition to any
+ * methods defined using the macros above.  This method is called only once,
+ * before registration.
+ */
+- (NSArray<id<RCTBridgeMethod>> *)methodsToExport;
 
 /**
  * Injects constants into JS. These constants are made accessible via
- * NativeModules.ModuleName.X. This method is called when the module is
- * registered by the bridge. It is only called once for the lifetime of the
- * bridge, so it is not suitable for returning dynamic values, but may be
- * used for long-lived values such as session keys, that are regenerated only
- * as part of a reload of the entire React application.
+ * NativeModules.ModuleName.X.  It is only called once for the lifetime of the
+ * bridge, so it is not suitable for returning dynamic values, but may be used
+ * for long-lived values such as session keys, that are regenerated only as
+ * part of a reload of the entire React application.
  */
-- (NSDictionary *)constantsToExport;
+- (NSDictionary<NSString *, id> *)constantsToExport;
 
 /**
  * Notifies the module that a batch of JS method invocations has just completed.
  */
 - (void)batchDidComplete;
+
+/**
+ * Notifies the module that the active batch of JS method invocations has been
+ * partially flushed.
+ *
+ * This occurs before -batchDidComplete, and more frequently.
+ */
+- (void)partialBatchDidFlush;
 
 @end

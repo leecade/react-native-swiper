@@ -7,24 +7,25 @@
  * of patent rights can be found in the PATENTS file in the same directory.
  *
  * @providesModule TouchableOpacity
+ * @noflow
  */
 'use strict';
 
 // Note (avik): add @flow when Flow supports spread properties in propTypes
 
+var Animated = require('Animated');
 var NativeMethodsMixin = require('NativeMethodsMixin');
-var POPAnimationMixin = require('POPAnimationMixin');
 var React = require('React');
 var TimerMixin = require('react-timer-mixin');
 var Touchable = require('Touchable');
 var TouchableWithoutFeedback = require('TouchableWithoutFeedback');
 
-var cloneWithProps = require('cloneWithProps');
-var ensureComponentIsNative = require('ensureComponentIsNative');
 var ensurePositiveDelayProps = require('ensurePositiveDelayProps');
 var flattenStyle = require('flattenStyle');
-var keyOf = require('keyOf');
-var onlyChild = require('onlyChild');
+
+type Event = Object;
+
+var PRESS_RETENTION_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
 
 /**
  * A wrapper for making views respond properly to touches.
@@ -46,13 +47,9 @@ var onlyChild = require('onlyChild');
  *   );
  * },
  * ```
- * > **NOTE**: TouchableOpacity supports only one child
- * >
- * > If you wish to have to have several child components, wrap them in a View.
  */
-
 var TouchableOpacity = React.createClass({
-  mixins: [TimerMixin, Touchable.Mixin, NativeMethodsMixin, POPAnimationMixin],
+  mixins: [TimerMixin, Touchable.Mixin, NativeMethodsMixin],
 
   propTypes: {
     ...TouchableWithoutFeedback.propTypes,
@@ -70,16 +67,14 @@ var TouchableOpacity = React.createClass({
   },
 
   getInitialState: function() {
-    return this.touchableGetInitialState();
+    return {
+      ...this.touchableGetInitialState(),
+      anim: new Animated.Value(1),
+    };
   },
 
   componentDidMount: function() {
     ensurePositiveDelayProps(this.props);
-    ensureComponentIsNative(this.refs[CHILD_REF]);
-  },
-
-  componentDidUpdate: function() {
-    ensureComponentIsNative(this.refs[CHILD_REF]);
   },
 
   componentWillReceiveProps: function(nextProps) {
@@ -87,58 +82,46 @@ var TouchableOpacity = React.createClass({
   },
 
   setOpacityTo: function(value) {
-    if (POPAnimationMixin) {
-      // Reset with animation if POP is available
-      this.stopAllAnimations();
-      var anim = {
-        type: this.AnimationTypes.linear,
-        property: this.AnimationProperties.opacity,
-        duration: 0.15,
-        toValue: value,
-      };
-      this.startAnimation(CHILD_REF, anim);
-    } else {
-      // Reset immediately if POP is unavailable
-      this.refs[CHILD_REF].setNativeProps({
-        opacity: value
-      });
-    }
+    Animated.timing(
+      this.state.anim,
+      {toValue: value, duration: 150}
+    ).start();
   },
 
   /**
    * `Touchable.Mixin` self callbacks. The mixin will invoke these if they are
    * defined on your component.
    */
-  touchableHandleActivePressIn: function() {
+  touchableHandleActivePressIn: function(e: Event) {
     this.clearTimeout(this._hideTimeout);
     this._hideTimeout = null;
     this._opacityActive();
-    this.props.onPressIn && this.props.onPressIn();
+    this.props.onPressIn && this.props.onPressIn(e);
   },
 
-  touchableHandleActivePressOut: function() {
+  touchableHandleActivePressOut: function(e: Event) {
     if (!this._hideTimeout) {
       this._opacityInactive();
     }
-    this.props.onPressOut && this.props.onPressOut();
+    this.props.onPressOut && this.props.onPressOut(e);
   },
 
-  touchableHandlePress: function() {
+  touchableHandlePress: function(e: Event) {
     this.clearTimeout(this._hideTimeout);
     this._opacityActive();
     this._hideTimeout = this.setTimeout(
       this._opacityInactive,
       this.props.delayPressOut || 100
     );
-    this.props.onPress && this.props.onPress();
+    this.props.onPress && this.props.onPress(e);
   },
 
-  touchableHandleLongPress: function() {
-    this.props.onLongPress && this.props.onLongPress();
+  touchableHandleLongPress: function(e: Event) {
+    this.props.onLongPress && this.props.onLongPress(e);
   },
 
   touchableGetPressRectOffset: function() {
-    return PRESS_RECT_OFFSET;   // Always make sure to predeclare a constant!
+    return this.props.pressRetentionOffset || PRESS_RETENTION_OFFSET;
   },
 
   touchableGetHighlightDelayMS: function() {
@@ -161,36 +144,31 @@ var TouchableOpacity = React.createClass({
   _opacityInactive: function() {
     this.clearTimeout(this._hideTimeout);
     this._hideTimeout = null;
-    var child = onlyChild(this.props.children);
-    var childStyle = flattenStyle(child.props.style) || {};
+    var childStyle = flattenStyle(this.props.style) || {};
     this.setOpacityTo(
       childStyle.opacity === undefined ? 1 : childStyle.opacity
     );
   },
 
   render: function() {
-    return cloneWithProps(onlyChild(this.props.children), {
-      ref: CHILD_REF,
-      accessible: true,
-      testID: this.props.testID,
-      onStartShouldSetResponder: this.touchableHandleStartShouldSetResponder,
-      onResponderTerminationRequest: this.touchableHandleResponderTerminationRequest,
-      onResponderGrant: this.touchableHandleResponderGrant,
-      onResponderMove: this.touchableHandleResponderMove,
-      onResponderRelease: this.touchableHandleResponderRelease,
-      onResponderTerminate: this.touchableHandleResponderTerminate,
-    });
+    return (
+      <Animated.View
+        accessible={true}
+        accessibilityComponentType={this.props.accessibilityComponentType}
+        accessibilityTraits={this.props.accessibilityTraits}
+        style={[this.props.style, {opacity: this.state.anim}]}
+        testID={this.props.testID}
+        onLayout={this.props.onLayout}
+        onStartShouldSetResponder={this.touchableHandleStartShouldSetResponder}
+        onResponderTerminationRequest={this.touchableHandleResponderTerminationRequest}
+        onResponderGrant={this.touchableHandleResponderGrant}
+        onResponderMove={this.touchableHandleResponderMove}
+        onResponderRelease={this.touchableHandleResponderRelease}
+        onResponderTerminate={this.touchableHandleResponderTerminate}>
+        {this.props.children}
+      </Animated.View>
+    );
   },
 });
-
-/**
- * When the scroll view is disabled, this defines how far your touch may move
- * off of the button, before deactivating the button. Once deactivated, try
- * moving it back and you'll see that the button is once again reactivated!
- * Move it back and forth several times while the scroll view is disabled.
- */
-var PRESS_RECT_OFFSET = {top: 20, left: 20, right: 20, bottom: 30};
-
-var CHILD_REF = keyOf({childRef: null});
 
 module.exports = TouchableOpacity;

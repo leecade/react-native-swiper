@@ -2,6 +2,7 @@
  * Copyright 2004-present Facebook. All Rights Reserved.
  *
  * @providesModule MatrixMath
+ * @noflow
  */
 /* eslint-disable space-infix-ops */
 'use strict';
@@ -28,6 +29,54 @@ var MatrixMath = {
       m[4],  m[5],  m[6],  m[7],
       m[8],  m[9],  m[10], m[11],
       m[12], m[13], m[14], m[15],
+    ];
+  },
+
+  createOrthographic: function(left, right, bottom, top, near, far) {
+    var a = 2 / (right - left);
+    var b = 2 / (top - bottom);
+    var c = -2 / (far - near);
+
+    var tx = -(right + left) / (right - left);
+    var ty = -(top + bottom) / (top - bottom);
+    var tz = -(far + near) / (far - near);
+
+    return [
+        a,  0,  0,  0,
+        0,  b,  0,  0,
+        0,  0,  c,  0,
+        tx, ty, tz, 1
+    ];
+  },
+
+  createFrustum: function(left, right, bottom, top, near, far) {
+    var r_width  = 1 / (right - left);
+    var r_height = 1 / (top - bottom);
+    var r_depth  = 1 / (near - far);
+    var x = 2 * (near * r_width);
+    var y = 2 * (near * r_height);
+    var A = (right + left) * r_width;
+    var B = (top + bottom) * r_height;
+    var C = (far + near) * r_depth;
+    var D = 2 * (far * near * r_depth);
+    return [
+      x, 0, 0, 0,
+      0, y, 0, 0,
+      A, B, C,-1,
+      0, 0, D, 0,
+    ];
+  },
+
+  createPerspective: function(fovInRadians, aspect, near, far) {
+    var h = 1 / Math.tan(fovInRadians);
+    var r_depth  = 1 / (near - far);
+    var C = (far + near) * r_depth;
+    var D = 2 * (far * near * r_depth);
+    return [
+      h/aspect, 0, 0, 0,
+      0, h, 0, 0,
+      0, 0, C,-1,
+      0, 0, D, 0,
     ];
   },
 
@@ -63,6 +112,10 @@ var MatrixMath = {
     matrixCommand[0] = x;
     matrixCommand[5] = y;
     matrixCommand[10] = z;
+  },
+
+  reusePerspectiveCommand: function(matrixCommand, p) {
+    matrixCommand[11] = -1 / p;
   },
 
   reuseScaleXCommand(matrixCommand, factor) {
@@ -103,6 +156,16 @@ var MatrixMath = {
     var mat = MatrixMath.createIdentityMatrix();
     MatrixMath.reuseRotateZCommand(mat, radians);
     return mat;
+  },
+
+  reuseSkewXCommand: function(matrixCommand, radians) {
+    matrixCommand[4] = Math.sin(radians);
+    matrixCommand[5] = Math.cos(radians);
+  },
+
+  reuseSkewYCommand: function(matrixCommand, radians) {
+    matrixCommand[0] = Math.cos(radians);
+    matrixCommand[1] = Math.sin(radians);
   },
 
   multiplyInto: function(out, a, b) {
@@ -402,10 +465,10 @@ var MatrixMath = {
 
       // Solve the equation by inverting perspectiveMatrix and multiplying
       // rightHandSide by the inverse.
-      var inversePerspectiveMatrix = MatrixMath.inverse3x3(
+      var inversePerspectiveMatrix = MatrixMath.inverse(
         perspectiveMatrix
       );
-      var transposedInversePerspectiveMatrix = MatrixMath.transpose4x4(
+      var transposedInversePerspectiveMatrix = MatrixMath.transpose(
         inversePerspectiveMatrix
       );
       var perspective = MatrixMath.multiplyVectorByMatrix(
@@ -520,6 +583,8 @@ var MatrixMath = {
       translation,
 
       rotate: rotationDegrees[2],
+      rotateX: rotationDegrees[0],
+      rotateY: rotationDegrees[1],
       scaleX: scale[0],
       scaleY: scale[1],
       translateX: translation[0],

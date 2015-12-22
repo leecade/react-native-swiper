@@ -1,15 +1,16 @@
-'use strict'
-/*
-react-native-swiper
-
-@author leecade<leecade@163.com>
+/**
+ * react-native-swiper
+ * @author leecade<leecade@163.com>
  */
 import React, {
   StyleSheet,
   Text,
   View,
   ScrollView,
+  Dimensions,
   TouchableOpacity,
+  ViewPagerAndroid,
+  Platform
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -18,7 +19,6 @@ import React, {
 // the component is unmounted, you risk the callback
 // throwing an exception.
 import TimerMixin from 'react-timer-mixin'
-import Dimensions from 'Dimensions'
 
 let { width, height } = Dimensions.get('window')
 
@@ -96,7 +96,9 @@ let styles = StyleSheet.create({
   },
 })
 
-export default React.createClass({
+// missing `module.exports = exports['default'];` with babel6
+// export default React.createClass({
+module.exports = React.createClass({
 
   /**
    * Props Validation
@@ -155,20 +157,7 @@ export default React.createClass({
    * @return {object} states
    */
   getInitialState() {
-    let props = this.props
-
-    let initState = {
-      isScrolling: false,
-      autoplayEnd: false,
-    }
-
-    // Default: horizontal
-    initState.dir = props.horizontal == false ? 'y' : 'x'
-    initState.width = props.width || width
-    initState.height = props.height || height
-    initState.offset = {}
-
-    return initState
+    return this.initState(this.props)
   },
 
   /**
@@ -181,31 +170,36 @@ export default React.createClass({
     this.props = this.injectState(this.props)
   },
 
-  componentWillReceiveProps(newProps) {
-    let newState = {}
-
-    newState.total = newProps.children
-      ? (newProps.children.length || 1)
-      : 0
-
-    newState.index = newState.total > 1
-      ? Math.min(this.props.index, newState.total - 1)
-      : 0
-
-    newState.offset = {}
-
-    if(newState.total > 1) {
-      let setup = this.props.loop ? 1 : newState.index
-      newState.offset[this.state.dir] = this.state.dir == 'y'
-        ? this.state.height * setup
-        : this.state.width * setup
-    }
-
-    this.setState(newState);
+  componentWillReceiveProps(props) {
+    this.setState(this.initState(props))
   },
 
   componentDidMount() {
     this.autoplay()
+  },
+
+  initState(props) {
+    let initState = {
+      isScrolling: false,
+      autoplayEnd: false,
+    }
+
+    initState.total = props.children ? props.children.length || 1 : 0
+    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
+
+    // Default: horizontal
+    initState.dir = props.horizontal == false ? 'y' : 'x'
+    initState.width = props.width || width
+    initState.height = props.height || height
+    initState.offset = {}
+
+    if (initState.total > 1) {
+      var setup = props.loop ? 1 : initState.index
+      initState.offset[initState.dir] = initState.dir == 'y'
+        ? initState.height * setup
+        : initState.width * setup
+    }
+    return initState
   },
 
   /**
@@ -333,9 +327,7 @@ export default React.createClass({
     if(this.state.total <= 1) return null
 
     let dots = []
-    for(let i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index
-        ? (this.props.activeDot || <View style={{
+    let ActiveDot = this.props.activeDot || <View style={{
             backgroundColor: '#007aff',
             width: 8,
             height: 8,
@@ -344,8 +336,8 @@ export default React.createClass({
             marginRight: 3,
             marginTop: 3,
             marginBottom: 3,
-          }} />)
-        : (this.props.dot || <View style={{
+          }} />;
+    let Dot = this.props.dot || <View style={{
             backgroundColor:'rgba(0,0,0,.2)',
             width: 8,
             height: 8,
@@ -354,7 +346,13 @@ export default React.createClass({
             marginRight: 3,
             marginTop: 3,
             marginBottom: 3,
-          }} />)
+          }} />;
+    for(let i = 0; i < this.state.total; i++) {
+      dots.push(i === this.state.index
+        ?
+        React.cloneElement(ActiveDot, {key: i})
+        :
+        React.cloneElement(Dot, {key: i})
       )
     }
 
@@ -417,7 +415,25 @@ export default React.createClass({
       </View>
     )
   },
-
+  renderScrollView(pages) {
+     if (Platform.OS === 'ios')
+         return (
+            <ScrollView ref="scrollView"
+             {...this.props}
+                       contentContainerStyle={[styles.wrapper, this.props.style]}
+                       contentOffset={this.state.offset}
+                       onScrollBeginDrag={this.onScrollBegin}
+                       onMomentumScrollEnd={this.onScrollEnd}>
+             {pages}
+            </ScrollView>
+         );
+      return (
+         <ViewPagerAndroid ref="scrollView"
+            style={{flex: 1}}>
+            {pages}
+         </ViewPagerAndroid>
+      );
+  },
   /**
    * Inject state to ScrollResponder
    * @param  {object} props origin props
@@ -485,14 +501,7 @@ export default React.createClass({
         width: state.width,
         height: state.height
       }]}>
-        <ScrollView ref="scrollView"
-          {...props}
-          contentContainerStyle={[styles.wrapper, props.style]}
-          contentOffset={state.offset}
-          onScrollBeginDrag={this.onScrollBegin}
-          onMomentumScrollEnd={this.onScrollEnd}>
-          {pages}
-        </ScrollView>
+        {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
           : this.renderPagination())}

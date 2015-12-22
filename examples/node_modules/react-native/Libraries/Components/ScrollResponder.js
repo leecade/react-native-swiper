@@ -11,17 +11,19 @@
  */
 'use strict';
 
-var NativeModules = require('NativeModules');
+var Dimensions = require('Dimensions');
+var Platform = require('Platform');
 var RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 var React = require('React');
 var Subscribable = require('Subscribable');
 var TextInputState = require('TextInputState');
 
-var RCTUIManager = NativeModules.UIManager;
-var RCTUIManagerDeprecated = NativeModules.UIManager;
-var RCTScrollViewConsts = RCTUIManager.RCTScrollView.Constants;
+var { UIManager, ScrollViewManager } = require('NativeModules');
 
+var invariant = require('invariant');
 var warning = require('warning');
+
+import type ReactComponent from 'ReactComponent';
 
 /**
  * Mixin that can be integrated in order to handle scrolling that plays well
@@ -114,7 +116,6 @@ type Event = Object;
 
 var ScrollResponderMixin = {
   mixins: [Subscribable.Mixin],
-  statics: RCTScrollViewConsts,
   scrollResponderMixinGetInitialState: function(): State {
     return {
       isTouching: false,
@@ -351,7 +352,37 @@ var ScrollResponderMixin = {
    * can also be used to quickly scroll to any element we want to focus
    */
   scrollResponderScrollTo: function(offsetX: number, offsetY: number) {
-    RCTUIManagerDeprecated.scrollTo(React.findNodeHandle(this), offsetX, offsetY);
+    if (Platform.OS === 'android') {
+      UIManager.dispatchViewManagerCommand(
+        React.findNodeHandle(this),
+        UIManager.RCTScrollView.Commands.scrollTo,
+        [Math.round(offsetX), Math.round(offsetY)],
+      );
+    } else {
+      ScrollViewManager.scrollTo(
+        React.findNodeHandle(this),
+        { x: offsetX, y: offsetY }
+      );
+    }
+  },
+
+  /**
+   * Like `scrollResponderScrollTo` but immediately scrolls to the given
+   * position
+   */
+  scrollResponderScrollWithouthAnimationTo: function(offsetX: number, offsetY: number) {
+    if (Platform.OS === 'android') {
+      UIManager.dispatchViewManagerCommand(
+        React.findNodeHandle(this),
+        UIManager.RCTScrollView.Commands.scrollWithoutAnimationTo,
+        [offsetX, offsetY],
+      );
+    } else {
+      ScrollViewManager.scrollWithoutAnimationTo(
+        React.findNodeHandle(this),
+        { x: offsetX, y: offsetY }
+      );
+    }
   },
 
   /**
@@ -359,7 +390,11 @@ var ScrollResponderMixin = {
    * @param {object} rect Should have shape {x, y, width, height}
    */
   scrollResponderZoomTo: function(rect: { x: number; y: number; width: number; height: number; }) {
-    RCTUIManagerDeprecated.zoomToRect(React.findNodeHandle(this), rect);
+    if (Platform.OS === 'android') {
+      invariant('zoomToRect is not implemented');
+    } else {
+      ScrollViewManager.zoomToRect(React.findNodeHandle(this), rect);
+    }
   },
 
   /**
@@ -375,9 +410,9 @@ var ScrollResponderMixin = {
   scrollResponderScrollNativeHandleToKeyboard: function(nodeHandle: any, additionalOffset?: number, preventNegativeScrollOffset?: bool) {
     this.additionalScrollOffset = additionalOffset || 0;
     this.preventNegativeScrollOffset = !!preventNegativeScrollOffset;
-    RCTUIManager.measureLayout(
+    UIManager.measureLayout(
       nodeHandle,
-      React.findNodeHandle(this),
+      React.findNodeHandle(this.getInnerViewNode()),
       this.scrollResponderTextInputFocusError,
       this.scrollResponderInputMeasureAndScrollToKeyboard
     );
@@ -394,20 +429,21 @@ var ScrollResponderMixin = {
    * @param {number} height Height of the text input.
    */
   scrollResponderInputMeasureAndScrollToKeyboard: function(left: number, top: number, width: number, height: number) {
+    var keyboardScreenY = Dimensions.get('window').height;
     if (this.keyboardWillOpenTo) {
-      var scrollOffsetY =
-        top - this.keyboardWillOpenTo.endCoordinates.screenY + height +
-        this.additionalScrollOffset;
-
-      // By default, this can scroll with negative offset, pulling the content
-      // down so that the target component's bottom meets the keyboard's top.
-      // If requested otherwise, cap the offset at 0 minimum to avoid content
-      // shifting down.
-      if (this.preventNegativeScrollOffset) {
-        scrollOffsetY = Math.max(0, scrollOffsetY);
-      }
-      this.scrollResponderScrollTo(0, scrollOffsetY);
+      keyboardScreenY = this.keyboardWillOpenTo.endCoordinates.screenY;
     }
+    var scrollOffsetY = top - keyboardScreenY + height + this.additionalScrollOffset;
+
+    // By default, this can scroll with negative offset, pulling the content
+    // down so that the target component's bottom meets the keyboard's top.
+    // If requested otherwise, cap the offset at 0 minimum to avoid content
+    // shifting down.
+    if (this.preventNegativeScrollOffset) {
+      scrollOffsetY = Math.max(0, scrollOffsetY);
+    }
+    this.scrollResponderScrollTo(0, scrollOffsetY);
+
     this.additionalOffset = 0;
     this.preventNegativeScrollOffset = false;
   },
@@ -469,14 +505,18 @@ var ScrollResponderMixin = {
     this.props.onKeyboardWillHide && this.props.onKeyboardWillHide(e);
   },
 
-  scrollResponderKeyboardDidShow: function() {
-    this.keyboardWillOpenTo = null;
-    this.props.onKeyboardDidShow && this.props.onKeyboardDidShow();
+  scrollResponderKeyboardDidShow: function(e: Event) {
+    // TODO(7693961): The event for DidShow is not available on iOS yet.
+    // Use the one from WillShow and do not assign.
+    if (e) {
+      this.keyboardWillOpenTo = e;
+    }
+    this.props.onKeyboardDidShow && this.props.onKeyboardDidShow(e);
   },
 
-  scrollResponderKeyboardDidHide: function() {
+  scrollResponderKeyboardDidHide: function(e: Event) {
     this.keyboardWillOpenTo = null;
-    this.props.onKeyboardDidHide && this.props.onKeyboardDidHide();
+    this.props.onKeyboardDidHide && this.props.onKeyboardDidHide(e);
   }
 
 };

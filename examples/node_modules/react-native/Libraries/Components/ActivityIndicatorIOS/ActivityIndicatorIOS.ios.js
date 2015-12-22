@@ -18,7 +18,6 @@ var StyleSheet = require('StyleSheet');
 var View = require('View');
 
 var requireNativeComponent = require('requireNativeComponent');
-var verifyPropTypes = require('verifyPropTypes');
 
 var GRAY = '#999999';
 
@@ -33,6 +32,7 @@ var ActivityIndicatorIOS = React.createClass({
   mixins: [NativeMethodsMixin],
 
   propTypes: {
+    ...View.propTypes,
     /**
      * Whether to show the indicator (true, the default) or hide it (false).
      */
@@ -75,8 +75,8 @@ var ActivityIndicatorIOS = React.createClass({
     return (
       <View
         onLayout={onLayout}
-        style={[styles.container, sizeStyle, style]}>
-        <RCTActivityIndicatorView {...props} />
+        style={[styles.container, style]}>
+        <RCTActivityIndicatorView {...props} style={sizeStyle} />
       </View>
     );
   }
@@ -99,15 +99,8 @@ var styles = StyleSheet.create({
 
 var RCTActivityIndicatorView = requireNativeComponent(
   'RCTActivityIndicatorView',
-  null
+  ActivityIndicatorIOS,
+  {nativeOnly: {activityIndicatorViewStyle: true}},
 );
-if (__DEV__) {
-  var nativeOnlyProps = {activityIndicatorViewStyle: true};
-  verifyPropTypes(
-    ActivityIndicatorIOS,
-    RCTActivityIndicatorView.viewConfig,
-    nativeOnlyProps
-  );
-}
 
 module.exports = ActivityIndicatorIOS;

@@ -11,6 +11,8 @@ The best Swiper component for React Native.
 
 ## Feature & TODO
 
+- [ ] **Support for Android**
+
 - [ ] More switch effects
 
 - [ ] Unit tests
@@ -39,7 +41,16 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.3.0]**
+- **[v1.4.0]**
+  + [1f8643a](https://github.com/leecade/react-native-swiper/commit/1f8643a67e2768d165132a19629a991a86672036) Move Dimensions import to deconstructed React import for react-native (@thanks [@jedrekk](https://github.com/jedrekk)).
+
+  + [e28af9b](https://github.com/leecade/react-native-swiper/commit/e28af9b205f17447cb3149b45fc220beec037bce) Support index property in combination with loop property (@thanks [@almost](https://github.com/almost)).
+
+  + [6c832d](https://github.com/leecade/react-native-swiper/commit/6c832d6a23da3737a2e8a2667273dc6093bcc9ee) fix warnings about keys for dots (@thanks [@sunnylqm](https://github.com/sunnylqm)).
+
+  + [8de1afc](https://github.com/leecade/react-native-swiper/commit/8de1afcb75a003424231bb089802db53bbbf84e4) Changes to make the example work in xcode 7 (@thanks [@allomov](https://github.com/allomov)).
+
+- [v1.3.0]
   + [8d6d75c](https://github.com/leecade/react-native-swiper/commit/8d6d75c00edf87b603c218aad0018932277814b5) inject `state` in ScrollResponders (@thanks [@smothers](https://github.com/smothers)).
 
 - [v1.2.2]
@@ -64,7 +75,7 @@ The best Swiper component for React Native.
 
 ## Show Cases
 
-> Try these cases by yourself very easy, Just open `examples/swiper.xcodeproj` with Xcode, then press `Cmd + R`; you may edit `examples/index.ios.js` for switch cases.
+> Try these cases by yourself very easy, Just open `examples/ios/swiper.xcodeproj` in Xcode, then press `Cmd + R`; you may edit `examples/index.ios.js` for switch cases.
 
 ### [examples/basic.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/basic.js)
 

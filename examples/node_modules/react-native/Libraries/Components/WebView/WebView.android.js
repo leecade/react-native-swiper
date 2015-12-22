@@ -14,14 +14,14 @@ var EdgeInsetsPropType = require('EdgeInsetsPropType');
 var React = require('React');
 var ReactNativeViewAttributes = require('ReactNativeViewAttributes');
 var StyleSheet = require('StyleSheet');
+var UIManager = require('UIManager');
 var View = require('View');
 
-var createReactNativeComponentClass = require('createReactNativeComponentClass');
 var keyMirror = require('keyMirror');
 var merge = require('merge');
+var requireNativeComponent = require('requireNativeComponent');
 
 var PropTypes = React.PropTypes;
-var RCTUIManager = require('NativeModules').UIManager;
 
 var RCT_WEBVIEW_REF = 'webview';
 
@@ -31,17 +31,27 @@ var WebViewState = keyMirror({
   ERROR: null,
 });
 
+/**
+ * Renders a native WebView.
+ */
 var WebView = React.createClass({
 
   propTypes: {
-    renderError: PropTypes.func, // view to show if there's an error
-    renderLoading: PropTypes.func, // loading indicator to show
-    url: PropTypes.string.isRequired,
+    ...View.propTypes,
+    renderError: PropTypes.func, 
+    renderLoading: PropTypes.func,
+    url: PropTypes.string,
+    html: PropTypes.string,
     automaticallyAdjustContentInsets: PropTypes.bool,
     contentInset: EdgeInsetsPropType,
     onNavigationStateChange: PropTypes.func,
     startInLoadingState: PropTypes.bool, // force WebView to show loadingView on first load
     style: View.propTypes.style,
+
+    /**
+     * Used on Android only, JS is enabled by default for WebView on iOS
+     * @platform android
+     */
     javaScriptEnabledAndroid: PropTypes.bool,
 
     /**
@@ -50,10 +60,11 @@ var WebView = React.createClass({
     injectedJavaScript: PropTypes.string,
 
     /**
-     * Sets the user-agent for this WebView. The user-agent can also be set in native through
-     * WebViewConfig, but this can and will overwrite that config.
+     * Sets the user-agent for this WebView. The user-agent can also be set in native using
+     * WebViewConfig. This prop will overwrite that config.
      */
     userAgent: PropTypes.string,
+
     /**
      * Used to locate this view in end-to-end tests.
      */
@@ -102,6 +113,7 @@ var WebView = React.createClass({
         key="webViewKey"
         style={webViewStyles}
         url={this.props.url}
+        html={this.props.html}
         injectedJavaScript={this.props.injectedJavaScript}
         userAgent={this.props.userAgent}
         javaScriptEnabledAndroid={this.props.javaScriptEnabledAndroid}
@@ -122,25 +134,25 @@ var WebView = React.createClass({
   },
 
   goForward: function() {
-    RCTUIManager.dispatchViewManagerCommand(
+    UIManager.dispatchViewManagerCommand(
       this.getWebWiewHandle(),
-      RCTUIManager.RCTWebView.Commands.goForward,
+      UIManager.RCTWebView.Commands.goForward,
       null
     );
   },
 
   goBack: function() {
-    RCTUIManager.dispatchViewManagerCommand(
+    UIManager.dispatchViewManagerCommand(
       this.getWebWiewHandle(),
-      RCTUIManager.RCTWebView.Commands.goBack,
+      UIManager.RCTWebView.Commands.goBack,
       null
     );
   },
 
   reload: function() {
-    RCTUIManager.dispatchViewManagerCommand(
+    UIManager.dispatchViewManagerCommand(
       this.getWebWiewHandle(),
-      RCTUIManager.RCTWebView.Commands.reload,
+      UIManager.RCTWebView.Commands.reload,
       null
     );
   },
@@ -181,15 +193,7 @@ var WebView = React.createClass({
   },
 });
 
-var RCTWebView = createReactNativeComponentClass({
-  validAttributes: merge(ReactNativeViewAttributes.UIView, {
-    injectedJavaScript: true,
-    javaScriptEnabledAndroid: true,
-    url: true,
-    userAgent: true,
-  }),
-  uiViewClassName: 'RCTWebView',
-});
+var RCTWebView = requireNativeComponent('RCTWebView', WebView);
 
 var styles = StyleSheet.create({
   container: {

@@ -9,6 +9,7 @@
 
 #import "RCTSourceCode.h"
 
+#import "RCTDefines.h"
 #import "RCTAssert.h"
 #import "RCTBridge.h"
 #import "RCTUtils.h"
@@ -19,19 +20,25 @@ RCT_EXPORT_MODULE()
 
 @synthesize bridge = _bridge;
 
+#if !RCT_DEV
+- (void)setScriptText:(NSString *)scriptText {}
+#endif
+
 RCT_EXPORT_METHOD(getScriptText:(RCTResponseSenderBlock)successCallback
-                  failureCallback:(RCTResponseSenderBlock)failureCallback)
+                  failureCallback:(RCTResponseErrorBlock)failureCallback)
 {
-  if (self.scriptText && self.scriptURL) {
-    successCallback(@[@{@"text": self.scriptText, @"url":[self.scriptURL absoluteString]}]);
+  if (RCT_DEV && self.scriptData && self.scriptURL) {
+    NSString *scriptText = [[NSString alloc] initWithData:self.scriptData encoding:NSUTF8StringEncoding];
+
+    successCallback(@[@{@"text": scriptText, @"url": self.scriptURL.absoluteString}]);
   } else {
-    failureCallback(@[RCTMakeError(@"Source code is not available", nil, nil)]);
+    failureCallback(RCTErrorWithMessage(@"Source code is not available"));
   }
 }
 
-- (NSDictionary *)constantsToExport
+- (NSDictionary<NSString *, id> *)constantsToExport
 {
-  NSString *URL = [self.bridge.bundleURL absoluteString] ?: @"";
+  NSString *URL = self.bridge.bundleURL.absoluteString ?: @"";
   return @{@"scriptURL": URL};
 }
 

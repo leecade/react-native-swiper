@@ -1,13 +1,13 @@
 /**
  * Copyright (c) 2015, Facebook, Inc.  All rights reserved.
  *
- * Facebook, Inc. (“Facebook”) owns all right, title and interest, including
+ * Facebook, Inc. ("Facebook") owns all right, title and interest, including
  * all intellectual property and other proprietary rights, in and to the React
- * Native CustomComponents software (the “Software”).  Subject to your
+ * Native CustomComponents software (the "Software").  Subject to your
  * compliance with these terms, you are hereby granted a non-exclusive,
  * worldwide, royalty-free copyright license to (1) use and copy the Software;
  * and (2) reproduce and distribute the Software as part of your own software
- * (“Your Software”).  Facebook reserves all rights not expressly granted to
+ * ("Your Software").  Facebook reserves all rights not expressly granted to
  * you in this license agreement.
  *
  * THE SOFTWARE AND DOCUMENTATION, IF ANY, ARE PROVIDED "AS IS" AND ANY EXPRESS
@@ -27,14 +27,14 @@
 'use strict';
 
 var Dimensions = require('Dimensions');
-var NavigatorNavigationBarStyles = require('NavigatorNavigationBarStyles');
+var NavigatorNavigationBarStylesIOS = require('NavigatorNavigationBarStylesIOS');
 
 var buildStyleInterpolator = require('buildStyleInterpolator');
 var merge = require('merge');
 
 var SCREEN_WIDTH = Dimensions.get('window').width;
-var STATUS_BAR_HEIGHT = NavigatorNavigationBarStyles.General.StatusBarHeight;
-var NAV_BAR_HEIGHT = NavigatorNavigationBarStyles.General.NavBarHeight;
+var STATUS_BAR_HEIGHT = NavigatorNavigationBarStylesIOS.General.StatusBarHeight;
+var NAV_BAR_HEIGHT = NavigatorNavigationBarStylesIOS.General.NavBarHeight;
 
 var SPACING = 4;
 var ICON_WIDTH = 40;
@@ -136,7 +136,7 @@ CENTER[0] = {
   Title: merge(FIRST_TITLE_BASE, {opacity: 1}),
   RightItem: CENTER[0].RightItem,
 };
-LEFT[0].Title = merge(FIRST_TITLE_BASE, {left: - SCREEN_WIDTH / 4, opacity: 0});
+LEFT[0].Title = merge(FIRST_TITLE_BASE, {left: -SCREEN_WIDTH / 4, opacity: 0});
 RIGHT[0].Title = merge(FIRST_TITLE_BASE, {opacity: 0});
 
 

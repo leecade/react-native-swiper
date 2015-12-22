@@ -23,7 +23,7 @@
 
 - (void)setReactTag:(NSNumber *)reactTag
 {
-  objc_setAssociatedObject(self, @selector(reactTag), reactTag, OBJC_ASSOCIATION_COPY_NONATOMIC);
+  objc_setAssociatedObject(self, @selector(reactTag), reactTag, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
 - (BOOL)isReactRootView
@@ -51,7 +51,7 @@
   [subview removeFromSuperview];
 }
 
-- (NSArray *)reactSubviews
+- (NSArray<UIView *> *)reactSubviews
 {
   return self.subviews;
 }
@@ -78,8 +78,8 @@
     return;
   }
 
-  self.layer.position = position;
-  self.layer.bounds = bounds;
+  self.center = position;
+  self.bounds = bounds;
 }
 
 - (void)reactSetInheritedBackgroundColor:(UIColor *)inheritedBackgroundColor
@@ -87,7 +87,7 @@
   self.backgroundColor = inheritedBackgroundColor;
 }
 
-- (UIViewController *)backingViewController
+- (UIViewController *)reactViewController
 {
   id responder = [self nextResponder];
   while (responder) {
@@ -99,14 +99,14 @@
   return nil;
 }
 
-- (void)addControllerToClosestParent:(UIViewController *)controller
+- (void)reactAddControllerToClosestParent:(UIViewController *)controller
 {
   if (!controller.parentViewController) {
     UIView *parentView = (UIView *)self.reactSuperview;
     while (parentView) {
-      if (parentView.backingViewController) {
-        [parentView.backingViewController addChildViewController:controller];
-        [controller didMoveToParentViewController:parentView.backingViewController];
+      if (parentView.reactViewController) {
+        [parentView.reactViewController addChildViewController:controller];
+        [controller didMoveToParentViewController:parentView.reactViewController];
         break;
       }
       parentView = (UIView *)parentView.reactSuperview;

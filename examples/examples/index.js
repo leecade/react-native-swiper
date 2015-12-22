@@ -1,21 +1,9 @@
 'use strict';
-Object.defineProperty(exports, '__esModule', {
-  value: true
-});
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-
-/*
-react-native-swiper
-
-@author leecade<leecade@163.com>
- */
-
-var _reactNative = require('react-native');
-
-var _reactNative2 = _interopRequireDefault(_reactNative);
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
+                                                                                                                                                                                                                                                                   * react-native-swiper
+                                                                                                                                                                                                                                                                   * @author leecade<leecade@163.com>
+                                                                                                                                                                                                                                                                   */
 
 // Using bare setTimeout, setInterval, setImmediate
 // and requestAnimationFrame calls is very dangerous
@@ -23,15 +11,17 @@ var _reactNative2 = _interopRequireDefault(_reactNative);
 // the component is unmounted, you risk the callback
 // throwing an exception.
 
+var _reactNative = require('react-native');
+
+var _reactNative2 = _interopRequireDefault(_reactNative);
+
 var _reactTimerMixin = require('react-timer-mixin');
 
 var _reactTimerMixin2 = _interopRequireDefault(_reactTimerMixin);
 
-var _Dimensions = require('Dimensions');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var _Dimensions2 = _interopRequireDefault(_Dimensions);
-
-var _Dimensions$get = _Dimensions2['default'].get('window');
+var _Dimensions$get = _reactNative.Dimensions.get('window');
 
 var width = _Dimensions$get.width;
 var height = _Dimensions$get.height;
@@ -40,6 +30,7 @@ var height = _Dimensions$get.height;
  * Default styles
  * @type {StyleSheetPropType}
  */
+
 var styles = _reactNative.StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
@@ -110,35 +101,37 @@ var styles = _reactNative.StyleSheet.create({
   }
 });
 
-exports['default'] = _reactNative2['default'].createClass({
-  displayName: 'index',
+// missing `module.exports = exports['default'];` with babel6
+// export default React.createClass({
+module.exports = _reactNative2.default.createClass({
+  displayName: 'exports',
 
   /**
    * Props Validation
    * @type {Object}
    */
   propTypes: {
-    horizontal: _reactNative2['default'].PropTypes.bool,
-    children: _reactNative2['default'].PropTypes.node.isRequired,
+    horizontal: _reactNative2.default.PropTypes.bool,
+    children: _reactNative2.default.PropTypes.node.isRequired,
     style: _reactNative.View.propTypes.style,
-    pagingEnabled: _reactNative2['default'].PropTypes.bool,
-    showsHorizontalScrollIndicator: _reactNative2['default'].PropTypes.bool,
-    showsVerticalScrollIndicator: _reactNative2['default'].PropTypes.bool,
-    bounces: _reactNative2['default'].PropTypes.bool,
-    scrollsToTop: _reactNative2['default'].PropTypes.bool,
-    removeClippedSubviews: _reactNative2['default'].PropTypes.bool,
-    automaticallyAdjustContentInsets: _reactNative2['default'].PropTypes.bool,
-    showsPagination: _reactNative2['default'].PropTypes.bool,
-    showsButtons: _reactNative2['default'].PropTypes.bool,
-    loop: _reactNative2['default'].PropTypes.bool,
-    autoplay: _reactNative2['default'].PropTypes.bool,
-    autoplayTimeout: _reactNative2['default'].PropTypes.number,
-    autoplayDirection: _reactNative2['default'].PropTypes.bool,
-    index: _reactNative2['default'].PropTypes.number,
-    renderPagination: _reactNative2['default'].PropTypes.func
+    pagingEnabled: _reactNative2.default.PropTypes.bool,
+    showsHorizontalScrollIndicator: _reactNative2.default.PropTypes.bool,
+    showsVerticalScrollIndicator: _reactNative2.default.PropTypes.bool,
+    bounces: _reactNative2.default.PropTypes.bool,
+    scrollsToTop: _reactNative2.default.PropTypes.bool,
+    removeClippedSubviews: _reactNative2.default.PropTypes.bool,
+    automaticallyAdjustContentInsets: _reactNative2.default.PropTypes.bool,
+    showsPagination: _reactNative2.default.PropTypes.bool,
+    showsButtons: _reactNative2.default.PropTypes.bool,
+    loop: _reactNative2.default.PropTypes.bool,
+    autoplay: _reactNative2.default.PropTypes.bool,
+    autoplayTimeout: _reactNative2.default.PropTypes.number,
+    autoplayDirection: _reactNative2.default.PropTypes.bool,
+    index: _reactNative2.default.PropTypes.number,
+    renderPagination: _reactNative2.default.PropTypes.func
   },
 
-  mixins: [_reactTimerMixin2['default']],
+  mixins: [_reactTimerMixin2.default],
 
   /**
    * Default props
@@ -170,15 +163,31 @@ exports['default'] = _reactNative2['default'].createClass({
    * @return {object} states
    */
   getInitialState: function getInitialState() {
-    var props = this.props;
+    return this.initState(this.props);
+  },
 
+  /**
+   * autoplay timer
+   * @type {null}
+   */
+  autoplayTimer: null,
+
+  componentWillMount: function componentWillMount() {
+    this.props = this.injectState(this.props);
+  },
+  componentWillReceiveProps: function componentWillReceiveProps(props) {
+    this.setState(this.initState(props));
+  },
+  componentDidMount: function componentDidMount() {
+    this.autoplay();
+  },
+  initState: function initState(props) {
     var initState = {
       isScrolling: false,
       autoplayEnd: false
     };
 
     initState.total = props.children ? props.children.length || 1 : 0;
-
     initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0;
 
     // Default: horizontal
@@ -191,22 +200,7 @@ exports['default'] = _reactNative2['default'].createClass({
       var setup = props.loop ? 1 : initState.index;
       initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
     }
-
     return initState;
-  },
-
-  /**
-   * autoplay timer
-   * @type {null}
-   */
-  autoplayTimer: null,
-
-  componentWillMount: function componentWillMount() {
-    this.props = this.injectState(this.props);
-  },
-
-  componentDidMount: function componentDidMount() {
-    this.autoplay();
   },
 
   /**
@@ -334,103 +328,119 @@ exports['default'] = _reactNative2['default'].createClass({
     if (this.state.total <= 1) return null;
 
     var dots = [];
+    var ActiveDot = this.props.activeDot || _reactNative2.default.createElement(_reactNative.View, { style: {
+        backgroundColor: '#007aff',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+      } });
+    var Dot = this.props.dot || _reactNative2.default.createElement(_reactNative.View, { style: {
+        backgroundColor: 'rgba(0,0,0,.2)',
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginLeft: 3,
+        marginRight: 3,
+        marginTop: 3,
+        marginBottom: 3
+      } });
     for (var i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index ? this.props.activeDot || _reactNative2['default'].createElement(_reactNative.View, { style: {
-          backgroundColor: '#007aff',
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          marginLeft: 3,
-          marginRight: 3,
-          marginTop: 3,
-          marginBottom: 3
-        } }) : this.props.dot || _reactNative2['default'].createElement(_reactNative.View, { style: {
-          backgroundColor: 'rgba(0,0,0,.2)',
-          width: 8,
-          height: 8,
-          borderRadius: 4,
-          marginLeft: 3,
-          marginRight: 3,
-          marginTop: 3,
-          marginBottom: 3
-        } }));
+      dots.push(i === this.state.index ? _reactNative2.default.cloneElement(ActiveDot, { key: i }) : _reactNative2.default.cloneElement(Dot, { key: i }));
     }
 
-    return _reactNative2['default'].createElement(
+    return _reactNative2.default.createElement(
       _reactNative.View,
       { pointerEvents: 'none', style: [styles['pagination_' + this.state.dir], this.props.paginationStyle] },
       dots
     );
   },
-
   renderTitle: function renderTitle() {
     var child = this.props.children[this.state.index];
     var title = child && child.props.title;
-    return title ? _reactNative2['default'].createElement(
+    return title ? _reactNative2.default.createElement(
       _reactNative.View,
       { style: styles.title },
       this.props.children[this.state.index].props.title
     ) : null;
   },
-
   renderNextButton: function renderNextButton() {
     var _this4 = this;
 
     var button = undefined;
 
     if (this.props.loop || this.state.index != this.state.total - 1) {
-      button = this.props.nextButton || _reactNative2['default'].createElement(
+      button = this.props.nextButton || _reactNative2.default.createElement(
         _reactNative.Text,
         { style: styles.buttonText },
         '›'
       );
     }
 
-    return _reactNative2['default'].createElement(
+    return _reactNative2.default.createElement(
       _reactNative.TouchableOpacity,
-      { onPress: function () {
+      { onPress: function onPress() {
           return button !== null && _this4.scrollTo.call(_this4, 1);
         } },
-      _reactNative2['default'].createElement(
+      _reactNative2.default.createElement(
         _reactNative.View,
         null,
         button
       )
     );
   },
-
   renderPrevButton: function renderPrevButton() {
     var _this5 = this;
 
     var button = null;
 
     if (this.props.loop || this.state.index != 0) {
-      button = this.props.prevButton || _reactNative2['default'].createElement(
+      button = this.props.prevButton || _reactNative2.default.createElement(
         _reactNative.Text,
         { style: styles.buttonText },
         '‹'
       );
     }
 
-    return _reactNative2['default'].createElement(
+    return _reactNative2.default.createElement(
       _reactNative.TouchableOpacity,
-      { onPress: function () {
+      { onPress: function onPress() {
           return button !== null && _this5.scrollTo.call(_this5, -1);
         } },
-      _reactNative2['default'].createElement(
+      _reactNative2.default.createElement(
         _reactNative.View,
         null,
         button
       )
     );
   },
-
   renderButtons: function renderButtons() {
-    return _reactNative2['default'].createElement(
+    return _reactNative2.default.createElement(
       _reactNative.View,
       { pointerEvents: 'box-none', style: [styles.buttonWrapper, { width: this.state.width, height: this.state.height }, this.props.buttonWrapperStyle] },
       this.renderPrevButton(),
       this.renderNextButton()
+    );
+  },
+  renderScrollView: function renderScrollView(pages) {
+    if (_reactNative.Platform.OS === 'ios') return _reactNative2.default.createElement(
+      _reactNative.ScrollView,
+      _extends({ ref: 'scrollView'
+      }, this.props, {
+        contentContainerStyle: [styles.wrapper, this.props.style],
+        contentOffset: this.state.offset,
+        onScrollBeginDrag: this.onScrollBegin,
+        onMomentumScrollEnd: this.onScrollEnd }),
+      pages
+    );
+    return _reactNative2.default.createElement(
+      _reactNative.ViewPagerAndroid,
+      { ref: 'scrollView',
+        style: { flex: 1 } },
+      pages
     );
   },
 
@@ -493,38 +503,28 @@ exports['default'] = _reactNative2['default'].createClass({
       }
 
       pages = pages.map(function (page, i) {
-        return _reactNative2['default'].createElement(
+        return _reactNative2.default.createElement(
           _reactNative.View,
           { style: pageStyle, key: i },
           children[page]
         );
       });
-    } else pages = _reactNative2['default'].createElement(
+    } else pages = _reactNative2.default.createElement(
       _reactNative.View,
       { style: pageStyle },
       children
     );
 
-    return _reactNative2['default'].createElement(
+    return _reactNative2.default.createElement(
       _reactNative.View,
       { style: [styles.container, {
           width: state.width,
           height: state.height
         }] },
-      _reactNative2['default'].createElement(
-        _reactNative.ScrollView,
-        _extends({ ref: 'scrollView'
-        }, props, {
-          contentContainerStyle: [styles.wrapper, props.style],
-          contentOffset: state.offset,
-          onScrollBeginDrag: this.onScrollBegin,
-          onMomentumScrollEnd: this.onScrollEnd }),
-        pages
-      ),
+      this.renderScrollView(pages),
       props.showsPagination && (props.renderPagination ? this.props.renderPagination(state.index, state.total, this) : this.renderPagination()),
       this.renderTitle(),
       this.props.showsButtons && this.renderButtons()
     );
   }
 });
-module.exports = exports['default'];

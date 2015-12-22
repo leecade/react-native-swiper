@@ -75,6 +75,9 @@ var defaultRenderError = (errorDomain, errorCode, errorDesc) => (
   </View>
 );
 
+/**
+ * Renders a native WebView.
+ */
 var WebView = React.createClass({
   statics: {
     JSNavigationScheme: JSNavigationScheme,
@@ -82,31 +85,65 @@ var WebView = React.createClass({
   },
 
   propTypes: {
+    ...View.propTypes,
     url: PropTypes.string,
     html: PropTypes.string,
+    /**
+     * Function that returns a view to show if there's an error.
+     */
     renderError: PropTypes.func, // view to show if there's an error
-    renderLoading: PropTypes.func, // loading indicator to show
+    /**
+     * Function that returns a loading indicator.
+     */
+    renderLoading: PropTypes.func,
+    /**
+     * @platform ios
+     */
     bounces: PropTypes.bool,
+    /**
+     * @platform ios
+     */
     scrollEnabled: PropTypes.bool,
     automaticallyAdjustContentInsets: PropTypes.bool,
     contentInset: EdgeInsetsPropType,
     onNavigationStateChange: PropTypes.func,
     startInLoadingState: PropTypes.bool, // force WebView to show loadingView on first load
     style: View.propTypes.style,
+
     /**
-     * Used for android only, JS is enabled by default for WebView on iOS
+     * Used on Android only, JS is enabled by default for WebView on iOS
+     * @platform android
      */
     javaScriptEnabledAndroid: PropTypes.bool,
+
     /**
      * Sets the JS to be injected when the webpage loads.
      */
     injectedJavaScript: PropTypes.string,
 
     /**
-     * Used for iOS only, sets whether the webpage scales to fit the view and the
-     * user can change the scale
+     * Sets whether the webpage scales to fit the view and the user can change the scale.
+     * @platform ios
      */
     scalesPageToFit: PropTypes.bool,
+
+    /**
+     * Allows custom handling of any webview requests by a JS handler. Return true
+     * or false from this method to continue loading the request.
+     * @platform ios
+     */
+    onShouldStartLoadWithRequest: PropTypes.func,
+
+    /**
+     * Determines whether HTML5 videos play inline or use the native full-screen
+     * controller.
+     * default value `false`
+     * **NOTE** : "In order for video to play inline, not only does this
+     * property need to be set to true, but the video element in the HTML
+     * document must also include the webkit-playsinline attribute."
+     * @platform ios
+     */
+    allowsInlineMediaPlayback: PropTypes.bool,
   },
 
   getInitialState: function() {
@@ -152,6 +189,12 @@ var WebView = React.createClass({
       webViewStyles.push(styles.hidden);
     }
 
+    var onShouldStartLoadWithRequest = this.props.onShouldStartLoadWithRequest && ((event: Event) => {
+      var shouldStart = this.props.onShouldStartLoadWithRequest &&
+        this.props.onShouldStartLoadWithRequest(event.nativeEvent);
+      RCTWebViewManager.startLoadWithResult(!!shouldStart, event.nativeEvent.lockIdentifier);
+    });
+
     var webView =
       <RCTWebView
         ref={RCT_WEBVIEW_REF}
@@ -167,7 +210,9 @@ var WebView = React.createClass({
         onLoadingStart={this.onLoadingStart}
         onLoadingFinish={this.onLoadingFinish}
         onLoadingError={this.onLoadingError}
+        onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
         scalesPageToFit={this.props.scalesPageToFit}
+        allowsInlineMediaPlayback={this.props.allowsInlineMediaPlayback}
       />;
 
     return (
@@ -210,7 +255,7 @@ var WebView = React.createClass({
 
   onLoadingError: function(event: Event) {
     event.persist(); // persist this event because we need to store it
-    console.error('Encountered an error loading page', event.nativeEvent);
+    console.warn('Encountered an error loading page', event.nativeEvent);
 
     this.setState({
       lastErrorEvent: event.nativeEvent,
@@ -226,7 +271,13 @@ var WebView = React.createClass({
   },
 });
 
-var RCTWebView = requireNativeComponent('RCTWebView', WebView);
+var RCTWebView = requireNativeComponent('RCTWebView', WebView, {
+  nativeOnly: {
+    onLoadingStart: true,
+    onLoadingError: true,
+    onLoadingFinish: true,
+  },
+});
 
 var styles = StyleSheet.create({
   container: {

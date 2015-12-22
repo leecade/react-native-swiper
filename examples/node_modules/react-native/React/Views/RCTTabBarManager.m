@@ -18,10 +18,11 @@ RCT_EXPORT_MODULE()
 
 - (UIView *)view
 {
-  return [[RCTTabBar alloc] initWithEventDispatcher:self.bridge.eventDispatcher];
+  return [RCTTabBar new];
 }
 
 RCT_EXPORT_VIEW_PROPERTY(tintColor, UIColor)
 RCT_EXPORT_VIEW_PROPERTY(barTintColor, UIColor)
+RCT_EXPORT_VIEW_PROPERTY(translucent, BOOL)
 
 @end
