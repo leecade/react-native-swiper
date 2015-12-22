@@ -206,7 +206,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | horizontal | true | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
-| loop | true | `bool` | Set to `true` to enable continuous loop mode. |
+| loop | true | `bool` | Set to `false` to disable continuous loop mode. |
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
