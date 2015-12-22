@@ -11,6 +11,7 @@ import React, {
   ScrollView,
   TouchableOpacity,
   Dimensions,
+  ViewPagerAndroid
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -421,7 +422,25 @@ export default React.createClass({
       </View>
     )
   },
-
+  renderScrollView(pages) {
+     if (Platform.OS === 'ios')
+         return (
+            <ScrollView ref="scrollView"
+             {...this.props}
+                       contentContainerStyle={[styles.wrapper, this.props.style]}
+                       contentOffset={this.state.offset}
+                       onScrollBeginDrag={this.onScrollBegin}
+                       onMomentumScrollEnd={this.onScrollEnd}>
+             {pages}
+            </ScrollView>
+         );
+      return (
+         <ViewPagerAndroid ref="scrollView"
+            style={{flex: 1}}>
+            {pages}
+         </ViewPagerAndroid>
+      );
+  },
   /**
    * Inject state to ScrollResponder
    * @param  {object} props origin props
@@ -489,14 +508,7 @@ export default React.createClass({
         width: state.width,
         height: state.height
       }]}>
-        <ScrollView ref="scrollView"
-          {...props}
-          contentContainerStyle={[styles.wrapper, props.style]}
-          contentOffset={state.offset}
-          onScrollBeginDrag={this.onScrollBegin}
-          onMomentumScrollEnd={this.onScrollEnd}>
-          {pages}
-        </ScrollView>
+        {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
           : this.renderPagination())}
