@@ -209,7 +209,7 @@ module.exports = _reactNative2.default.createClass({
   autoplay: function autoplay() {
     var _this = this;
 
-    if (!this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) return;
+    if (!Array.isArray(this.props.children) || !this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) return;
 
     clearTimeout(this.autoplayTimer);
 
@@ -302,7 +302,7 @@ module.exports = _reactNative2.default.createClass({
    * @param  {number} index offset index
    */
   scrollTo: function scrollTo(index) {
-    if (this.state.isScrolling) return;
+    if (this.state.isScrolling || this.state.total < 2) return;
     var state = this.state;
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
     var x = 0;

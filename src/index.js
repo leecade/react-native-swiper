@@ -206,7 +206,8 @@ module.exports = React.createClass({
    * Automatic rolling
    */
   autoplay() {
-    if(!this.props.autoplay
+    if(!Array.isArray(this.props.children)
+      || !this.props.autoplay
       || this.state.isScrolling
       || this.state.autoplayEnd) return
 
@@ -301,7 +302,7 @@ module.exports = React.createClass({
    * @param  {number} index offset index
    */
   scrollTo(index) {
-    if(this.state.isScrolling) return
+    if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
