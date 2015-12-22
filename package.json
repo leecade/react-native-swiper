@@ -24,5 +24,8 @@
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
     "babel": "^5.1.11"
+  },
+  "dependencies": {
+    "react-timer-mixin": "^0.13.3"
   }
 }
