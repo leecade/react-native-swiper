@@ -42,6 +42,12 @@ The best Swiper component for React Native.
 ## Changelogs
 
 - **[v1.4.0]**
+  + Support for React Native latest(`^0.17.0`) & Upgrade examples base on Xcode `7.2` / React Native `0.17.0`
+
+  + Upgrade build tool to babel6
+
+  + Add missing deps `react-timer-mixin`
+
   + [1f8643a](https://github.com/leecade/react-native-swiper/commit/1f8643a67e2768d165132a19629a991a86672036) Move Dimensions import to deconstructed React import for react-native (@thanks [@jedrekk](https://github.com/jedrekk)).
 
   + [e28af9b](https://github.com/leecade/react-native-swiper/commit/e28af9b205f17447cb3149b45fc220beec037bce) Support index property in combination with loop property (@thanks [@almost](https://github.com/almost)).
