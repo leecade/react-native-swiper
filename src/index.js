@@ -8,9 +8,13 @@ import React, {
   View,
   ScrollView,
   Dimensions,
+<<<<<<< HEAD
   TouchableOpacity,
   ViewPagerAndroid,
   Platform
+=======
+  ViewPagerAndroid
+>>>>>>> c183f393671e9bab99350a84d051e28540b777a3
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
