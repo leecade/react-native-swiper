@@ -5,6 +5,7 @@ react-native-swiper
 @author leecade<leecade@163.com>
  */
 import React, {
+  Dimensions,
   StyleSheet,
   Text,
   View,
