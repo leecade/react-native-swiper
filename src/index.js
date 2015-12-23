@@ -328,7 +328,7 @@ module.exports = React.createClass({
     if(this.state.total <= 1) return null
 
     let dots = []
-    let ActiveDot = this.props.activeDot || <View style={{
+    let ActiveDot = this.props.activeDot || <View key={i} style={{
             backgroundColor: '#007aff',
             width: 8,
             height: 8,
@@ -338,7 +338,7 @@ module.exports = React.createClass({
             marginTop: 3,
             marginBottom: 3,
           }} />;
-    let Dot = this.props.dot || <View style={{
+    let Dot = this.props.dot || <View key={i} style={{
             backgroundColor:'rgba(0,0,0,.2)',
             width: 8,
             height: 8,
