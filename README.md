@@ -9,7 +9,27 @@
 
 The best Swiper component for React Native.
 
-## Feature & TODO
+## Roadmap
+
+### V2
+
+- [ ] **Compatible with android**
+
+- [ ] Fixes currently bugs
+
+- [ ] More features
+
+- [ ] Improve performance
+
+- [ ] Landscape mode
+
+Please track in [milestones:v2](https://github.com/leecade/react-native-swiper/milestones/v2)
+
+Contribute code to [branch:Android](https://github.com/leecade/react-native-swiper/tree/android) and [branch:V2](https://github.com/leecade/react-native-swiper/tree/v2)
+
+Provide creative in [issues](https://github.com/leecade/react-native-swiper/issues)
+
+### V1
 
 - [ ] **Support for Android**
 
