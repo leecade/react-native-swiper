@@ -41,7 +41,7 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.4.1]**
+- **[1.4.3]**
   + Fixed auto play issue when only a child view
 
 - [v1.4.0]
