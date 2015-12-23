@@ -41,7 +41,10 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[v1.4.0]**
+- **[v1.4.1]**
+  + Fixed auto play issue when only a child view
+
+- [v1.4.0]
   + Support for React Native latest(`^0.17.0`) & Upgrade examples base on Xcode `7.2` / React Native `0.17.0`
 
   + Upgrade build tool to babel6
