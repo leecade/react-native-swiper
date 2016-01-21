@@ -167,13 +167,13 @@ module.exports = React.createClass({
   autoplayTimer: null,
 
   componentWillMount() {
-    this.props = this.injectState(this.props)
+    this.props = Platform.OS === 'ios' ? this.injectState(this.props) : this.injectStateAndroid(this.props);
+    
   },
 
   componentWillReceiveProps(props) {
     this.setState(this.initState(props))
   },
-
   componentDidMount() {
     this.autoplay()
   },
@@ -191,9 +191,10 @@ module.exports = React.createClass({
     initState.dir = props.horizontal == false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
-    initState.offset = {}
-
-    if (initState.total > 1) {
+    
+    //android not use offset
+    if (Platform.OS === 'ios' && initState.total > 1) {
+      initState.offset = {}
       var setup = props.loop ? 1 : initState.index
       initState.offset[initState.dir] = initState.dir == 'y'
         ? initState.height * setup
@@ -223,6 +224,7 @@ module.exports = React.createClass({
     }, this.props.autoplayTimeout * 1000)
   },
 
+
   /**
    * Scroll begin handle
    * @param  {object} e native event
@@ -249,8 +251,7 @@ module.exports = React.createClass({
       isScrolling: false
     })
 
-    this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
-
+    this.updateIndexIOS(e.nativeEvent.contentOffset, this.state.dir)
     // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
     // in setTimeout to ensure synchronous update `index`
     this.setTimeout(() => {
@@ -260,13 +261,58 @@ module.exports = React.createClass({
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.state, this)
     })
   },
+  onScrollBeginAndroid(e, offset) {
+    this.autoplay();
+  },
+  onScrollEndAndroid(e) {
+    this.autoplay();
 
+    // update scroll state
+    this.setState({
+      isScrolling: false
+    })
+    
+    this.updateIndexAndroid(e.nativeEvent.position, this.state.dir)
+
+    if(e.nativeEvent.position < 1){
+        //avoid animation shark
+        this.setTimeout(()=>{
+          this.refs.scrollView.setPageWithoutAnimation(this.state.total)
+        },500);
+    }
+    if(e.nativeEvent.position > this.state.total){
+        //avoid animation shark
+        this.setTimeout(()=>{
+          this.refs.scrollView.setPageWithoutAnimation(1)
+        },500);
+    }
+  },
+
+
+  updateIndexAndroid(position, dir) {
+    let state = this.state
+    let index = position - 1 
+    
+
+    if(this.props.loop) {
+      if(index < 0) {
+        index = state.total - 1
+      }
+      else if(index >= state.total) {
+        index = 0
+      }
+    }
+
+    this.setState({
+      index: index
+    })
+  },
   /**
    * Update index after scroll
    * @param  {object} offset content offset
    * @param  {string} dir    'x' || 'y'
    */
-  updateIndex(offset, dir) {
+  updateIndexIOS(offset, dir) {
 
     let state = this.state
     let index = state.index
@@ -302,14 +348,25 @@ module.exports = React.createClass({
    * @param  {number} index offset index
    */
   scrollTo(index) {
-    if (this.state.isScrolling || this.state.total < 2) return
+    if (this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x)
+    if(Platform.OS === 'ios'){
+      if(this.state.isScrolling) return;
+      this.refs.scrollView && this.refs.scrollView.scrollTo(y, x)
+    }else{
+      this.updateIndexAndroid(diff);
+      this.refs.scrollView && this.refs.scrollView.setPage(diff)
+      if(this.state.index == 0){
+        this.setTimeout(()=>{
+          this.refs.scrollView.setPageWithoutAnimation(1)
+        },500);
+      }
+    }
 
     // update scroll state
     this.setState({
@@ -416,8 +473,9 @@ module.exports = React.createClass({
       </View>
     )
   },
+
   renderScrollView(pages) {
-     if (Platform.OS === 'ios')
+      if (Platform.OS === 'ios'){
          return (
             <ScrollView ref="scrollView"
              {...this.props}
@@ -428,12 +486,21 @@ module.exports = React.createClass({
              {pages}
             </ScrollView>
          );
+     }else{
+      //android
       return (
          <ViewPagerAndroid ref="scrollView"
-            style={{flex: 1}}>
+            style={{flex: 1}}
+            {...this.props}
+            index={this.state.index}
+            onPageScroll={this.onScrollBeginAndroid}
+            onPageSelected={this.onScrollEndAndroid} 
+            initialPage={1}>
             {pages}
          </ViewPagerAndroid>
+         
       );
+    }
   },
   /**
    * Inject state to ScrollResponder
@@ -464,6 +531,29 @@ module.exports = React.createClass({
     return props
   },
 
+  injectStateAndroid(props) {
+/*    const scrollResponders = [
+      'onMomentumScrollBegin',
+      'onTouchStartCapture',
+      'onTouchStart',
+      'onTouchEnd',
+      'onResponderRelease',
+    ]*/
+
+    for(let prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if(typeof props[prop] === 'function'
+        && prop !== 'onPageSelected'
+        && prop !== 'renderPagination'
+        && prop !== 'onPageScroll'
+      ) {
+        let originResponder = props[prop]
+        props[prop] = (e) => originResponder(e, this.state, this)
+      }
+    }
+
+    return props
+  },
   /**
    * Default render
    * @return {object} react-dom
@@ -481,8 +571,8 @@ module.exports = React.createClass({
     let pages = []
     let pageStyle = [{width: state.width, height: state.height}, styles.slide]
 
-    // For make infinite at least total > 1
-    if(total > 1) {
+    // For make infinite at least total > 0
+    if(total > 0) {
 
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
