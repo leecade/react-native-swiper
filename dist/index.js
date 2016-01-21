@@ -173,7 +173,7 @@ module.exports = _reactNative2.default.createClass({
   autoplayTimer: null,
 
   componentWillMount: function componentWillMount() {
-    this.props = this.injectState(this.props);
+    this.props = _reactNative.Platform.OS === 'ios' ? this.injectState(this.props) : this.injectStateAndroid(this.props);
   },
   componentWillReceiveProps: function componentWillReceiveProps(props) {
     this.setState(this.initState(props));
@@ -194,9 +194,10 @@ module.exports = _reactNative2.default.createClass({
     initState.dir = props.horizontal == false ? 'y' : 'x';
     initState.width = props.width || width;
     initState.height = props.height || height;
-    initState.offset = {};
 
-    if (initState.total > 1) {
+    //android not use offset
+    if (_reactNative.Platform.OS === 'ios' && initState.total > 1) {
+      initState.offset = {};
       var setup = props.loop ? 1 : initState.index;
       initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
     }
@@ -250,8 +251,7 @@ module.exports = _reactNative2.default.createClass({
       isScrolling: false
     });
 
-    this.updateIndex(e.nativeEvent.contentOffset, this.state.dir);
-
+    this.updateIndexIOS(e.nativeEvent.contentOffset, this.state.dir);
     // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
     // in setTimeout to ensure synchronous update `index`
     this.setTimeout(function () {
@@ -261,13 +261,57 @@ module.exports = _reactNative2.default.createClass({
       _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd(e, _this3.state, _this3);
     });
   },
+  onScrollBeginAndroid: function onScrollBeginAndroid(e, offset) {
+    this.autoplay();
+  },
+  onScrollEndAndroid: function onScrollEndAndroid(e) {
+    var _this4 = this;
+
+    this.autoplay();
+
+    // update scroll state
+    this.setState({
+      isScrolling: false
+    });
+
+    this.updateIndexAndroid(e.nativeEvent.position, this.state.dir);
+
+    if (e.nativeEvent.position < 1) {
+      //avoid animation shark
+      this.setTimeout(function () {
+        _this4.refs.scrollView.setPageWithoutAnimation(_this4.state.total);
+      }, 500);
+    }
+    if (e.nativeEvent.position > this.state.total) {
+      //avoid animation shark
+      this.setTimeout(function () {
+        _this4.refs.scrollView.setPageWithoutAnimation(1);
+      }, 500);
+    }
+  },
+  updateIndexAndroid: function updateIndexAndroid(position, dir) {
+    var state = this.state;
+    var index = position - 1;
+
+    if (this.props.loop) {
+      if (index < 0) {
+        index = state.total - 1;
+      } else if (index >= state.total) {
+        index = 0;
+      }
+    }
+
+    this.setState({
+      index: index
+    });
+  },
 
   /**
    * Update index after scroll
    * @param  {object} offset content offset
    * @param  {string} dir    'x' || 'y'
    */
-  updateIndex: function updateIndex(offset, dir) {
+  updateIndexIOS: function updateIndexIOS(offset, dir) {
 
     var state = this.state;
     var index = state.index;
@@ -302,14 +346,27 @@ module.exports = _reactNative2.default.createClass({
    * @param  {number} index offset index
    */
   scrollTo: function scrollTo(index) {
-    if (this.state.isScrolling || this.state.total < 2) return;
+    var _this5 = this;
+
+    if (this.state.total < 2) return;
     var state = this.state;
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
     var x = 0;
     var y = 0;
     if (state.dir == 'x') x = diff * state.width;
     if (state.dir == 'y') y = diff * state.height;
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x);
+    if (_reactNative.Platform.OS === 'ios') {
+      if (this.state.isScrolling) return;
+      this.refs.scrollView && this.refs.scrollView.scrollTo(y, x);
+    } else {
+      this.updateIndexAndroid(diff);
+      this.refs.scrollView && this.refs.scrollView.setPage(diff);
+      if (this.state.index == 0) {
+        this.setTimeout(function () {
+          _this5.refs.scrollView.setPageWithoutAnimation(1);
+        }, 500);
+      }
+    }
 
     // update scroll state
     this.setState({
@@ -368,7 +425,7 @@ module.exports = _reactNative2.default.createClass({
     ) : null;
   },
   renderNextButton: function renderNextButton() {
-    var _this4 = this;
+    var _this6 = this;
 
     var button = undefined;
 
@@ -383,7 +440,7 @@ module.exports = _reactNative2.default.createClass({
     return _reactNative2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this4.scrollTo.call(_this4, 1);
+          return button !== null && _this6.scrollTo.call(_this6, 1);
         } },
       _reactNative2.default.createElement(
         _reactNative.View,
@@ -393,7 +450,7 @@ module.exports = _reactNative2.default.createClass({
     );
   },
   renderPrevButton: function renderPrevButton() {
-    var _this5 = this;
+    var _this7 = this;
 
     var button = null;
 
@@ -408,7 +465,7 @@ module.exports = _reactNative2.default.createClass({
     return _reactNative2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this5.scrollTo.call(_this5, -1);
+          return button !== null && _this7.scrollTo.call(_this7, -1);
         } },
       _reactNative2.default.createElement(
         _reactNative.View,
@@ -426,22 +483,31 @@ module.exports = _reactNative2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
-    if (_reactNative.Platform.OS === 'ios') return _reactNative2.default.createElement(
-      _reactNative.ScrollView,
-      _extends({ ref: 'scrollView'
-      }, this.props, {
-        contentContainerStyle: [styles.wrapper, this.props.style],
-        contentOffset: this.state.offset,
-        onScrollBeginDrag: this.onScrollBegin,
-        onMomentumScrollEnd: this.onScrollEnd }),
-      pages
-    );
-    return _reactNative2.default.createElement(
-      _reactNative.ViewPagerAndroid,
-      { ref: 'scrollView',
-        style: { flex: 1 } },
-      pages
-    );
+    if (_reactNative.Platform.OS === 'ios') {
+      return _reactNative2.default.createElement(
+        _reactNative.ScrollView,
+        _extends({ ref: 'scrollView'
+        }, this.props, {
+          contentContainerStyle: [styles.wrapper, this.props.style],
+          contentOffset: this.state.offset,
+          onScrollBeginDrag: this.onScrollBegin,
+          onMomentumScrollEnd: this.onScrollEnd }),
+        pages
+      );
+    } else {
+      //android
+      return _reactNative2.default.createElement(
+        _reactNative.ViewPagerAndroid,
+        _extends({ ref: 'scrollView',
+          style: { flex: 1 }
+        }, this.props, {
+          index: this.state.index,
+          onPageScroll: this.onScrollBeginAndroid,
+          onPageSelected: this.onScrollEndAndroid,
+          initialPage: 1 }),
+        pages
+      );
+    }
   },
 
   /**
@@ -450,7 +516,7 @@ module.exports = _reactNative2.default.createClass({
    * @return {object} props injected props
    */
   injectState: function injectState(props) {
-    var _this6 = this;
+    var _this8 = this;
 
     /*    const scrollResponders = [
           'onMomentumScrollBegin',
@@ -466,7 +532,32 @@ module.exports = _reactNative2.default.createClass({
         (function () {
           var originResponder = props[prop];
           props[prop] = function (e) {
-            return originResponder(e, _this6.state, _this6);
+            return originResponder(e, _this8.state, _this8);
+          };
+        })();
+      }
+    }
+
+    return props;
+  },
+  injectStateAndroid: function injectStateAndroid(props) {
+    var _this9 = this;
+
+    /*    const scrollResponders = [
+          'onMomentumScrollBegin',
+          'onTouchStartCapture',
+          'onTouchStart',
+          'onTouchEnd',
+          'onResponderRelease',
+        ]*/
+
+    for (var prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if (typeof props[prop] === 'function' && prop !== 'onPageSelected' && prop !== 'renderPagination' && prop !== 'onPageScroll') {
+        (function () {
+          var originResponder = props[prop];
+          props[prop] = function (e) {
+            return originResponder(e, _this9.state, _this9);
           };
         })();
       }
@@ -492,8 +583,8 @@ module.exports = _reactNative2.default.createClass({
     var pages = [];
     var pageStyle = [{ width: state.width, height: state.height }, styles.slide];
 
-    // For make infinite at least total > 1
-    if (total > 1) {
+    // For make infinite at least total > 0
+    if (total > 0) {
 
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children);
