@@ -249,6 +249,15 @@ module.exports = React.createClass({
       isScrolling: false
     })
 
+    // making our events coming from android compatible to updateIndex logic
+    if (!e.nativeEvent.contentOffset) {
+      if (this.state.dir == 'x') {
+        e.nativeEvent.contentOffset = {x: e.nativeEvent.position * this.state.width}
+      } else {
+        e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
+      }
+    }
+
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
 
     // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
@@ -430,6 +439,7 @@ module.exports = React.createClass({
          );
       return (
          <ViewPagerAndroid ref="scrollView"
+            onPageSelected={this.onScrollEnd}
             style={{flex: 1}}>
             {pages}
          </ViewPagerAndroid>
