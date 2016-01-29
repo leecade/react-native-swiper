@@ -271,6 +271,29 @@ module.exports = _reactNative2.default.createClass({
     });
   },
 
+  /*
+   * Drag end handle
+   * @param {object} e native event
+   */
+  onScrollEndDrag: function onScrollEndDrag(e) {
+    var contentOffset = e.nativeEvent.contentOffset;
+    var _props = this.props;
+    var horizontal = _props.horizontal;
+    var children = _props.children;
+    var _state = this.state;
+    var offset = _state.offset;
+    var index = _state.index;
+
+    var previousOffset = horizontal ? offset.x : offset.y;
+    var newOffset = horizontal ? contentOffset.x : contentOffset.y;
+
+    if (previousOffset === newOffset && (index === 0 || index === children.length - 1)) {
+      this.setState({
+        isScrolling: false
+      });
+    }
+  },
+
   /**
    * Update index after scroll
    * @param  {object} offset content offset
@@ -442,7 +465,8 @@ module.exports = _reactNative2.default.createClass({
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
         onScrollBeginDrag: this.onScrollBegin,
-        onMomentumScrollEnd: this.onScrollEnd }),
+        onMomentumScrollEnd: this.onScrollEnd,
+        onScrollEndDrag: this.onScrollEndDrag }),
       pages
     );
     return _reactNative2.default.createElement(
