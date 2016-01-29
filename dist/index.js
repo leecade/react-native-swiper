@@ -295,6 +295,30 @@ module.exports = _react2.default.createClass({
   },
 
 
+  /*
+   * Drag end handle
+   * @param {object} e native event
+   */
+  onScrollEndDrag: function onScrollEndDrag(e) {
+    var contentOffset = e.nativeEvent.contentOffset;
+    var _props = this.props;
+    var horizontal = _props.horizontal;
+    var children = _props.children;
+    var _state = this.state;
+    var offset = _state.offset;
+    var index = _state.index;
+
+    var previousOffset = horizontal ? offset.x : offset.y;
+    var newOffset = horizontal ? contentOffset.x : contentOffset.y;
+
+    if (previousOffset === newOffset && (index === 0 || index === children.length - 1)) {
+      this.setState({
+        isScrolling: false
+      });
+    }
+  },
+
+
   /**
    * Update index after scroll
    * @param  {object} offset content offset
@@ -350,10 +374,7 @@ module.exports = _react2.default.createClass({
     if (_reactNative.Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff);
     } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({
-        y: y,
-        x: x
-      });
+      this.refs.scrollView && this.refs.scrollView.scrollTo({ x: x, y: y });
     }
 
     // update scroll state
@@ -513,8 +534,6 @@ module.exports = _react2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
-    var _this8 = this;
-
     if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
@@ -522,10 +541,8 @@ module.exports = _react2.default.createClass({
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
         onScrollBeginDrag: this.onScrollBegin,
-        onScrollEndDrag: function onScrollEndDrag() {
-          return _this8.setState({ isScrolling: false });
-        },
-        onMomentumScrollEnd: this.onScrollEnd }),
+        onMomentumScrollEnd: this.onScrollEnd,
+        onScrollEndDrag: this.onScrollEndDrag }),
       pages
     );
     return _react2.default.createElement(
