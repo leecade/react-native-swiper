@@ -310,8 +310,10 @@ module.exports = React.createClass({
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x)
-
+    if(Platform.OS ==='ios')
+      this.refs.scrollView && this.refs.scrollView.scrollTo(y, x);
+    else
+      this.refs.scrollView.setPage(index);
     // update scroll state
     this.setState({
       isScrolling: true,
