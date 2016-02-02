@@ -247,7 +247,8 @@ module.exports = _reactNative2.default.createClass({
 
     // update scroll state
     this.setState({
-      isScrolling: false
+      isScrolling: false,
+      index: e.nativeEvent.position
     });
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir);
@@ -439,6 +440,8 @@ module.exports = _reactNative2.default.createClass({
     return _reactNative2.default.createElement(
       _reactNative.ViewPagerAndroid,
       { ref: 'scrollView',
+        initialPage: this.state.index,
+        onPageSelected: this.onScrollEnd,
         style: { flex: 1 } },
       pages
     );
