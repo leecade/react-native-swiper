@@ -246,7 +246,8 @@ module.exports = React.createClass({
 
     // update scroll state
     this.setState({
-      isScrolling: false
+      isScrolling: false,
+      index:e.nativeEvent.position
     })
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir)
@@ -430,6 +431,8 @@ module.exports = React.createClass({
          );
       return (
          <ViewPagerAndroid ref="scrollView"
+            initialPage={this.state.index}
+            onPageSelected={this.onScrollEnd}
             style={{flex: 1}}>
             {pages}
          </ViewPagerAndroid>
