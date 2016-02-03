@@ -435,14 +435,18 @@ module.exports = _reactNative2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
+    var _this6 = this;
+
     if (_reactNative.Platform.OS === 'ios') return _reactNative2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
       }, this.props, {
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
-        onScrollEndDrag: ()=>this.setState({isScrolling:false}),
         onScrollBeginDrag: this.onScrollBegin,
+        onScrollEndDrag: function onScrollEndDrag() {
+          return _this6.setState({ isScrolling: false });
+        },
         onMomentumScrollEnd: this.onScrollEnd }),
       pages
     );
@@ -461,7 +465,7 @@ module.exports = _reactNative2.default.createClass({
    * @return {object} props injected props
    */
   injectState: function injectState(props) {
-    var _this6 = this;
+    var _this7 = this;
 
     /*    const scrollResponders = [
           'onMomentumScrollBegin',
@@ -477,7 +481,7 @@ module.exports = _reactNative2.default.createClass({
         (function () {
           var originResponder = props[prop];
           props[prop] = function (e) {
-            return originResponder(e, _this6.state, _this6);
+            return originResponder(e, _this7.state, _this7);
           };
         })();
       }

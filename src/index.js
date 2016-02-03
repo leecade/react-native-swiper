@@ -433,6 +433,7 @@ module.exports = React.createClass({
                        contentContainerStyle={[styles.wrapper, this.props.style]}
                        contentOffset={this.state.offset}
                        onScrollBeginDrag={this.onScrollBegin}
+                       onScrollEndDrag={()=>this.setState({isScrolling:false})}
                        onMomentumScrollEnd={this.onScrollEnd}>
              {pages}
             </ScrollView>
