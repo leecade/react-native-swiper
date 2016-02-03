@@ -441,6 +441,7 @@ module.exports = _reactNative2.default.createClass({
       }, this.props, {
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
+        onScrollEndDrag: ()=>this.setState({isScrolling:false}),
         onScrollBeginDrag: this.onScrollBegin,
         onMomentumScrollEnd: this.onScrollEnd }),
       pages
