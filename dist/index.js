@@ -318,7 +318,7 @@ module.exports = _reactNative2.default.createClass({
     var y = 0;
     if (state.dir == 'x') x = diff * state.width;
     if (state.dir == 'y') y = diff * state.height;
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x);
+    this.refs.scrollView && this.refs.scrollView.scrollTo({y :y, x :x});
 
     // update scroll state
     this.setState({
