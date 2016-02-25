@@ -128,7 +128,9 @@ module.exports = _reactNative2.default.createClass({
     autoplayTimeout: _reactNative2.default.PropTypes.number,
     autoplayDirection: _reactNative2.default.PropTypes.bool,
     index: _reactNative2.default.PropTypes.number,
-    renderPagination: _reactNative2.default.PropTypes.func
+    renderPagination: _reactNative2.default.PropTypes.func,
+    renderLeftLoopView: _reactNative2.default.PropTypes.func,
+    renderRightLoopView: _reactNative2.default.PropTypes.func
   },
 
   mixins: [_reactTimerMixin2.default],
@@ -197,7 +199,7 @@ module.exports = _reactNative2.default.createClass({
     initState.offset = {};
 
     if (initState.total > 1) {
-      var setup = props.loop ? 1 : initState.index;
+      var setup = props.loop ? initState.index + 1 : initState.index;
       initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
     }
     return initState;
@@ -472,7 +474,7 @@ module.exports = _reactNative2.default.createClass({
 
     for (var prop in props) {
       // if(~scrollResponders.indexOf(prop)
-      if (typeof props[prop] === 'function' && prop !== 'onMomentumScrollEnd' && prop !== 'renderPagination' && prop !== 'onScrollBeginDrag') {
+      if (typeof props[prop] === 'function' && prop !== 'onMomentumScrollEnd' && prop !== 'renderPagination' && prop !== 'onScrollBeginDrag' && prop !== 'renderLeftLoopView' && prop !== 'renderRightLoopView') {
         (function () {
           var originResponder = props[prop];
           props[prop] = function (e) {
@@ -490,6 +492,8 @@ module.exports = _reactNative2.default.createClass({
    * @return {object} react-dom
    */
   render: function render() {
+    var _this7 = this;
+
     var state = this.state;
     var props = this.props;
     var children = props.children;
@@ -504,21 +508,37 @@ module.exports = _reactNative2.default.createClass({
 
     // For make infinite at least total > 1
     if (total > 1) {
+      (function () {
 
-      // Re-design a loop model for avoid img flickering
-      pages = Object.keys(children);
-      if (loop) {
-        pages.unshift(total - 1);
-        pages.push(0);
-      }
+        // Re-design a loop model for avoid img flickering
+        pages = Object.keys(children);
+        var loopBoundaryViewsIncluded = _this7.props.renderLeftLoopView && _this7.props.renderRightLoopView;
+        if (loop && !loopBoundaryViewsIncluded) {
+          pages.unshift(total - 1);
+          pages.push(0);
+        }
 
-      pages = pages.map(function (page, i) {
-        return _reactNative2.default.createElement(
-          _reactNative.View,
-          { style: pageStyle, key: i },
-          children[page]
-        );
-      });
+        pages = pages.map(function (page, i) {
+          return _reactNative2.default.createElement(
+            _reactNative.View,
+            { style: pageStyle, key: i + (loopBoundaryViewsIncluded || 0) },
+            children[page]
+          );
+        });
+
+        if (loopBoundaryViewsIncluded) {
+          pages.unshift(_reactNative2.default.createElement(
+            _reactNative.View,
+            { style: pageStyle, key: 0 },
+            _this7.props.renderLeftLoopView()
+          ));
+          pages.push(_reactNative2.default.createElement(
+            _reactNative.View,
+            { style: pageStyle, key: total + 1 },
+            _this7.props.renderRightLoopView()
+          ));
+        }
+      })();
     } else pages = _reactNative2.default.createElement(
       _reactNative.View,
       { style: pageStyle },

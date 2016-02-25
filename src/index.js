@@ -123,6 +123,8 @@ module.exports = React.createClass({
     autoplayDirection                : React.PropTypes.bool,
     index                            : React.PropTypes.number,
     renderPagination                 : React.PropTypes.func,
+    renderLeftLoopView               : React.PropTypes.func,
+    renderRightLoopView              : React.PropTypes.func,
   },
 
   mixins: [TimerMixin],
@@ -194,7 +196,7 @@ module.exports = React.createClass({
     initState.offset = {}
 
     if (initState.total > 1) {
-      var setup = props.loop ? 1 : initState.index
+      var setup = props.loop ? (initState.index + 1) : initState.index
       initState.offset[initState.dir] = initState.dir == 'y'
         ? initState.height * setup
         : initState.width * setup
@@ -465,6 +467,8 @@ module.exports = React.createClass({
         && prop !== 'onMomentumScrollEnd'
         && prop !== 'renderPagination'
         && prop !== 'onScrollBeginDrag'
+        && prop !== 'renderLeftLoopView'
+        && prop !== 'renderRightLoopView'
       ) {
         let originResponder = props[prop]
         props[prop] = (e) => originResponder(e, this.state, this)
@@ -496,14 +500,20 @@ module.exports = React.createClass({
 
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
-      if(loop) {
+      const loopBoundaryViewsIncluded = this.props.renderLeftLoopView && this.props.renderRightLoopView;
+      if(loop && !loopBoundaryViewsIncluded) {
         pages.unshift(total - 1)
         pages.push(0)
       }
 
       pages = pages.map((page, i) =>
-        <View style={pageStyle} key={i}>{children[page]}</View>
+        <View style={pageStyle} key={i + (loopBoundaryViewsIncluded || 0)}>{children[page]}</View>
       )
+
+      if (loopBoundaryViewsIncluded) {
+        pages.unshift(<View style={pageStyle} key={0}>{this.props.renderLeftLoopView()}</View>);
+        pages.push(<View style={pageStyle} key={total + 1}>{this.props.renderRightLoopView()}</View>);
+      }
     }
     else pages = <View style={pageStyle}>{children}</View>
 
