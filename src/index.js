@@ -318,7 +318,7 @@ module.exports = React.createClass({
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x)
+    this.refs.scrollView && this.refs.scrollView.scrollTo({y, x})
 
     // update scroll state
     this.setState({
