@@ -309,8 +309,9 @@ module.exports = React.createClass({
   /**
    * Scroll by index
    * @param  {number} index offset index
+   * @param  {boolean} animated true to animate, false to make immediate
    */
-  scrollTo(index) {
+  scrollTo(index, animated) {
     if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
@@ -318,11 +319,21 @@ module.exports = React.createClass({
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-    this.refs.scrollView && this.refs.scrollView.scrollTo(y, x)
+    
+    // By default, animate the scroll.
+    if (animated === undefined) {
+      animated = true;
+    }
+    
+    this.refs.scrollView && this.refs.scrollView.scrollTo({
+      x: x,
+      y: y,
+      animated: animated,
+    })
 
     // update scroll state
     this.setState({
-      isScrolling: true,
+      isScrolling: animated,
       autoplayEnd: false,
     })
   },
