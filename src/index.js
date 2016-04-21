@@ -310,7 +310,7 @@ module.exports = React.createClass({
    * Scroll by index
    * @param  {number} index offset index
    */
-  scrollTo(index) {
+  scrollTo(index, animated = true) {
     if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
@@ -320,9 +320,11 @@ module.exports = React.createClass({
     if(state.dir == 'y') y = diff * state.height
     if (this.refs.scrollView) {
       if (Platform.OS === 'ios') {
-        this.refs.scrollView.scrollTo({y, x})
+        this.refs.scrollView.scrollTo({y, x, animated})
       } else {
-        this.refs.scrollView.setPage(index)
+        animated ?
+          this.refs.scrollView.setPage(index) :
+          this.refs.scrollView.setPageWithoutAnimation(index)
       }
     }
 

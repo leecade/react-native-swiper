@@ -311,6 +311,8 @@ module.exports = _reactNative2.default.createClass({
    * @param  {number} index offset index
    */
   scrollTo: function scrollTo(index) {
+    var animated = arguments.length <= 1 || arguments[1] === undefined ? true : arguments[1];
+
     if (this.state.isScrolling || this.state.total < 2) return;
     var state = this.state;
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
@@ -320,9 +322,9 @@ module.exports = _reactNative2.default.createClass({
     if (state.dir == 'y') y = diff * state.height;
     if (this.refs.scrollView) {
       if (_reactNative.Platform.OS === 'ios') {
-        this.refs.scrollView.scrollTo({ y: y, x: x });
+        this.refs.scrollView.scrollTo({ y: y, x: x, animated: animated });
       } else {
-        this.refs.scrollView.setPage(index);
+        animated ? this.refs.scrollView.setPage(index) : this.refs.scrollView.setPageWithoutAnimation(index);
       }
     }
 
