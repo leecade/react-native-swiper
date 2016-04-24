@@ -319,12 +319,15 @@ module.exports = React.createClass({
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
     if (this.refs.scrollView) {
-      if (Platform.OS === 'ios') {
-        this.refs.scrollView.scrollTo({y, x, animated})
-      } else {
-        animated ?
-          this.refs.scrollView.setPage(index) :
-          this.refs.scrollView.setPageWithoutAnimation(index)
+      switch (Platform.OS) {
+        case 'ios':
+          this.refs.scrollView.scrollTo({y, x, animated})
+          break
+        case 'android':
+          animated ?
+            this.refs.scrollView.setPage(index) :
+            this.refs.scrollView.setPageWithoutAnimation(index)
+          break
       }
     }
 
