@@ -10,7 +10,8 @@ import React, {
   Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
-  Platform
+  Platform,
+  Image
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -94,6 +95,11 @@ let styles = StyleSheet.create({
     color: '#007aff',
     fontFamily: 'Arial',
   },
+  backgroundImage: {
+    position: 'absolute',
+    flex:1,
+    resizeMode: 'cover'
+  }
 })
 
 // missing `module.exports = exports['default'];` with babel6
@@ -134,6 +140,7 @@ module.exports = React.createClass({
    */
   getDefaultProps() {
     return {
+      backgroundImageSource            : null,
       horizontal                       : true,
       pagingEnabled                    : true,
       showsHorizontalScrollIndicator   : false,
@@ -425,7 +432,16 @@ module.exports = React.createClass({
       </View>
     )
   },
+  renderBackgroundImage: function(pages) {
+    if (this.props.backgroundImageSource) {
+      return (<Image
+      source={this.props.backgroundImageSource}
+      style={[{ width: this.state.width * pages.length, height: this.state.height }, styles.backgroundImage]}/>);
+    }
+  },
   renderScrollView(pages) {
+    var backgroundImage = this.renderBackgroundImage(pages);
+
      if (Platform.OS === 'ios')
          return (
             <ScrollView ref="scrollView"
@@ -434,6 +450,7 @@ module.exports = React.createClass({
                        contentOffset={this.state.offset}
                        onScrollBeginDrag={this.onScrollBegin}
                        onMomentumScrollEnd={this.onScrollEnd}>
+             {backgroundImage}
              {pages}
             </ScrollView>
          );
@@ -441,6 +458,7 @@ module.exports = React.createClass({
          <ViewPagerAndroid ref="scrollView"
             onPageSelected={this.onScrollEnd}
             style={{flex: 1}}>
+            {backgroundImage}
             {pages}
          </ViewPagerAndroid>
       );
