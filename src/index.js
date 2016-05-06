@@ -2,7 +2,8 @@
  * react-native-swiper
  * @author leecade<leecade@163.com>
  */
-import React, {
+import React from 'react'
+import ReactNative, {
   StyleSheet,
   Text,
   View,
@@ -97,32 +98,32 @@ let styles = StyleSheet.create({
 })
 
 // missing `module.exports = exports['default'];` with babel6
-// export default React.createClass({
-module.exports = React.createClass({
+// export default ReactNative.createClass({
+module.exports = ReactNative.createClass({
 
   /**
    * Props Validation
    * @type {Object}
    */
   propTypes: {
-    horizontal                       : React.PropTypes.bool,
-    children                         : React.PropTypes.node.isRequired,
+    horizontal                       : ReactNative.PropTypes.bool,
+    children                         : ReactNative.PropTypes.node.isRequired,
     style                            : View.propTypes.style,
-    pagingEnabled                    : React.PropTypes.bool,
-    showsHorizontalScrollIndicator   : React.PropTypes.bool,
-    showsVerticalScrollIndicator     : React.PropTypes.bool,
-    bounces                          : React.PropTypes.bool,
-    scrollsToTop                     : React.PropTypes.bool,
-    removeClippedSubviews            : React.PropTypes.bool,
-    automaticallyAdjustContentInsets : React.PropTypes.bool,
-    showsPagination                  : React.PropTypes.bool,
-    showsButtons                     : React.PropTypes.bool,
-    loop                             : React.PropTypes.bool,
-    autoplay                         : React.PropTypes.bool,
-    autoplayTimeout                  : React.PropTypes.number,
-    autoplayDirection                : React.PropTypes.bool,
-    index                            : React.PropTypes.number,
-    renderPagination                 : React.PropTypes.func,
+    pagingEnabled                    : ReactNative.PropTypes.bool,
+    showsHorizontalScrollIndicator   : ReactNative.PropTypes.bool,
+    showsVerticalScrollIndicator     : ReactNative.PropTypes.bool,
+    bounces                          : ReactNative.PropTypes.bool,
+    scrollsToTop                     : ReactNative.PropTypes.bool,
+    removeClippedSubviews            : ReactNative.PropTypes.bool,
+    automaticallyAdjustContentInsets : ReactNative.PropTypes.bool,
+    showsPagination                  : ReactNative.PropTypes.bool,
+    showsButtons                     : ReactNative.PropTypes.bool,
+    loop                             : ReactNative.PropTypes.bool,
+    autoplay                         : ReactNative.PropTypes.bool,
+    autoplayTimeout                  : ReactNative.PropTypes.number,
+    autoplayDirection                : ReactNative.PropTypes.bool,
+    index                            : ReactNative.PropTypes.number,
+    renderPagination                 : ReactNative.PropTypes.func,
   },
 
   mixins: [TimerMixin],

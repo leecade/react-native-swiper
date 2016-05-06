@@ -5,11 +5,17 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
                                                                                                                                                                                                                                                                    * @author leecade<leecade@163.com>
                                                                                                                                                                                                                                                                    */
 
+
 // Using bare setTimeout, setInterval, setImmediate
 // and requestAnimationFrame calls is very dangerous
 // because if you forget to cancel the request before
 // the component is unmounted, you risk the callback
 // throwing an exception.
+
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
 
 var _reactNative = require('react-native');
 
@@ -102,9 +108,8 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 // missing `module.exports = exports['default'];` with babel6
-// export default React.createClass({
+// export default ReactNative.createClass({
 module.exports = _reactNative2.default.createClass({
-  displayName: 'exports',
 
   /**
    * Props Validation
@@ -158,6 +163,7 @@ module.exports = _reactNative2.default.createClass({
     };
   },
 
+
   /**
    * Init states
    * @return {object} states
@@ -165,6 +171,7 @@ module.exports = _reactNative2.default.createClass({
   getInitialState: function getInitialState() {
     return this.initState(this.props);
   },
+
 
   /**
    * autoplay timer
@@ -203,6 +210,7 @@ module.exports = _reactNative2.default.createClass({
     return initState;
   },
 
+
   /**
    * Automatic rolling
    */
@@ -221,6 +229,7 @@ module.exports = _reactNative2.default.createClass({
     }, this.props.autoplayTimeout * 1000);
   },
 
+
   /**
    * Scroll begin handle
    * @param  {object} e native event
@@ -237,6 +246,7 @@ module.exports = _reactNative2.default.createClass({
       _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag(e, _this2.state, _this2);
     });
   },
+
 
   /**
    * Scroll end handle
@@ -270,6 +280,7 @@ module.exports = _reactNative2.default.createClass({
       _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd(e, _this3.state, _this3);
     });
   },
+
 
   /**
    * Update index after scroll
@@ -306,6 +317,7 @@ module.exports = _reactNative2.default.createClass({
     });
   },
 
+
   /**
    * Scroll by index
    * @param  {number} index offset index
@@ -327,6 +339,7 @@ module.exports = _reactNative2.default.createClass({
     });
   },
 
+
   /**
    * Render pagination
    * @return {object} react-dom
@@ -337,7 +350,7 @@ module.exports = _reactNative2.default.createClass({
     if (this.state.total <= 1) return null;
 
     var dots = [];
-    var ActiveDot = this.props.activeDot || _reactNative2.default.createElement(_reactNative.View, { style: {
+    var ActiveDot = this.props.activeDot || _react2.default.createElement(_reactNative.View, { style: {
         backgroundColor: '#007aff',
         width: 8,
         height: 8,
@@ -347,7 +360,7 @@ module.exports = _reactNative2.default.createClass({
         marginTop: 3,
         marginBottom: 3
       } });
-    var Dot = this.props.dot || _reactNative2.default.createElement(_reactNative.View, { style: {
+    var Dot = this.props.dot || _react2.default.createElement(_reactNative.View, { style: {
         backgroundColor: 'rgba(0,0,0,.2)',
         width: 8,
         height: 8,
@@ -358,10 +371,10 @@ module.exports = _reactNative2.default.createClass({
         marginBottom: 3
       } });
     for (var i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index ? _reactNative2.default.cloneElement(ActiveDot, { key: i }) : _reactNative2.default.cloneElement(Dot, { key: i }));
+      dots.push(i === this.state.index ? _react2.default.cloneElement(ActiveDot, { key: i }) : _react2.default.cloneElement(Dot, { key: i }));
     }
 
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.View,
       { pointerEvents: 'none', style: [styles['pagination_' + this.state.dir], this.props.paginationStyle] },
       dots
@@ -370,7 +383,7 @@ module.exports = _reactNative2.default.createClass({
   renderTitle: function renderTitle() {
     var child = this.props.children[this.state.index];
     var title = child && child.props.title;
-    return title ? _reactNative2.default.createElement(
+    return title ? _react2.default.createElement(
       _reactNative.View,
       { style: styles.title },
       this.props.children[this.state.index].props.title
@@ -379,22 +392,22 @@ module.exports = _reactNative2.default.createClass({
   renderNextButton: function renderNextButton() {
     var _this4 = this;
 
-    var button = undefined;
+    var button = void 0;
 
     if (this.props.loop || this.state.index != this.state.total - 1) {
-      button = this.props.nextButton || _reactNative2.default.createElement(
+      button = this.props.nextButton || _react2.default.createElement(
         _reactNative.Text,
         { style: styles.buttonText },
         '›'
       );
     }
 
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
           return button !== null && _this4.scrollTo.call(_this4, 1);
         } },
-      _reactNative2.default.createElement(
+      _react2.default.createElement(
         _reactNative.View,
         null,
         button
@@ -407,19 +420,19 @@ module.exports = _reactNative2.default.createClass({
     var button = null;
 
     if (this.props.loop || this.state.index != 0) {
-      button = this.props.prevButton || _reactNative2.default.createElement(
+      button = this.props.prevButton || _react2.default.createElement(
         _reactNative.Text,
         { style: styles.buttonText },
         '‹'
       );
     }
 
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
           return button !== null && _this5.scrollTo.call(_this5, -1);
         } },
-      _reactNative2.default.createElement(
+      _react2.default.createElement(
         _reactNative.View,
         null,
         button
@@ -427,7 +440,7 @@ module.exports = _reactNative2.default.createClass({
     );
   },
   renderButtons: function renderButtons() {
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.View,
       { pointerEvents: 'box-none', style: [styles.buttonWrapper, { width: this.state.width, height: this.state.height }, this.props.buttonWrapperStyle] },
       this.renderPrevButton(),
@@ -435,7 +448,7 @@ module.exports = _reactNative2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
-    if (_reactNative.Platform.OS === 'ios') return _reactNative2.default.createElement(
+    if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
       }, this.props, {
@@ -445,7 +458,7 @@ module.exports = _reactNative2.default.createClass({
         onMomentumScrollEnd: this.onScrollEnd }),
       pages
     );
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.ViewPagerAndroid,
       { ref: 'scrollView',
         onPageSelected: this.onScrollEnd,
@@ -485,6 +498,7 @@ module.exports = _reactNative2.default.createClass({
     return props;
   },
 
+
   /**
    * Default render
    * @return {object} react-dom
@@ -513,19 +527,19 @@ module.exports = _reactNative2.default.createClass({
       }
 
       pages = pages.map(function (page, i) {
-        return _reactNative2.default.createElement(
+        return _react2.default.createElement(
           _reactNative.View,
           { style: pageStyle, key: i },
           children[page]
         );
       });
-    } else pages = _reactNative2.default.createElement(
+    } else pages = _react2.default.createElement(
       _reactNative.View,
       { style: pageStyle },
       children
     );
 
-    return _reactNative2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.View,
       { style: [styles.container, {
           width: state.width,
