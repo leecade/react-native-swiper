@@ -474,14 +474,15 @@ module.exports = React.createClass({
             </ScrollView>
          );
       return (
-        {backgroundImage}
-         <ViewPagerAndroid ref="scrollView"
-          {...this.props}
-            initialPage={this.state.index}
-            onPageSelected={this.onScrollEnd}
-            style={{flex: 1}}>
-            {pages}
-         </ViewPagerAndroid>
+        <View style={{flex: 1}}>{backgroundImage}
+           <ViewPagerAndroid ref="scrollView"
+            {...this.props}
+              initialPage={this.state.index}
+              onPageSelected={this.onScrollEnd}
+              style={{flex: 1}}>
+              {pages}
+           </ViewPagerAndroid>
+         </View>
       );
   },
   /**

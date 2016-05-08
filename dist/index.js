@@ -495,14 +495,18 @@ module.exports = _reactNative2.default.createClass({
       pages
     );
     return _reactNative2.default.createElement(
-      _reactNative.ViewPagerAndroid,
-      _extends({ ref: 'scrollView'
-      }, this.props, {
-        initialPage: this.state.index,
-        onPageSelected: this.onScrollEnd,
-        style: { flex: 1 } }),
+      _reactNative.View,
+      { style: { flex: 1 } },
       backgroundImage,
-      pages
+      _reactNative2.default.createElement(
+        _reactNative.ViewPagerAndroid,
+        _extends({ ref: 'scrollView'
+        }, this.props, {
+          initialPage: this.state.index,
+          onPageSelected: this.onScrollEnd,
+          style: { flex: 1 } }),
+        pages
+      )
     );
   },
 
