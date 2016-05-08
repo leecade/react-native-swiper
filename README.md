@@ -235,6 +235,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
+| backgroundImageSource | null | `string` | Specify source to image and render a background image stretching all swiper pages. |
 
 #### Custom basic style & content
 
