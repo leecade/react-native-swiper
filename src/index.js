@@ -316,7 +316,7 @@ module.exports = React.createClass({
    * Scroll by index
    * @param  {number} index offset index
    */
-  scrollTo(index) {    
+  scrollTo(index) {
     if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
@@ -324,7 +324,7 @@ module.exports = React.createClass({
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-      
+
     if (Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff)
     } else {
@@ -339,7 +339,7 @@ module.exports = React.createClass({
       isScrolling: true,
       autoplayEnd: false,
     })
-    
+
     // trigger onScrollEnd manually in android
     if (Platform.OS === 'android') {
       this.setTimeout(() => {
@@ -474,12 +474,12 @@ module.exports = React.createClass({
             </ScrollView>
          );
       return (
+        {backgroundImage}
          <ViewPagerAndroid ref="scrollView"
           {...this.props}
             initialPage={this.state.index}
             onPageSelected={this.onScrollEnd}
             style={{flex: 1}}>
-            {backgroundImage}
             {pages}
          </ViewPagerAndroid>
       );
