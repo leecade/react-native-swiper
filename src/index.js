@@ -194,7 +194,10 @@ module.exports = React.createClass({
     initState.offset = {}
 
     if (initState.total > 1) {
-      var setup = props.loop ? 1 : initState.index
+      var setup = initState.index
+      if ( props.loop ) {
+        setup++
+      }
       initState.offset[initState.dir] = initState.dir == 'y'
         ? initState.height * setup
         : initState.width * setup
