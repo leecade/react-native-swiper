@@ -272,6 +272,24 @@ module.exports = React.createClass({
     })
   },
 
+  /*
+   * Drag end handle
+   * @param {object} e native event
+   */
+  onScrollEndDrag(e) {
+    let { contentOffset } = e.nativeEvent
+    let { horizontal, children } = this.props
+    let { offset, index } = this.state
+    let previousOffset = horizontal ? offset.x : offset.y
+    let newOffset = horizontal ? contentOffset.x : contentOffset.y
+    
+    if (previousOffset === newOffset && (index === 0 || index === children.length - 1)) {
+      this.setState({
+        isScrolling: false
+      })
+    }
+  },
+
   /**
    * Update index after scroll
    * @param  {object} offset content offset
@@ -455,7 +473,8 @@ module.exports = React.createClass({
                        contentContainerStyle={[styles.wrapper, this.props.style]}
                        contentOffset={this.state.offset}
                        onScrollBeginDrag={this.onScrollBegin}
-                       onMomentumScrollEnd={this.onScrollEnd}>
+                       onMomentumScrollEnd={this.onScrollEnd}
+                       onScrollEndDrag={this.onScrollEndDrag}>
              {pages}
             </ScrollView>
          );
