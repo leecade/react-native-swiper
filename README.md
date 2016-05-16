@@ -297,7 +297,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 
 | Prop  | Params  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
-| onMomentumScrollBegin | `e` / `state` / `context` | `function` | When animation begins after letting up |
+| onScrollBeginDrag | `e` / `state` / `context` | `function` | When animation begins after letting up |
 | onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce |
 | onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd` |
 | onTouchStart | `e` / `state` / `context` | `function` | Same, but bubble phase |
