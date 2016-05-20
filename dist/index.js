@@ -108,32 +108,34 @@ var styles = _reactNative.StyleSheet.create({
 });
 
 // missing `module.exports = exports['default'];` with babel6
-// export default ReactNative.createClass({
-module.exports = _reactNative2.default.createClass({
+// export default React.createClass({
+module.exports = _react2.default.createClass({
+  displayName: 'exports',
+
 
   /**
    * Props Validation
    * @type {Object}
    */
   propTypes: {
-    horizontal: _reactNative2.default.PropTypes.bool,
-    children: _reactNative2.default.PropTypes.node.isRequired,
+    horizontal: _react2.default.PropTypes.bool,
+    children: _react2.default.PropTypes.node.isRequired,
     style: _reactNative.View.propTypes.style,
-    pagingEnabled: _reactNative2.default.PropTypes.bool,
-    showsHorizontalScrollIndicator: _reactNative2.default.PropTypes.bool,
-    showsVerticalScrollIndicator: _reactNative2.default.PropTypes.bool,
-    bounces: _reactNative2.default.PropTypes.bool,
-    scrollsToTop: _reactNative2.default.PropTypes.bool,
-    removeClippedSubviews: _reactNative2.default.PropTypes.bool,
-    automaticallyAdjustContentInsets: _reactNative2.default.PropTypes.bool,
-    showsPagination: _reactNative2.default.PropTypes.bool,
-    showsButtons: _reactNative2.default.PropTypes.bool,
-    loop: _reactNative2.default.PropTypes.bool,
-    autoplay: _reactNative2.default.PropTypes.bool,
-    autoplayTimeout: _reactNative2.default.PropTypes.number,
-    autoplayDirection: _reactNative2.default.PropTypes.bool,
-    index: _reactNative2.default.PropTypes.number,
-    renderPagination: _reactNative2.default.PropTypes.func
+    pagingEnabled: _react2.default.PropTypes.bool,
+    showsHorizontalScrollIndicator: _react2.default.PropTypes.bool,
+    showsVerticalScrollIndicator: _react2.default.PropTypes.bool,
+    bounces: _react2.default.PropTypes.bool,
+    scrollsToTop: _react2.default.PropTypes.bool,
+    removeClippedSubviews: _react2.default.PropTypes.bool,
+    automaticallyAdjustContentInsets: _react2.default.PropTypes.bool,
+    showsPagination: _react2.default.PropTypes.bool,
+    showsButtons: _react2.default.PropTypes.bool,
+    loop: _react2.default.PropTypes.bool,
+    autoplay: _react2.default.PropTypes.bool,
+    autoplayTimeout: _react2.default.PropTypes.number,
+    autoplayDirection: _react2.default.PropTypes.bool,
+    index: _react2.default.PropTypes.number,
+    renderPagination: _react2.default.PropTypes.func
   },
 
   mixins: [_reactTimerMixin2.default],
