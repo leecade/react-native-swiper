@@ -98,32 +98,32 @@ let styles = StyleSheet.create({
 })
 
 // missing `module.exports = exports['default'];` with babel6
-// export default ReactNative.createClass({
-module.exports = ReactNative.createClass({
+// export default React.createClass({
+module.exports = React.createClass({
 
   /**
    * Props Validation
    * @type {Object}
    */
   propTypes: {
-    horizontal                       : ReactNative.PropTypes.bool,
-    children                         : ReactNative.PropTypes.node.isRequired,
+    horizontal                       : React.PropTypes.bool,
+    children                         : React.PropTypes.node.isRequired,
     style                            : View.propTypes.style,
-    pagingEnabled                    : ReactNative.PropTypes.bool,
-    showsHorizontalScrollIndicator   : ReactNative.PropTypes.bool,
-    showsVerticalScrollIndicator     : ReactNative.PropTypes.bool,
-    bounces                          : ReactNative.PropTypes.bool,
-    scrollsToTop                     : ReactNative.PropTypes.bool,
-    removeClippedSubviews            : ReactNative.PropTypes.bool,
-    automaticallyAdjustContentInsets : ReactNative.PropTypes.bool,
-    showsPagination                  : ReactNative.PropTypes.bool,
-    showsButtons                     : ReactNative.PropTypes.bool,
-    loop                             : ReactNative.PropTypes.bool,
-    autoplay                         : ReactNative.PropTypes.bool,
-    autoplayTimeout                  : ReactNative.PropTypes.number,
-    autoplayDirection                : ReactNative.PropTypes.bool,
-    index                            : ReactNative.PropTypes.number,
-    renderPagination                 : ReactNative.PropTypes.func,
+    pagingEnabled                    : React.PropTypes.bool,
+    showsHorizontalScrollIndicator   : React.PropTypes.bool,
+    showsVerticalScrollIndicator     : React.PropTypes.bool,
+    bounces                          : React.PropTypes.bool,
+    scrollsToTop                     : React.PropTypes.bool,
+    removeClippedSubviews            : React.PropTypes.bool,
+    automaticallyAdjustContentInsets : React.PropTypes.bool,
+    showsPagination                  : React.PropTypes.bool,
+    showsButtons                     : React.PropTypes.bool,
+    loop                             : React.PropTypes.bool,
+    autoplay                         : React.PropTypes.bool,
+    autoplayTimeout                  : React.PropTypes.number,
+    autoplayDirection                : React.PropTypes.bool,
+    index                            : React.PropTypes.number,
+    renderPagination                 : React.PropTypes.func,
   },
 
   mixins: [TimerMixin],
@@ -313,7 +313,7 @@ module.exports = ReactNative.createClass({
    * Scroll by index
    * @param  {number} index offset index
    */
-  scrollTo(index) {    
+  scrollTo(index) {
     if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
@@ -321,7 +321,7 @@ module.exports = ReactNative.createClass({
     let y = 0
     if(state.dir == 'x') x = diff * state.width
     if(state.dir == 'y') y = diff * state.height
-      
+
     if (Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff)
     } else {
@@ -336,7 +336,7 @@ module.exports = ReactNative.createClass({
       isScrolling: true,
       autoplayEnd: false,
     })
-    
+
     // trigger onScrollEnd manually in android
     if (Platform.OS === 'android') {
       this.setTimeout(() => {
