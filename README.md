@@ -1,5 +1,7 @@
 # react-native-swiper
 
+[![Join the chat at https://gitter.im/leecade/react-native-swiper](https://badges.gitter.im/leecade/react-native-swiper.svg)](https://gitter.im/leecade/react-native-swiper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 [![npm version](http://img.shields.io/npm/v/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![npm version](http://img.shields.io/npm/dm/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![Issue Stats](http://issuestats.com/github/leecade/react-native-swiper/badge/pr?style=flat-square)](https://github.com/leecade/react-native-swiper/pulls?q=is%3Apr+is%3Aclosed)
