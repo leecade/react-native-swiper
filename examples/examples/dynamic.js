@@ -1,10 +1,11 @@
-var React = require('react-native')
+var React = require('react')
+var ReactNative = require('react-native')
 var Swiper = require('./')
 var {
   StyleSheet,
   Text,
   View,
-} = React
+} = ReactNative
 
 var styles = StyleSheet.create({
   wrapper: {
@@ -49,9 +50,9 @@ var swiper = React.createClass({
   render: function() {
     return(
       <Swiper showsButtons={true}>
-        {this.state.items.map(function(item){
+        {this.state.items.map((item, key) => {
           return (
-            <View style={item.css}>
+            <View key={key} style={item.css}>
               <Text style={styles.text}>{item.title}</Text>
             </View>
           );

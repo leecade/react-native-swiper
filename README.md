@@ -1,11 +1,10 @@
 # react-native-swiper
 
-[![Join the chat at https://gitter.im/leecade/react-native-swiper](https://badges.gitter.im/leecade/react-native-swiper.svg)](https://gitter.im/leecade/react-native-swiper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 [![npm version](http://img.shields.io/npm/v/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![npm version](http://img.shields.io/npm/dm/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![Issue Stats](http://issuestats.com/github/leecade/react-native-swiper/badge/pr?style=flat-square)](https://github.com/leecade/react-native-swiper/pulls?q=is%3Apr+is%3Aclosed)
 [![Issue Stats](http://issuestats.com/github/leecade/react-native-swiper/badge/issue?style=flat-square)](https://github.com/leecade/react-native-swiper/issues?q=is%3Aissue+is%3Aclosed)
+[![Join the chat at https://gitter.im/leecade/react-native-swiper](https://badges.gitter.im/leecade/react-native-swiper.svg)](https://gitter.im/leecade/react-native-swiper?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ![logo](http://i.imgur.com/P4cRUgD.png)
 
@@ -64,6 +63,12 @@ The best Swiper component for React Native.
 - [x] State inject
 
 ## Changelogs
+
+- **[1.4.4]**
+  + Support for React Native latest(`^0.26.0`)
+  + Updates examples to work with react-native-swiper 1.4.4
+  + Examples now run on Android (some are still buggy, needs more work)
+  + Removes old examples folder
 
 - **[1.4.3]**
   + Fixed auto play issue when only a child view
@@ -339,6 +344,7 @@ $ npm start
 ## Contribution
 
 - [@leecade](mailto:leecade@163.com) The main author.
+- [@rajkissu](mailto:rajkissu@gmail.com) The secondary contributor.
 
 ## Questions
 

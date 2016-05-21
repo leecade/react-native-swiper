@@ -1,10 +1,11 @@
-var React = require('react-native')
+var React = require('react')
+var ReactNative = require('react-native')
 var Swiper = require('./')
 var {
   StyleSheet,
   Text,
   View,
-} = React
+} = ReactNative
 
 var styles = StyleSheet.create({
   wrapper: {
