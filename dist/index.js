@@ -486,6 +486,8 @@ module.exports = _react2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
+    var _this7 = this;
+
     if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
@@ -493,6 +495,9 @@ module.exports = _react2.default.createClass({
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
         onScrollBeginDrag: this.onScrollBegin,
+        onScrollEndDrag: function onScrollEndDrag() {
+          return _this7.setState({ isScrolling: false });
+        },
         onMomentumScrollEnd: this.onScrollEnd }),
       pages
     );
@@ -513,7 +518,7 @@ module.exports = _react2.default.createClass({
    * @return {object} props injected props
    */
   injectState: function injectState(props) {
-    var _this7 = this;
+    var _this8 = this;
 
     /*    const scrollResponders = [
           'onMomentumScrollBegin',
@@ -529,7 +534,7 @@ module.exports = _react2.default.createClass({
         (function () {
           var originResponder = props[prop];
           props[prop] = function (e) {
-            return originResponder(e, _this7.state, _this7);
+            return originResponder(e, _this8.state, _this8);
           };
         })();
       }
