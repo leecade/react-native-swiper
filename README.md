@@ -64,6 +64,12 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- **[1.4.5]8**
+  + renames `scrollTo()` to `scrollBy()`
+  + image index is now always an integer
+  + prevents parent state updates from reseting index counter
+  + fixes issue with scrolling not working sometimes
+
 - **[1.4.4]**
   + Support for React Native latest(`^0.26.0`)
   + Updates examples to work with react-native-swiper 1.4.4
