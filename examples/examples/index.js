@@ -191,16 +191,26 @@ module.exports = _react2.default.createClass({
     this.autoplay();
   },
   initState: function initState(props) {
+    // set the current state
+    var state = this.state || {};
+
     var initState = {
       isScrolling: false,
       autoplayEnd: false
     };
 
     initState.total = props.children ? props.children.length || 1 : 0;
-    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0;
+
+    if (state.total === initState.total) {
+      // retain the index
+      initState.index = state.index;
+    } else {
+      // reset the index
+      initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0;
+    }
 
     // Default: horizontal
-    initState.dir = props.horizontal == false ? 'y' : 'x';
+    initState.dir = props.horizontal === false ? 'y' : 'x';
     initState.width = props.width || width;
     initState.height = props.height || height;
     initState.offset = {};
@@ -210,7 +220,7 @@ module.exports = _react2.default.createClass({
       if (props.loop) {
         setup++;
       }
-      initState.offset[initState.dir] = initState.dir == 'y' ? initState.height * setup : initState.width * setup;
+      initState.offset[initState.dir] = initState.dir === 'y' ? initState.height * setup : initState.width * setup;
     }
     return initState;
   },
@@ -222,15 +232,18 @@ module.exports = _react2.default.createClass({
   autoplay: function autoplay() {
     var _this = this;
 
-    if (!Array.isArray(this.props.children) || !this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) return;
+    if (!Array.isArray(this.props.children) || !this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) {
+      return;
+    }
 
     clearTimeout(this.autoplayTimer);
 
     this.autoplayTimer = this.setTimeout(function () {
-      if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index == _this.state.total - 1 : _this.state.index == 0)) return _this.setState({
-        autoplayEnd: true
-      });
-      _this.scrollTo(_this.props.autoplayDirection ? 1 : -1);
+      if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index === _this.state.total - 1 : _this.state.index === 0)) {
+        return _this.setState({ autoplayEnd: true });
+      }
+
+      _this.scrollBy(_this.props.autoplayDirection ? 1 : -1);
     }, this.props.autoplayTimeout * 1000);
   },
 
@@ -243,9 +256,7 @@ module.exports = _react2.default.createClass({
     var _this2 = this;
 
     // update scroll state
-    this.setState({
-      isScrolling: true
-    });
+    this.setState({ isScrolling: true });
 
     this.setTimeout(function () {
       _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag(e, _this2.state, _this2);
@@ -267,7 +278,7 @@ module.exports = _react2.default.createClass({
 
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
-      if (this.state.dir == 'x') {
+      if (this.state.dir === 'x') {
         e.nativeEvent.contentOffset = { x: e.nativeEvent.position * this.state.width };
       } else {
         e.nativeEvent.contentOffset = { y: e.nativeEvent.position * this.state.height };
@@ -297,14 +308,15 @@ module.exports = _react2.default.createClass({
     var state = this.state;
     var index = state.index;
     var diff = offset[dir] - state.offset[dir];
-    var step = dir == 'x' ? state.width : state.height;
+    var step = dir === 'x' ? state.width : state.height;
 
     // Do nothing if offset no change.
     if (!diff) return;
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
-    index = index + diff / step;
+    // parseInt() ensures it's always an integer
+    index = parseInt(index + diff / step);
 
     if (this.props.loop) {
       if (index <= -1) {
@@ -327,7 +339,7 @@ module.exports = _react2.default.createClass({
    * Scroll by index
    * @param  {number} index offset index
    */
-  scrollTo: function scrollTo(index) {
+  scrollBy: function scrollBy(index) {
     var _this4 = this;
 
     if (this.state.isScrolling || this.state.total < 2) return;
@@ -335,8 +347,8 @@ module.exports = _react2.default.createClass({
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
     var x = 0;
     var y = 0;
-    if (state.dir == 'x') x = diff * state.width;
-    if (state.dir == 'y') y = diff * state.height;
+    if (state.dir === 'x') x = diff * state.width;
+    if (state.dir === 'y') y = diff * state.height;
 
     if (_reactNative.Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff);
@@ -431,7 +443,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this5.scrollTo.call(_this5, 1);
+          return button !== null && _this5.scrollBy.call(_this5, 1);
         } },
       _react2.default.createElement(
         _reactNative.View,
@@ -456,7 +468,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this6.scrollTo.call(_this6, -1);
+          return button !== null && _this6.scrollBy.call(_this6, -1);
         } },
       _react2.default.createElement(
         _reactNative.View,

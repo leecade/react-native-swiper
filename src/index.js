@@ -180,16 +180,26 @@ module.exports = React.createClass({
   },
 
   initState(props) {
+    // set the current state
+    const state = this.state || {}
+
     let initState = {
       isScrolling: false,
       autoplayEnd: false,
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
-    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
+
+    if (state.total === initState.total) {
+      // retain the index
+      initState.index = state.index
+    } else {
+      // reset the index
+      initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
+    }
 
     // Default: horizontal
-    initState.dir = props.horizontal == false ? 'y' : 'x'
+    initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
     initState.offset = {}
@@ -199,7 +209,7 @@ module.exports = React.createClass({
       if ( props.loop ) {
         setup++
       }
-      initState.offset[initState.dir] = initState.dir == 'y'
+      initState.offset[initState.dir] = initState.dir === 'y'
         ? initState.height * setup
         : initState.width * setup
     }
@@ -210,20 +220,29 @@ module.exports = React.createClass({
    * Automatic rolling
    */
   autoplay() {
-    if(!Array.isArray(this.props.children)
+    if(
+      !Array.isArray(this.props.children)
       || !this.props.autoplay
       || this.state.isScrolling
-      || this.state.autoplayEnd) return
+      || this.state.autoplayEnd
+    ) {
+      return
+    }
 
     clearTimeout(this.autoplayTimer)
 
     this.autoplayTimer = this.setTimeout(() => {
-      if(!this.props.loop && (this.props.autoplayDirection
-          ? this.state.index == this.state.total - 1
-          : this.state.index == 0)) return this.setState({
-        autoplayEnd: true
-      })
-      this.scrollTo(this.props.autoplayDirection ? 1 : -1)
+      if(
+        !this.props.loop && (
+          this.props.autoplayDirection
+            ? this.state.index === this.state.total - 1
+            : this.state.index === 0
+        )
+      ) {
+        return this.setState({ autoplayEnd: true })
+      }
+
+      this.scrollBy(this.props.autoplayDirection ? 1 : -1)
     }, this.props.autoplayTimeout * 1000)
   },
 
@@ -233,9 +252,7 @@ module.exports = React.createClass({
    */
   onScrollBegin(e) {
     // update scroll state
-    this.setState({
-      isScrolling: true
-    })
+    this.setState({ isScrolling: true })
 
     this.setTimeout(() => {
       this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.state, this)
@@ -254,7 +271,7 @@ module.exports = React.createClass({
 
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
-      if (this.state.dir == 'x') {
+      if (this.state.dir === 'x') {
         e.nativeEvent.contentOffset = {x: e.nativeEvent.position * this.state.width}
       } else {
         e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
@@ -283,14 +300,15 @@ module.exports = React.createClass({
     let state = this.state
     let index = state.index
     let diff = offset[dir] - state.offset[dir]
-    let step = dir == 'x' ? state.width : state.height
+    let step = dir === 'x' ? state.width : state.height
 
     // Do nothing if offset no change.
     if(!diff) return
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
-    index = index + diff / step
+    // parseInt() ensures it's always an integer
+    index = parseInt(index + diff / step)
 
     if(this.props.loop) {
       if(index <= -1) {
@@ -313,14 +331,14 @@ module.exports = React.createClass({
    * Scroll by index
    * @param  {number} index offset index
    */
-  scrollTo(index) {
+  scrollBy(index) {
     if (this.state.isScrolling || this.state.total < 2) return
     let state = this.state
     let diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
-    if(state.dir == 'x') x = diff * state.width
-    if(state.dir == 'y') y = diff * state.height
+    if(state.dir === 'x') x = diff * state.width
+    if(state.dir === 'y') y = diff * state.height
 
     if (Platform.OS === 'android') {
       this.refs.scrollView && this.refs.scrollView.setPage(diff)
@@ -416,7 +434,7 @@ module.exports = React.createClass({
     }
 
     return (
-      <TouchableOpacity onPress={() => button !== null && this.scrollTo.call(this, 1)}>
+      <TouchableOpacity onPress={() => button !== null && this.scrollBy.call(this, 1)}>
         <View>
           {button}
         </View>
@@ -432,7 +450,7 @@ module.exports = React.createClass({
     }
 
     return (
-      <TouchableOpacity onPress={() => button !== null && this.scrollTo.call(this, -1)}>
+      <TouchableOpacity onPress={() => button !== null && this.scrollBy.call(this, -1)}>
         <View>
           {button}
         </View>
