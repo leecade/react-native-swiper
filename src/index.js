@@ -190,7 +190,7 @@ module.exports = React.createClass({
 
     initState.total = props.children ? props.children.length || 1 : 0
 
-    if (state.total === initState.total) {
+    if (state.total === initState.total && props.index === this.props.index) {
       // retain the index
       initState.index = state.index
     } else {
