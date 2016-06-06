@@ -196,7 +196,8 @@ module.exports = _react2.default.createClass({
 
     var initState = {
       isScrolling: false,
-      autoplayEnd: false
+      autoplayEnd: false,
+      loopJump: false
     };
 
     initState.total = props.children ? props.children.length || 1 : 0;
@@ -220,18 +221,26 @@ module.exports = _react2.default.createClass({
       if (props.loop) {
         setup++;
       }
-      initState.offset[initState.dir] = initState.dir === 'y' ? initState.height * setup : initState.width * setup;
+      initState.offset[initState.dir] = initState.dir === 'y' ? (initState.height * setup) : (initState.width * setup);
     }
     return initState;
   },
 
+  /*
+   * loopJump
+   */
+  loopJump: function loopJump(){
+    if(this.state.loopJump){
+      var i = this.state.index + (this.props.loop ? 1 : 0);
+      setTimeout(() => this.refs.scrollView && this.refs.scrollView.setPageWithoutAnimation(i), 50);
+    }
+  },
 
   /**
    * Automatic rolling
    */
   autoplay: function autoplay() {
     var _this = this;
-
     if (!Array.isArray(this.props.children) || !this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) {
       return;
     }
@@ -242,7 +251,6 @@ module.exports = _react2.default.createClass({
       if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index === _this.state.total - 1 : _this.state.index === 0)) {
         return _this.setState({ autoplayEnd: true });
       }
-
       _this.scrollBy(_this.props.autoplayDirection ? 1 : -1);
     }, this.props.autoplayTimeout * 1000);
   },
@@ -254,7 +262,6 @@ module.exports = _react2.default.createClass({
    */
   onScrollBegin: function onScrollBegin(e) {
     var _this2 = this;
-
     // update scroll state
     this.setState({ isScrolling: true });
 
@@ -275,7 +282,6 @@ module.exports = _react2.default.createClass({
     this.setState({
       isScrolling: false
     });
-
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
       if (this.state.dir === 'x') {
@@ -291,7 +297,7 @@ module.exports = _react2.default.createClass({
     // in setTimeout to ensure synchronous update `index`
     this.setTimeout(function () {
       _this3.autoplay();
-
+      _this3.loopJump();
       // if `onMomentumScrollEnd` registered will be called here
       _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd(e, _this3.state, _this3);
     });
@@ -304,11 +310,11 @@ module.exports = _react2.default.createClass({
    * @param  {string} dir    'x' || 'y'
    */
   updateIndex: function updateIndex(offset, dir) {
-
     var state = this.state;
     var index = state.index;
     var diff = offset[dir] - state.offset[dir];
     var step = dir === 'x' ? state.width : state.height;
+    var loopJump = false;
 
     // Do nothing if offset no change.
     if (!diff) return;
@@ -322,15 +328,18 @@ module.exports = _react2.default.createClass({
       if (index <= -1) {
         index = state.total - 1;
         offset[dir] = step * state.total;
+        loopJump = true;
       } else if (index >= state.total) {
         index = 0;
         offset[dir] = step;
+        loopJump = true;
       }
     }
 
     this.setState({
       index: index,
-      offset: offset
+      offset: offset,
+      loopJump: loopJump
     });
   },
 
@@ -341,7 +350,6 @@ module.exports = _react2.default.createClass({
    */
   scrollBy: function scrollBy(index) {
     var _this4 = this;
-
     if (this.state.isScrolling || this.state.total < 2) return;
     var state = this.state;
     var diff = (this.props.loop ? 1 : 0) + index + this.state.index;
@@ -373,7 +381,7 @@ module.exports = _react2.default.createClass({
             position: diff
           }
         });
-      }, 50);
+      }, 0);
     }
   },
 
@@ -487,7 +495,7 @@ module.exports = _react2.default.createClass({
   },
   renderScrollView: function renderScrollView(pages) {
     var _this7 = this;
-
+    var i = this.state.index + (this.props.loop ? 1 : 0);
     if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
@@ -505,7 +513,7 @@ module.exports = _react2.default.createClass({
       _reactNative.ViewPagerAndroid,
       _extends({ ref: 'scrollView'
       }, this.props, {
-        initialPage: this.state.index,
+        initialPage: i,
         onPageSelected: this.onScrollEnd,
         style: { flex: 1 } }),
       pages
@@ -567,10 +575,9 @@ module.exports = _react2.default.createClass({
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children);
       if (loop) {
-        pages.unshift(total - 1);
-        pages.push(0);
+        pages.unshift(total - 1 + '');
+        pages.push('0');
       }
-
       pages = pages.map(function (page, i) {
         return _react2.default.createElement(
           _reactNative.View,
