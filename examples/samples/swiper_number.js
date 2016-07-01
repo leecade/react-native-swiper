@@ -1,48 +1,47 @@
-var React = require('react')
-var ReactNative = require('react-native')
-var Swiper = require('./')
-var {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} = ReactNative
+import React from 'react'
+import { StyleSheet, Text, View, Image } from 'react-native'
+import Swiper from '../swiper.dist'
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
   },
+
   slide: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
+
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
+
   image: {
-    flex: 1,
+    flex: 1
   }
 })
 
-var renderPagination = function (index, total, context) {
+const renderPagination = (index, total, context) => {
   return (
     <View style={{
       position: 'absolute',
       bottom: -25,
-      right: 10,
+      right: 10
     }}>
-      <Text><Text style={{
-        color: '#007aff',
-        fontSize: 20,
-      }}>{index + 1}</Text>/{total}</Text>
+      <Text>
+        <Text style={{
+          color: '#007aff',
+          fontSize: 20
+        }}>{index + 1}</Text>/{total}
+      </Text>
     </View>
   )
 }
 
-var swiper = React.createClass({
-  render: function() {
+export default class NumberSample extends React.Component {
+  render() {
     return (
       <View>
         <Swiper style={styles.wrapper} height={240}
@@ -66,7 +65,4 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
-
-module.exports = swiper
-
+}

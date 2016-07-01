@@ -181,9 +181,6 @@ module.exports = _react2.default.createClass({
    */
   autoplayTimer: null,
 
-  componentWillMount: function componentWillMount() {
-    this.props = this.injectState(this.props);
-  },
   componentWillReceiveProps: function componentWillReceiveProps(props) {
     this.setState(this.initState(props));
   },
@@ -376,6 +373,36 @@ module.exports = _react2.default.createClass({
       }, 50);
     }
   },
+  scrollViewPropOverrides: function scrollViewPropOverrides() {
+    var _this5 = this;
+
+    var props = this.props;
+    var overrides = {};
+
+    /*
+    const scrollResponders = [
+      'onMomentumScrollBegin',
+      'onTouchStartCapture',
+      'onTouchStart',
+      'onTouchEnd',
+      'onResponderRelease',
+    ]
+    */
+
+    for (var prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if (typeof props[prop] === 'function' && prop !== 'onMomentumScrollEnd' && prop !== 'renderPagination' && prop !== 'onScrollBeginDrag') {
+        (function () {
+          var originResponder = props[prop];
+          overrides[prop] = function (e) {
+            return originResponder(e, _this5.state, _this5);
+          };
+        })();
+      }
+    }
+
+    return overrides;
+  },
 
 
   /**
@@ -428,7 +455,7 @@ module.exports = _react2.default.createClass({
     ) : null;
   },
   renderNextButton: function renderNextButton() {
-    var _this5 = this;
+    var _this6 = this;
 
     var button = void 0;
 
@@ -443,7 +470,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this5.scrollBy.call(_this5, 1);
+          return button !== null && _this6.scrollBy.call(_this6, 1);
         } },
       _react2.default.createElement(
         _reactNative.View,
@@ -453,7 +480,7 @@ module.exports = _react2.default.createClass({
     );
   },
   renderPrevButton: function renderPrevButton() {
-    var _this6 = this;
+    var _this7 = this;
 
     var button = null;
 
@@ -468,7 +495,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this6.scrollBy.call(_this6, -1);
+          return button !== null && _this7.scrollBy.call(_this7, -1);
         } },
       _react2.default.createElement(
         _reactNative.View,
@@ -486,17 +513,17 @@ module.exports = _react2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
-    var _this7 = this;
+    var _this8 = this;
 
     if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
-      }, this.props, {
+      }, this.props, this.scrollViewPropOverrides(), {
         contentContainerStyle: [styles.wrapper, this.props.style],
         contentOffset: this.state.offset,
         onScrollBeginDrag: this.onScrollBegin,
         onScrollEndDrag: function onScrollEndDrag() {
-          return _this7.setState({ isScrolling: false });
+          return _this8.setState({ isScrolling: false });
         },
         onMomentumScrollEnd: this.onScrollEnd }),
       pages
@@ -505,42 +532,11 @@ module.exports = _react2.default.createClass({
       _reactNative.ViewPagerAndroid,
       _extends({ ref: 'scrollView'
       }, this.props, {
-        initialPage: this.state.index,
+        initialPage: this.props.loop ? this.state.index + 1 : this.state.index,
         onPageSelected: this.onScrollEnd,
         style: { flex: 1 } }),
       pages
     );
-  },
-
-  /**
-   * Inject state to ScrollResponder
-   * @param  {object} props origin props
-   * @return {object} props injected props
-   */
-  injectState: function injectState(props) {
-    var _this8 = this;
-
-    /*    const scrollResponders = [
-          'onMomentumScrollBegin',
-          'onTouchStartCapture',
-          'onTouchStart',
-          'onTouchEnd',
-          'onResponderRelease',
-        ]*/
-
-    for (var prop in props) {
-      // if(~scrollResponders.indexOf(prop)
-      if (typeof props[prop] === 'function' && prop !== 'onMomentumScrollEnd' && prop !== 'renderPagination' && prop !== 'onScrollBeginDrag') {
-        (function () {
-          var originResponder = props[prop];
-          props[prop] = function (e) {
-            return originResponder(e, _this8.state, _this8);
-          };
-        })();
-      }
-    }
-
-    return props;
   },
 
 

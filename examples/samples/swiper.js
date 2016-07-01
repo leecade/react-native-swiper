@@ -1,51 +1,51 @@
-var React = require('react')
-var ReactNative = require('react-native')
-var Swiper = require('./')
-var {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} = ReactNative
+import React from 'react'
+import { StyleSheet, Text, View, Image } from 'react-native'
+import Swiper from '../swiper.dist'
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
   },
+
   slide: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
+
   slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB',
+    backgroundColor: '#9DD6EB'
   },
+
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5',
+    backgroundColor: '#97CAE5'
   },
+
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    backgroundColor: '#92BBD9'
   },
+
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   },
+
   image: {
     flex: 1,
   }
 })
 
-var swiper = React.createClass({
-  render: function() {
+export default class SwiperSample extends React.Component {
+  render() {
     return (
       <View>
         <Swiper style={styles.wrapper} height={200} horizontal={false} autoplay={true}>
@@ -83,6 +83,4 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
-
-module.exports = swiper
+}
