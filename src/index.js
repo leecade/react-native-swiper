@@ -320,7 +320,10 @@ module.exports = React.createClass({
     this.setState({
       index: index,
       offset: offset,
-    })
+    }, () => {
+      // if `onChangedIndex` function prop exists, call it
+      this.props.onChangedIndex && this.props.onChangedIndex({index, offset})
+    });
   },
 
   /**
