@@ -167,10 +167,6 @@ module.exports = React.createClass({
    */
   autoplayTimer: null,
 
-  componentWillMount() {
-    this.props = this.injectState(this.props)
-  },
-
   componentWillReceiveProps(props) {
     this.setState(this.initState(props))
   },
@@ -368,6 +364,35 @@ module.exports = React.createClass({
 
   },
 
+  scrollViewPropOverrides() {
+    var props = this.props
+    var overrides = {}
+
+    /*
+    const scrollResponders = [
+      'onMomentumScrollBegin',
+      'onTouchStartCapture',
+      'onTouchStart',
+      'onTouchEnd',
+      'onResponderRelease',
+    ]
+    */
+
+    for(let prop in props) {
+      // if(~scrollResponders.indexOf(prop)
+      if(typeof props[prop] === 'function'
+        && prop !== 'onMomentumScrollEnd'
+        && prop !== 'renderPagination'
+        && prop !== 'onScrollBeginDrag'
+      ) {
+        let originResponder = props[prop]
+        overrides[prop] = (e) => originResponder(e, this.state, this)
+      }
+    }
+
+    return overrides
+  },
+
   /**
    * Render pagination
    * @return {object} react-dom
@@ -466,11 +491,13 @@ module.exports = React.createClass({
       </View>
     )
   },
+
   renderScrollView(pages) {
      if (Platform.OS === 'ios')
          return (
             <ScrollView ref="scrollView"
              {...this.props}
+             {...this.scrollViewPropOverrides()}
                        contentContainerStyle={[styles.wrapper, this.props.style]}
                        contentOffset={this.state.offset}
                        onScrollBeginDrag={this.onScrollBegin}
@@ -482,40 +509,12 @@ module.exports = React.createClass({
       return (
          <ViewPagerAndroid ref="scrollView"
           {...this.props}
-            initialPage={this.state.index}
+            initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
             onPageSelected={this.onScrollEnd}
             style={{flex: 1}}>
             {pages}
          </ViewPagerAndroid>
       );
-  },
-  /**
-   * Inject state to ScrollResponder
-   * @param  {object} props origin props
-   * @return {object} props injected props
-   */
-  injectState(props) {
-/*    const scrollResponders = [
-      'onMomentumScrollBegin',
-      'onTouchStartCapture',
-      'onTouchStart',
-      'onTouchEnd',
-      'onResponderRelease',
-    ]*/
-
-    for(let prop in props) {
-      // if(~scrollResponders.indexOf(prop)
-      if(typeof props[prop] === 'function'
-        && prop !== 'onMomentumScrollEnd'
-        && prop !== 'renderPagination'
-        && prop !== 'onScrollBeginDrag'
-      ) {
-        let originResponder = props[prop]
-        props[prop] = (e) => originResponder(e, this.state, this)
-      }
-    }
-
-    return props
   },
 
   /**

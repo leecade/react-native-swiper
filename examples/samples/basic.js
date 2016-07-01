@@ -1,46 +1,46 @@
-var React = require('react')
-var ReactNative = require('react-native')
-var Swiper = require('./')
-var {
-  StyleSheet,
-  Text,
-  View,
-} = ReactNative
+import React from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import Swiper from '../swiper.dist'
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
   },
+
   slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB',
+    backgroundColor: '#9DD6EB'
   },
+
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5',
+    backgroundColor: '#97CAE5'
   },
+
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    backgroundColor: '#92BBD9'
   },
+
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   }
 })
 
-var swiper = React.createClass({
-  _onMomentumScrollEnd: function (e, state, context) {
+export default class BasicSample extends React.Component {
+  _onMomentumScrollEnd(e, state, context) {
     // you can get `state` and `this`(ref to swiper's context) from params
     console.log(state, context.state)
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <Swiper style={styles.wrapper}
       onMomentumScrollEnd={this._onMomentumScrollEnd}
@@ -57,7 +57,4 @@ var swiper = React.createClass({
       </Swiper>
     )
   }
-})
-
-module.exports = swiper
-
+}

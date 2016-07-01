@@ -1,28 +1,24 @@
-var React = require('react')
-var ReactNative = require('react-native')
-var Swiper = require('./')
-var {
-  StyleSheet,
-  Text,
-  View,
-  Image,
-} = ReactNative
+import React from 'react'
+import { StyleSheet, Text, View, Image } from 'react-native'
+import Swiper from '../swiper.dist'
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
-    // backgroundColor: '#f00',
+    // backgroundColor: '#f00'
   },
+
   slide: {
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
+
   image: {
-    flex: 1,
+    flex: 1
   }
 })
 
-var swiper = React.createClass({
-  render: function() {
+export default class PhoneSample extends React.Component {
+  render() {
     return (
       <View>
         <Image source={{uri: 'http://i.imgur.com/rVekwfn.jpg'}}>
@@ -47,6 +43,4 @@ var swiper = React.createClass({
       </View>
     )
   }
-})
-
-module.exports = swiper
+}
