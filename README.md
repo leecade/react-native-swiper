@@ -64,7 +64,12 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- **[1.4.5]8**
+- **[1.4.6]**
+  + refactors examples
+  + prevents mutation of `this.props`
+  + fixes android index loop issue
+
+- **[1.4.5]**
   + renames `scrollTo()` to `scrollBy()`
   + image index is now always an integer
   + prevents parent state updates from reseting index counter
