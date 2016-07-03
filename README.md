@@ -126,19 +126,19 @@ The best Swiper component for React Native.
 
 > Try these cases by yourself very easy, Just open `examples/ios/swiper.xcodeproj` in Xcode, then press `Cmd + R`; you may edit `examples/index.ios.js` for switch cases.
 
-### [examples/basic.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/basic.js)
+### [examples/samples/basic.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/basic.js)
 
 ![](http://i.imgur.com/zrsazAG.gif =300x)
 
-### [examples/swiper.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/swiper.js)
+### [examples/samples/swiper.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/swiper.js)
 
 ![](http://i.imgur.com/hP3f3oO.gif =300x)
 
-### [examples/swiper_number.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/swiper_number.js)
+### [examples/samples/swiper_number.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/swiper_number.js)
 
 ![](http://i.imgur.com/0rqESVb.gif =300x)
 
-### [examples/phone.js](https://github.com/leecade/react-native-swiper/blob/master/examples/examples/phone.js)
+### [examples/samples/phone.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/phone.js)
 
 ![](http://i.imgur.com/c1BhjZm.gif =300x)
 
@@ -344,7 +344,7 @@ var swiper = React.createClass({
 
 ### Examples
 
-@TODO, see code in [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/examples) first.
+@TODO, see code in [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/) first.
 
 ### Development
 
