@@ -14,12 +14,6 @@ The best Swiper component for React Native.
 
 ### V2
 
-- [ ] **Compatible with android**
-
-- [ ] Fixes currently bugs
-
-- [ ] More features
-
 - [ ] Improve performance
 
 - [ ] Landscape mode
@@ -34,13 +28,15 @@ The best Swiper component for React Native.
 
 ### V1
 
-- [ ] **Support for Android**
+- [x] **Support for Android**
 
 - [ ] More switch effects
 
 - [ ] Unit tests
 
 - [ ] Check typo
+
+- [ ] Fix bugs
 
 - [x] Infinite loop
 
