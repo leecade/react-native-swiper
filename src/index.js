@@ -296,7 +296,7 @@ module.exports = React.createClass({
     let { offset, index } = this.state
     let previousOffset = horizontal ? offset.x : offset.y
     let newOffset = horizontal ? contentOffset.x : contentOffset.y
-    
+
     if (previousOffset === newOffset && (index === 0 || index === children.length - 1)) {
       this.setState({
         isScrolling: false
@@ -322,7 +322,7 @@ module.exports = React.createClass({
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     // parseInt() ensures it's always an integer
-    index = parseInt(index + diff / step)
+    index = parseInt(index + Math.round(diff / step))
 
     if(this.props.loop) {
       if(index <= -1) {
