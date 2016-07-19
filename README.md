@@ -60,6 +60,12 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- **[1.4.7]**
+  + Don't attempt to mutate this.props
+  + Fixes examples links
+  + Adds drag end handling to always reset state.isScrolling
+  + Fixes float calculation error
+
 - **[1.4.6]**
   + refactors examples
   + prevents mutation of `this.props`
