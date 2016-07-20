@@ -182,6 +182,7 @@ module.exports = React.createClass({
     let initState = {
       isScrolling: false,
       autoplayEnd: false,
+      loopJump: false,
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
@@ -210,6 +211,13 @@ module.exports = React.createClass({
         : initState.width * setup
     }
     return initState
+  },
+
+	loopJump: function loopJump(){
+    if(this.state.loopJump){
+      var i = this.state.index + (this.props.loop ? 1 : 0);
+      setTimeout(() => this.refs.scrollView.setPageWithoutAnimation && this.refs.scrollView.setPageWithoutAnimation(i), 50);
+    }
   },
 
   /**
@@ -280,6 +288,7 @@ module.exports = React.createClass({
     // in setTimeout to ensure synchronous update `index`
     this.setTimeout(() => {
       this.autoplay()
+      this.loopJump();
 
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.state, this)
@@ -315,6 +324,7 @@ module.exports = React.createClass({
     let index = state.index
     let diff = offset[dir] - state.offset[dir]
     let step = dir === 'x' ? state.width : state.height
+    let loopJump = false;
 
     // Do nothing if offset no change.
     if(!diff) return
@@ -328,16 +338,19 @@ module.exports = React.createClass({
       if(index <= -1) {
         index = state.total - 1
         offset[dir] = step * state.total
+        loopJump = true;
       }
       else if(index >= state.total) {
         index = 0
         offset[dir] = step
+        loopJump = true;
       }
     }
 
     this.setState({
       index: index,
       offset: offset,
+      loopJump: loopJump,
     })
   },
 
@@ -374,7 +387,7 @@ module.exports = React.createClass({
             position: diff,
           }
         });
-      }, 50);
+      }, 0);
     }
 
   },
@@ -555,8 +568,8 @@ module.exports = React.createClass({
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
       if(loop) {
-        pages.unshift(total - 1)
-        pages.push(0)
+        pages.unshift(total - 1 + '')
+        pages.push('0')
       }
 
       pages = pages.map((page, i) =>

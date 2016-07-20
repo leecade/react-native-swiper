@@ -1,6 +1,5 @@
 'use strict';
 
-
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; }; /**
                                                                                                                                                                                                                                                                    * react-native-swiper
                                                                                                                                                                                                                                                                    * @author leecade<leecade@163.com>
@@ -194,7 +193,8 @@ module.exports = _react2.default.createClass({
 
     var initState = {
       isScrolling: false,
-      autoplayEnd: false
+      autoplayEnd: false,
+      loopJump: false
     };
 
     initState.total = props.children ? props.children.length || 1 : 0;
@@ -224,11 +224,22 @@ module.exports = _react2.default.createClass({
   },
 
 
+  loopJump: function loopJump() {
+    var _this = this;
+
+    if (this.state.loopJump) {
+      var i = this.state.index + (this.props.loop ? 1 : 0);
+      setTimeout(function () {
+        return _this.refs.scrollView.setPageWithoutAnimation && _this.refs.scrollView.setPageWithoutAnimation(i);
+      }, 50);
+    }
+  },
+
   /**
    * Automatic rolling
    */
   autoplay: function autoplay() {
-    var _this = this;
+    var _this2 = this;
 
     if (!Array.isArray(this.props.children) || !this.props.autoplay || this.state.isScrolling || this.state.autoplayEnd) {
       return;
@@ -237,11 +248,11 @@ module.exports = _react2.default.createClass({
     clearTimeout(this.autoplayTimer);
 
     this.autoplayTimer = this.setTimeout(function () {
-      if (!_this.props.loop && (_this.props.autoplayDirection ? _this.state.index === _this.state.total - 1 : _this.state.index === 0)) {
-        return _this.setState({ autoplayEnd: true });
+      if (!_this2.props.loop && (_this2.props.autoplayDirection ? _this2.state.index === _this2.state.total - 1 : _this2.state.index === 0)) {
+        return _this2.setState({ autoplayEnd: true });
       }
 
-      _this.scrollBy(_this.props.autoplayDirection ? 1 : -1);
+      _this2.scrollBy(_this2.props.autoplayDirection ? 1 : -1);
     }, this.props.autoplayTimeout * 1000);
   },
 
@@ -251,13 +262,13 @@ module.exports = _react2.default.createClass({
    * @param  {object} e native event
    */
   onScrollBegin: function onScrollBegin(e) {
-    var _this2 = this;
+    var _this3 = this;
 
     // update scroll state
     this.setState({ isScrolling: true });
 
     this.setTimeout(function () {
-      _this2.props.onScrollBeginDrag && _this2.props.onScrollBeginDrag(e, _this2.state, _this2);
+      _this3.props.onScrollBeginDrag && _this3.props.onScrollBeginDrag(e, _this3.state, _this3);
     });
   },
 
@@ -267,7 +278,7 @@ module.exports = _react2.default.createClass({
    * @param  {object} e native event
    */
   onScrollEnd: function onScrollEnd(e) {
-    var _this3 = this;
+    var _this4 = this;
 
     // update scroll state
     this.setState({
@@ -288,10 +299,11 @@ module.exports = _react2.default.createClass({
     // Note: `this.setState` is async, so I call the `onMomentumScrollEnd`
     // in setTimeout to ensure synchronous update `index`
     this.setTimeout(function () {
-      _this3.autoplay();
+      _this4.autoplay();
+      _this4.loopJump();
 
       // if `onMomentumScrollEnd` registered will be called here
-      _this3.props.onMomentumScrollEnd && _this3.props.onMomentumScrollEnd(e, _this3.state, _this3);
+      _this4.props.onMomentumScrollEnd && _this4.props.onMomentumScrollEnd(e, _this4.state, _this4);
     });
   },
 
@@ -331,6 +343,7 @@ module.exports = _react2.default.createClass({
     var index = state.index;
     var diff = offset[dir] - state.offset[dir];
     var step = dir === 'x' ? state.width : state.height;
+    var loopJump = false;
 
     // Do nothing if offset no change.
     if (!diff) return;
@@ -344,15 +357,18 @@ module.exports = _react2.default.createClass({
       if (index <= -1) {
         index = state.total - 1;
         offset[dir] = step * state.total;
+        loopJump = true;
       } else if (index >= state.total) {
         index = 0;
         offset[dir] = step;
+        loopJump = true;
       }
     }
 
     this.setState({
       index: index,
-      offset: offset
+      offset: offset,
+      loopJump: loopJump
     });
   },
 
@@ -362,7 +378,7 @@ module.exports = _react2.default.createClass({
    * @param  {number} index offset index
    */
   scrollBy: function scrollBy(index) {
-    var _this4 = this;
+    var _this5 = this;
 
     if (this.state.isScrolling || this.state.total < 2) return;
     var state = this.state;
@@ -387,16 +403,16 @@ module.exports = _react2.default.createClass({
     // trigger onScrollEnd manually in android
     if (_reactNative.Platform.OS === 'android') {
       this.setTimeout(function () {
-        _this4.onScrollEnd({
+        _this5.onScrollEnd({
           nativeEvent: {
             position: diff
           }
         });
-      }, 50);
+      }, 0);
     }
   },
   scrollViewPropOverrides: function scrollViewPropOverrides() {
-    var _this5 = this;
+    var _this6 = this;
 
     var props = this.props;
     var overrides = {};
@@ -417,7 +433,7 @@ module.exports = _react2.default.createClass({
         (function () {
           var originResponder = props[prop];
           overrides[prop] = function (e) {
-            return originResponder(e, _this5.state, _this5);
+            return originResponder(e, _this6.state, _this6);
           };
         })();
       }
@@ -477,7 +493,7 @@ module.exports = _react2.default.createClass({
     ) : null;
   },
   renderNextButton: function renderNextButton() {
-    var _this6 = this;
+    var _this7 = this;
 
     var button = void 0;
 
@@ -492,7 +508,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this6.scrollBy.call(_this6, 1);
+          return button !== null && _this7.scrollBy.call(_this7, 1);
         } },
       _react2.default.createElement(
         _reactNative.View,
@@ -502,7 +518,7 @@ module.exports = _react2.default.createClass({
     );
   },
   renderPrevButton: function renderPrevButton() {
-    var _this7 = this;
+    var _this8 = this;
 
     var button = null;
 
@@ -517,7 +533,7 @@ module.exports = _react2.default.createClass({
     return _react2.default.createElement(
       _reactNative.TouchableOpacity,
       { onPress: function onPress() {
-          return button !== null && _this7.scrollBy.call(_this7, -1);
+          return button !== null && _this8.scrollBy.call(_this8, -1);
         } },
       _react2.default.createElement(
         _reactNative.View,
@@ -581,8 +597,8 @@ module.exports = _react2.default.createClass({
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children);
       if (loop) {
-        pages.unshift(total - 1);
-        pages.push(0);
+        pages.unshift(total - 1 + '');
+        pages.push('0');
       }
 
       pages = pages.map(function (page, i) {
