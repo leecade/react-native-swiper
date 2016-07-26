@@ -344,6 +344,18 @@ var swiper = React.createClass({
 
 > More ScrollResponder info, see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
 
+### Methods
+
+#### scrollBy(index)
+
+Scroll by relative index.
+
+Parameters:
+
+| Name  | Type     | Description |
+| :---- | :------: | :--- |
+| index | number   | offset index |
+
 ### Examples
 
 @TODO, see code in [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/) first.
