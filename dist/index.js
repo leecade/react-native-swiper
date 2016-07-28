@@ -388,11 +388,7 @@ module.exports = _react2.default.createClass({
     if (state.dir === 'x') x = diff * state.width;
     if (state.dir === 'y') y = diff * state.height;
 
-    if (_reactNative.Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView.setPage(diff);
-    } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({ x: x, y: y });
-    }
+    this.refs.scrollView && this.refs.scrollView.scrollTo({ x: x, y: y });
 
     // update scroll state
     this.setState({
@@ -551,7 +547,7 @@ module.exports = _react2.default.createClass({
     );
   },
   renderScrollView: function renderScrollView(pages) {
-    if (_reactNative.Platform.OS === 'ios') return _react2.default.createElement(
+    return _react2.default.createElement(
       _reactNative.ScrollView,
       _extends({ ref: 'scrollView'
       }, this.props, this.scrollViewPropOverrides(), {
@@ -560,15 +556,6 @@ module.exports = _react2.default.createClass({
         onScrollBeginDrag: this.onScrollBegin,
         onMomentumScrollEnd: this.onScrollEnd,
         onScrollEndDrag: this.onScrollEndDrag }),
-      pages
-    );
-    return _react2.default.createElement(
-      _reactNative.ViewPagerAndroid,
-      _extends({ ref: 'scrollView'
-      }, this.props, {
-        initialPage: this.props.loop ? this.state.index + 1 : this.state.index,
-        onPageSelected: this.onScrollEnd,
-        style: { flex: 1 } }),
       pages
     );
   },
