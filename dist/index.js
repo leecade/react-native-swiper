@@ -153,7 +153,7 @@ module.exports = _react2.default.createClass({
       showsVerticalScrollIndicator: false,
       bounces: false,
       scrollsToTop: false,
-      removeClippedSubviews: true,
+      removeClippedSubviews: false,
       automaticallyAdjustContentInsets: false,
       showsPagination: true,
       showsButtons: false,
