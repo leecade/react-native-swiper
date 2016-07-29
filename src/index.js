@@ -141,7 +141,7 @@ module.exports = React.createClass({
       showsVerticalScrollIndicator     : false,
       bounces                          : false,
       scrollsToTop                     : false,
-      removeClippedSubviews            : true,
+      removeClippedSubviews            : false,
       automaticallyAdjustContentInsets : false,
       showsPagination                  : true,
       showsButtons                     : false,
@@ -367,11 +367,7 @@ module.exports = React.createClass({
     if(state.dir === 'x') x = diff * state.width
     if(state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView.setPage(diff)
-    } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y })
-    }
+    this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y })
 
     // update scroll state
     this.setState({
@@ -521,28 +517,18 @@ module.exports = React.createClass({
   },
 
   renderScrollView(pages) {
-     if (Platform.OS === 'ios')
-         return (
-            <ScrollView ref="scrollView"
-             {...this.props}
-             {...this.scrollViewPropOverrides()}
-                       contentContainerStyle={[styles.wrapper, this.props.style]}
-                       contentOffset={this.state.offset}
-                       onScrollBeginDrag={this.onScrollBegin}
-                       onMomentumScrollEnd={this.onScrollEnd}
-                       onScrollEndDrag={this.onScrollEndDrag}>
-             {pages}
-            </ScrollView>
-         );
-      return (
-         <ViewPagerAndroid ref="scrollView"
-          {...this.props}
-            initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-            onPageSelected={this.onScrollEnd}
-            style={{flex: 1}}>
-            {pages}
-         </ViewPagerAndroid>
-      );
+    return (
+      <ScrollView ref="scrollView"
+        {...this.props}
+        {...this.scrollViewPropOverrides()}
+        contentContainerStyle={[styles.wrapper, this.props.style]}
+        contentOffset={this.state.offset}
+        onScrollBeginDrag={this.onScrollBegin}
+        onMomentumScrollEnd={this.onScrollEnd}
+        onScrollEndDrag={this.onScrollEndDrag}>
+        {pages}
+      </ScrollView>
+    );
   },
 
   /**
