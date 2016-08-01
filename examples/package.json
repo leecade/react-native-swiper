@@ -6,7 +6,11 @@
     "start": "react-native start"
   },
   "dependencies": {
-    "react-native": "^0.17.0",
+    "react": "^15.0.2",
+    "react-native": "^0.26.0",
     "react-timer-mixin": "^0.13.3"
+  },
+  "devDependencies": {
+    "rnpm-plugin-upgrade": "^0.26.0"
   }
 }
