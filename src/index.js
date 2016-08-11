@@ -469,7 +469,7 @@ module.exports = React.createClass({
 
   renderTitle() {
     let child = this.props.children[this.state.index]
-    let title = child && child.props.title
+    let title = child && child.props && child.props.title
     return title
       ? (
         <View style={styles.title}>
