@@ -60,8 +60,11 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- **[1.4.9]**
+  + Adds extra check for title
+
 - **[1.4.8]**
-  + fixed loop and autoplay bugs in android
+  + Fixes loop and autoplay bugs in android
 
 - **[1.4.7]**
   + Don't attempt to mutate this.props
