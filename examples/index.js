@@ -130,6 +130,7 @@ module.exports = _react2.default.createClass({
     automaticallyAdjustContentInsets: _react2.default.PropTypes.bool,
     showsPagination: _react2.default.PropTypes.bool,
     showsButtons: _react2.default.PropTypes.bool,
+    loadMinimal: _react2.default.PropTypes.bool,
     loop: _react2.default.PropTypes.bool,
     autoplay: _react2.default.PropTypes.bool,
     autoplayTimeout: _react2.default.PropTypes.number,
@@ -158,6 +159,7 @@ module.exports = _react2.default.createClass({
       showsPagination: true,
       showsButtons: false,
       loop: true,
+      loadMinimal: false,
       autoplay: false,
       autoplayTimeout: 2.5,
       autoplayDirection: true,
@@ -587,9 +589,17 @@ module.exports = _react2.default.createClass({
     var loop = props.loop;
     var dir = state.dir;
     var key = 0;
+    var loopVal = loop ? 1 : 0;
 
     var pages = [];
+
     var pageStyle = [{ width: state.width, height: state.height }, styles.slide];
+    var pageStyleLoading = {
+      width: this.state.width,
+      height: this.state.height,
+      justifyContent: 'center',
+      alignItems: 'center'
+    };
 
     // For make infinite at least total > 1
     if (total > 1) {
@@ -602,11 +612,27 @@ module.exports = _react2.default.createClass({
       }
 
       pages = pages.map(function (page, i) {
-        return _react2.default.createElement(
-          _reactNative.View,
-          { style: pageStyle, key: i },
-          children[page]
-        );
+        if (props.loadMinimal) {
+          if (i >= index + loopVal - 1 && i <= index + loopVal + 1) {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: pageStyle, key: i },
+              children[page]
+            );
+          } else {
+            return _react2.default.createElement(
+              _reactNative.View,
+              { style: pageStyleLoading, key: 'loading-' + i },
+              _react2.default.createElement(_reactNative.ActivityIndicator, null)
+            );
+          }
+        } else {
+          return _react2.default.createElement(
+            _reactNative.View,
+            { style: pageStyle, key: i },
+            children[page]
+          );
+        }
       });
     } else pages = _react2.default.createElement(
       _reactNative.View,

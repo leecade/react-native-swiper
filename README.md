@@ -38,6 +38,8 @@ The best Swiper component for React Native.
 
 - [ ] Fix bugs
 
+- [x] Improve performance
+
 - [x] Infinite loop
 
 - [x] Direction control
@@ -59,6 +61,9 @@ The best Swiper component for React Native.
 - [x] State inject
 
 ## Changelogs
+
+- **[1.4.10]**
+  + add loadMinimal to api (lazyloading-esque)
 
 - **[1.4.9]**
   + Adds extra check for title
@@ -269,6 +274,7 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
 | height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
 | style | {...} | `style` | See default style in source. |
+| loadMinimal | false | `bool` | Only load current index slide , 1 before and 1 after. |
 
 #### Pagination
 
