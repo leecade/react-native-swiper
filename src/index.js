@@ -11,7 +11,8 @@ import ReactNative, {
   Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
-  Platform
+  Platform,
+  ActivityIndicator
 } from 'react-native'
 
 // Using bare setTimeout, setInterval, setImmediate
@@ -118,6 +119,7 @@ module.exports = React.createClass({
     automaticallyAdjustContentInsets : React.PropTypes.bool,
     showsPagination                  : React.PropTypes.bool,
     showsButtons                     : React.PropTypes.bool,
+    loadMinimal                      : React.PropTypes.bool,
     loop                             : React.PropTypes.bool,
     autoplay                         : React.PropTypes.bool,
     autoplayTimeout                  : React.PropTypes.number,
@@ -146,6 +148,7 @@ module.exports = React.createClass({
       showsPagination                  : true,
       showsButtons                     : false,
       loop                             : true,
+      loadMinimal                      : false,
       autoplay                         : false,
       autoplayTimeout                  : 2.5,
       autoplayDirection                : true,
@@ -558,9 +561,17 @@ module.exports = React.createClass({
     let loop = props.loop
     let dir = state.dir
     let key = 0
+    let loopVal = loop ? 1 : 0
 
     let pages = []
+
     let pageStyle = [{width: state.width, height: state.height}, styles.slide]
+    let pageStyleLoading = {
+      width: this.state.width,
+      height: this.state.height,
+      justifyContent: 'center',
+      alignItems: 'center'
+    }
 
     // For make infinite at least total > 1
     if(total > 1) {
@@ -572,8 +583,17 @@ module.exports = React.createClass({
         pages.push('0')
       }
 
-      pages = pages.map((page, i) =>
-        <View style={pageStyle} key={i}>{children[page]}</View>
+      pages = pages.map((page, i) => {
+          if (props.loadMinimal) {
+            if (i >= (index+loopVal-1) && i <= (index+loopVal+1)) {
+              return <View style={pageStyle} key={i}>{children[page]}</View>
+            } else {
+              return <View style={pageStyleLoading} key={`loading-${i}`}><ActivityIndicator /></View>
+            }
+          } else {
+            return <View style={pageStyle} key={i}>{children[page]}</View>
+          }
+        }
       )
     }
     else pages = <View style={pageStyle}>{children}</View>
