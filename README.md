@@ -277,7 +277,8 @@ AppRegistry.registerComponent('swiper', () => swiper)
 | width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
 | height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
 | style | {...} | `style` | See default style in source. |
-| loadMinimal | false | `bool` | Only load current index slide , 1 before and 1 after. |
+| loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
+| loadMinimalSize | 1 | `number` | see `loadMinimal`   |
 
 #### Pagination
 
