@@ -62,8 +62,11 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- **[1.4.11]**
+  + Adds loadMinimalSize property
+
 - **[1.4.10]**
-  + add loadMinimal to api (lazyloading-esque)
+  + Adds loadMinimal to api (lazyloading-esque)
 
 - **[1.4.9]**
   + Adds extra check for title
