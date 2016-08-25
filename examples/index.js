@@ -131,6 +131,7 @@ module.exports = _react2.default.createClass({
     showsPagination: _react2.default.PropTypes.bool,
     showsButtons: _react2.default.PropTypes.bool,
     loadMinimal: _react2.default.PropTypes.bool,
+    loadMinimalSize: _react2.default.PropTypes.number,
     loop: _react2.default.PropTypes.bool,
     autoplay: _react2.default.PropTypes.bool,
     autoplayTimeout: _react2.default.PropTypes.number,
@@ -160,6 +161,7 @@ module.exports = _react2.default.createClass({
       showsButtons: false,
       loop: true,
       loadMinimal: false,
+      loadMinimalSize: 1,
       autoplay: false,
       autoplayTimeout: 2.5,
       autoplayDirection: true,
@@ -613,7 +615,7 @@ module.exports = _react2.default.createClass({
 
       pages = pages.map(function (page, i) {
         if (props.loadMinimal) {
-          if (i >= index + loopVal - 1 && i <= index + loopVal + 1) {
+          if (i >= index + loopVal - props.loadMinimalSize && i <= index + loopVal + props.loadMinimalSize) {
             return _react2.default.createElement(
               _reactNative.View,
               { style: pageStyle, key: i },
