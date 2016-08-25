@@ -120,6 +120,7 @@ module.exports = React.createClass({
     showsPagination                  : React.PropTypes.bool,
     showsButtons                     : React.PropTypes.bool,
     loadMinimal                      : React.PropTypes.bool,
+    loadMinimalSize                  : React.PropTypes.number,
     loop                             : React.PropTypes.bool,
     autoplay                         : React.PropTypes.bool,
     autoplayTimeout                  : React.PropTypes.number,
@@ -149,6 +150,7 @@ module.exports = React.createClass({
       showsButtons                     : false,
       loop                             : true,
       loadMinimal                      : false,
+      loadMinimalSize                  : 1,
       autoplay                         : false,
       autoplayTimeout                  : 2.5,
       autoplayDirection                : true,
@@ -585,7 +587,7 @@ module.exports = React.createClass({
 
       pages = pages.map((page, i) => {
           if (props.loadMinimal) {
-            if (i >= (index+loopVal-1) && i <= (index+loopVal+1)) {
+            if (i >= (index+loopVal-props.loadMinimalSize) && i <= (index+loopVal+props.loadMinimalSize)) {
               return <View style={pageStyle} key={i}>{children[page]}</View>
             } else {
               return <View style={pageStyleLoading} key={`loading-${i}`}><ActivityIndicator /></View>
