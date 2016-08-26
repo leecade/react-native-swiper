@@ -197,17 +197,15 @@ $ react-native init myproject
 - Then, edit `myproject/index.ios.js`, like this:
 
 ```jsx
-var Swiper = require('react-native-swiper')
-// es6
-// import Swiper from 'react-native-swiper'
-
-var React = require('react-native');
-var {
+import React, { Component } from 'react';
+import {
   AppRegistry,
   StyleSheet,
   Text,
-  View,
-} = React;
+  View
+} from 'react-native';
+
+import Swiper from 'react-native-swiper';
 
 var styles = StyleSheet.create({
   wrapper: {
@@ -255,7 +253,7 @@ var swiper = React.createClass({
   }
 })
 
-AppRegistry.registerComponent('swiper', () => swiper)
+AppRegistry.registerComponent('myproject', () => swiper);
 ```
 
 ### Properties
