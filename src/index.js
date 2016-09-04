@@ -127,6 +127,7 @@ module.exports = React.createClass({
     autoplayDirection                : React.PropTypes.bool,
     index                            : React.PropTypes.number,
     renderPagination                 : React.PropTypes.func,
+    onChangedIndex                   : React.PropTypes.func
   },
 
   mixins: [TimerMixin],
@@ -356,6 +357,8 @@ module.exports = React.createClass({
       index: index,
       offset: offset,
       loopJump: loopJump,
+    }, () => {
+      this.props.onChangedIndex && this.props.onChangedIndex({ index, offset })
     })
   },
 
