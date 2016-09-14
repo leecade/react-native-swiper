@@ -432,7 +432,7 @@ module.exports = React.createClass({
    */
   renderPagination() {
 
-    // By default, dots only show when `total` > 2
+    // By default, dots only show when `total` >= 2
     if(this.state.total <= 1) return null
 
     let dots = []
