@@ -34,7 +34,6 @@
     "ignore": [
       "dist/",
       "mock/",
-      "src/",
       "node_modules/"
     ]
   },
@@ -54,13 +53,10 @@
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
     "babel-eslint": "^6.1.2",
-    "enzyme": "^2.4.1",
     "rimraf": "^2.5.4",
     "snazzy": "^5.0.0",
     "standard": "^8.1.0",
     "updtr": "^0.2.1"
   },
-  "dependencies": {
-    "react-timer-mixin": "^0.13.3"
-  }
+  "dependencies": {}
 }
