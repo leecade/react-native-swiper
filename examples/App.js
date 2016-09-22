@@ -5,4 +5,5 @@ import Basic from './components/Basic/'
 // import Swiper from './components/Swiper/'
 // import SwiperNumber from './components/SwiperNumber/'
 // import LoadMinimal from './components/LoadMinimal/'
+// import PhotoView from './components/PhotoView/'
 AppRegistry.registerComponent('examples', () => Basic)
