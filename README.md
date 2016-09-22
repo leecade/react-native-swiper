@@ -64,12 +64,12 @@ The best Swiper component for React Native.
 ## Changelogs
 
 - [1.5.0]
-  + Improve develop workflow for support watch & use real pkg name in examples
+  + Improve develop [workflow](#development) for support watch & use real pkg name in examples
   + Update examples for support `React-native 0.33` + `Xcode8` + `ios10` + `iphone7`
   + Switch to [standard](https://github.com/feross/standard) code style
   + Rewrite source code with ES6 syntex
   + Cancel transform the source code when publish
-  + Add a [demo](examples/components/LoadMinimal) for `LoadMinimal` + `lazyload`
+  + Add a [demo](examples/components/LoadMinimal) for `loadMinimal` + `lazyload`
 
 - **[1.4.11]**
   + Adds loadMinimalSize property
@@ -169,7 +169,7 @@ The best Swiper component for React Native.
 
 ### [examples/components/LoadMinimal](https://github.com/leecade/react-native-swiper/blob/master/examples/components/LoadMinimal)
 
-![](https://cloud.githubusercontent.com/assets/533360/18763803/85f6a0ba-8141-11e6-83cf-bc193974edee.gif =300x)
+![](http://i.imgur.com/LAOHbJA.gif =300x)
 
 ## Getting Started
 
@@ -385,7 +385,13 @@ Parameters:
 
 ### Examples
 
-@TODO, see code in [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/) first.
+```bash
+$ cd examples
+$ npm i
+$ react-native run-ios
+```
+
+> Quick start with [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/).
 
 ### Development
 
@@ -393,7 +399,7 @@ Parameters:
 $ cd examples
 $ npm i
 $ npm run dev
-$ open examples/ios/examples.xcodeproj
+$ react-native run-ios
 ```
 
 Then launch simulator for preview, note that, you just need edit the source file `src/index.js`, the change will auto sync to examples.
