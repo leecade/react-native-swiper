@@ -69,7 +69,7 @@ The best Swiper component for React Native.
   + Switch to [standard](https://github.com/feross/standard) code style
   + Rewrite source code with ES6 syntex
   + Cancel transform the source code when publish
-  + Add `loader` property to replace `ActivityIndicator` when image loading
+  + Add a [demo](examples/components/LoadMinimal) for `LoadMinimal` + `lazyload`
 
 - **[1.4.11]**
   + Adds loadMinimalSize property
@@ -151,21 +151,25 @@ The best Swiper component for React Native.
 
 > Try these cases by yourself very easy, Just open `examples/ios/swiper.xcodeproj` in Xcode, then press `Cmd + R`; you may edit `examples/index.ios.js` for switch cases.
 
-### [examples/samples/basic.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/basic.js)
+### [examples/components/Basic](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Basic)
 
 ![](http://i.imgur.com/zrsazAG.gif =300x)
 
-### [examples/samples/swiper.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/swiper.js)
+### [examples/components/Swiper](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Swiper)
 
 ![](http://i.imgur.com/hP3f3oO.gif =300x)
 
-### [examples/samples/swiper_number.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/swiper_number.js)
+### [examples/components/SwiperNumber](https://github.com/leecade/react-native-swiper/blob/master/examples/components/SwiperNumber)
 
 ![](http://i.imgur.com/0rqESVb.gif =300x)
 
-### [examples/samples/phone.js](https://github.com/leecade/react-native-swiper/blob/master/examples/samples/phone.js)
+### [examples/components/Phone](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Phone)
 
 ![](http://i.imgur.com/c1BhjZm.gif =300x)
+
+### [examples/components/LoadMinimal](https://github.com/leecade/react-native-swiper/blob/master/examples/components/LoadMinimal)
+
+![](https://cloud.githubusercontent.com/assets/533360/18763803/85f6a0ba-8141-11e6-83cf-bc193974edee.gif =300x)
 
 ## Getting Started
 
