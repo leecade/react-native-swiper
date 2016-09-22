@@ -1,5 +1,6 @@
 # react-native-swiper
 
+[![JavaScript Style Guide](https://img.shields.io/badge/code%20style-standard-brightgreen.svg)](http://standardjs.com/)
 [![npm version](http://img.shields.io/npm/v/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![npm version](http://img.shields.io/npm/dm/react-native-swiper.svg?style=flat-square)](https://npmjs.org/package/react-native-swiper "View this project on npm")
 [![Issue Stats](http://issuestats.com/github/leecade/react-native-swiper/badge/pr?style=flat-square)](https://github.com/leecade/react-native-swiper/pulls?q=is%3Apr+is%3Aclosed)
@@ -62,42 +63,50 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- [1.5.0]
+  + Improve develop workflow for support watch & use real pkg name in examples
+  + Update examples for support `React-native 0.33` + `Xcode8` + `ios10` + `iphone7`
+  + Switch to [standard](https://github.com/feross/standard) code style
+  + Rewrite source code with ES6 syntex
+  + Cancel transform the source code when publish
+  + Add `loader` property to replace `ActivityIndicator` when image loading
+
 - **[1.4.11]**
   + Adds loadMinimalSize property
 
-- **[1.4.10]**
+- [1.4.10]
   + Adds loadMinimal to api (lazyloading-esque)
 
-- **[1.4.9]**
+- [1.4.9]
   + Adds extra check for title
 
-- **[1.4.8]**
+- [1.4.8]
   + Fixes loop and autoplay bugs in android
 
-- **[1.4.7]**
+- [1.4.7]
   + Don't attempt to mutate this.props
   + Fixes examples links
   + Adds drag end handling to always reset state.isScrolling
   + Fixes float calculation error
 
-- **[1.4.6]**
+- [1.4.6]
   + refactors examples
   + prevents mutation of `this.props`
   + fixes android index loop issue
 
-- **[1.4.5]**
+- [1.4.5]
   + renames `scrollTo()` to `scrollBy()`
   + image index is now always an integer
   + prevents parent state updates from reseting index counter
   + fixes issue with scrolling not working sometimes
 
-- **[1.4.4]**
+- [1.4.4]
   + Support for React Native latest(`^0.26.0`)
   + Updates examples to work with react-native-swiper 1.4.4
   + Examples now run on Android (some are still buggy, needs more work)
   + Removes old examples folder
 
-- **[1.4.3]**
+- [1.4.3]
   + Fixed auto play issue when only a child view
 
 - [v1.4.0]
@@ -377,8 +386,15 @@ Parameters:
 ### Development
 
 ```bash
-$ npm start
+$ cd examples
+$ npm i
+$ npm run dev
+$ open examples/ios/examples.xcodeproj
 ```
+
+Then launch simulator for preview, note that, you just need edit the source file `src/index.js`, the change will auto sync to examples.
+
+And now this project follow the [standard](https://github.com/feross/standard) code style, you'd better prepare it for IDE.
 
 ## Contribution
 

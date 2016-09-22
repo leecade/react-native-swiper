@@ -7,10 +7,40 @@
   ],
   "version": "1.4.11",
   "description": "Swiper component for React Native.",
-  "main": "dist/index.js",
+  "main": "index.js",
   "scripts": {
-    "start": "babel src --out-dir dist --presets es2015,react",
-    "watch": "babel src --out-dir dist --watch --presets es2015,react"
+    "start": "react-native start",
+    "lint": "standard | snazzy",
+    "update": "updtr",
+    "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
+    "test": "npm run lint"
+  },
+  "pre-commit": {
+    "run": [
+      "precommit"
+    ],
+    "silent": true
+  },
+  "standard": {
+    "parser": "babel-eslint",
+    "global": [
+      "__DEV__",
+      "FormData",
+      "requestAnimationFrame",
+      "alert",
+      "setImmediate",
+      "fetch"
+    ],
+    "ignore": [
+      "dist/",
+      "mock/",
+      "src/",
+      "node_modules/"
+    ]
+  },
+  "ava": {
+    "babel": "inherit",
+    "require": []
   },
   "repository": {
     "type": "git",
@@ -23,9 +53,12 @@
   },
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
-    "babel-cli": "^6.11.4",
-    "babel-preset-es2015": "^6.13.2",
-    "babel-preset-react": "^6.11.1"
+    "babel-eslint": "^6.1.2",
+    "enzyme": "^2.4.1",
+    "rimraf": "^2.5.4",
+    "snazzy": "^5.0.0",
+    "standard": "^8.1.0",
+    "updtr": "^0.2.1"
   },
   "dependencies": {
     "react-timer-mixin": "^0.13.3"
