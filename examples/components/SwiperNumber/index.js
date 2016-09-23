@@ -34,12 +34,12 @@ const renderPagination = (index, total, context) => {
   return (
     <View style={{
       position: 'absolute',
-      bottom: -25,
+      bottom: 10
       right: 10
     }}>
-      <Text>
+      <Text style={{ color:'grey' }}>
         <Text style={{
-          color: '#007aff',
+          color: 'white',
           fontSize: 20
         }}>{index + 1}</Text>/{total}
       </Text>
