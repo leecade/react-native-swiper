@@ -293,7 +293,7 @@ export default class extends Component {
       this.loopJump()
 
       // if `onMomentumScrollEnd` registered will be called here
-      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.state, this)
+      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
     })
   }
 
@@ -413,7 +413,7 @@ export default class extends Component {
         prop !== 'onScrollBeginDrag'
       ) {
         let originResponder = props[prop]
-        overrides[prop] = (e) => originResponder(e, this.state, this)
+        overrides[prop] = (e) => originResponder(e, this.fullState(), this)
       }
     }
 
