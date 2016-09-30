@@ -197,6 +197,7 @@ export default class extends Component {
       initState.index = state.index
     } else {
       // reset the index
+      setOffsetInState = true // if the index is reset, go ahead and update the offset in state
       initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
     }
 
