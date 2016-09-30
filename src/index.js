@@ -168,10 +168,6 @@ export default class extends Component {
     this.autoplay()
   }
 
-  shouldComponentUpdate () {
-    return !this.internals.isScrolling
-  }
-
   componentWillUnmount () {
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
