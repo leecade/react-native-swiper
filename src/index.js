@@ -354,8 +354,10 @@ export default class extends Component {
   /**
    * Scroll by index
    * @param  {number} index offset index
+   * @param  {bool} animated
    */
-  scrollBy = index => {
+
+  scrollBy = (index, animated = true) => {
     if (this.internals.isScrolling || this.state.total < 2) return
     const state = this.state
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
@@ -365,9 +367,9 @@ export default class extends Component {
     if (state.dir === 'y') y = diff * state.height
 
     if (Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView.setPage(diff)
+      this.refs.scrollView && this.refs.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y })
+      this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y, animated })
     }
 
     // update scroll state
@@ -377,7 +379,7 @@ export default class extends Component {
     })
 
     // trigger onScrollEnd manually in android
-    if (Platform.OS === 'android') {
+    if (!animated || Platform.OS === 'android') {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {

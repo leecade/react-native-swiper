@@ -63,6 +63,9 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
+- [1.5.1]
+  + Allow scroll without animate `scrollBy(index, animated)`
+
 - **[1.5.0]**
   + Improve develop [workflow](#development) for support watch & use real pkg name in examples
   + Update examples for support `React-native 0.33` + `Xcode8` + `ios10` + `iphone7`
@@ -313,9 +316,10 @@ Scroll by relative index.
 
 Parameters:
 
-| Name  | Type     | Description |
-| :---- | :------: | :--- |
-| index | number   | offset index |
+| Name  | Type     | default | Description |
+| :---- | :------: | :------: | :--- |
+| index | number   | `undefined` | offset index |
+| animated | bool   | `true` | offset index |
 
 ### Examples
 
