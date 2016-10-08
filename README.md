@@ -63,11 +63,11 @@ The best Swiper component for React Native.
 
 ## Changelogs
 
-- [1.5.1]
+- **[1.5.1]**
   + Allow scroll without animate `scrollBy(index, animated)`
   + Remove [#254](https://github.com/leecade/react-native-swiper/pull/254) which break the scroll direction in loop mode
 
-- **[1.5.0]**
+- [1.5.0]
   + Improve develop [workflow](#development) for support watch & use real pkg name in examples
   + Update examples for support `React-native 0.33` + `Xcode8` + `ios10` + `iphone7`
   + Switch to [standard](https://github.com/feross/standard) code style
