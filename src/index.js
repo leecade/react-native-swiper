@@ -149,7 +149,7 @@ export default class extends Component {
    * Init states
    * @return {object} states
    */
-  state = this.initState(this.props, true)
+  state = this.initState(this.props)
 
   /**
    * autoplay timer
@@ -158,10 +158,8 @@ export default class extends Component {
   autoplayTimer = null
   loopJumpTimer = null
 
-  componentWillReceiveProps (nextProps) {
-    const sizeChanged = (nextProps.width || width) !== this.state.width ||
-                        (nextProps.height || height) !== this.state.height
-    this.setState(this.initState(nextProps, sizeChanged))
+  componentWillReceiveProps (props) {
+    this.setState(this.initState(props))
   }
 
   componentDidMount () {
@@ -173,17 +171,14 @@ export default class extends Component {
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
-  initState (props, setOffsetInState) {
+  initState (props) {
     // set the current state
     const state = this.state || {}
 
-    const initState = {
+    let initState = {
+      isScrolling: false,
       autoplayEnd: false,
       loopJump: false
-    }
-
-    const newInternals = {
-      isScrolling: false
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
@@ -193,7 +188,6 @@ export default class extends Component {
       initState.index = state.index
     } else {
       // reset the index
-      setOffsetInState = true // if the index is reset, go ahead and update the offset in state
       initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
     }
 
@@ -201,31 +195,18 @@ export default class extends Component {
     initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
-    newInternals.offset = {}
+    initState.offset = {}
 
     if (initState.total > 1) {
       let setup = initState.index
       if (props.loop) {
         setup++
       }
-      newInternals.offset[initState.dir] = initState.dir === 'y'
+      initState.offset[initState.dir] = initState.dir === 'y'
         ? initState.height * setup
         : initState.width * setup
     }
-
-    // only update the offset in state if needed, updating offset while swiping
-    // causes some bad jumping / stuttering
-    if (setOffsetInState) {
-      initState.offset = newInternals.offset
-    }
-
-    this.internals = newInternals
     return initState
-  }
-
-  // include internals with state
-  fullState () {
-    return Object.assign({}, this.state, this.internals)
   }
 
   loopJump = () => {
@@ -242,7 +223,7 @@ export default class extends Component {
   autoplay = () => {
     if (!Array.isArray(this.props.children) ||
       !this.props.autoplay ||
-      this.internals.isScrolling ||
+      this.state.isScrolling ||
       this.state.autoplayEnd) return
 
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
@@ -264,8 +245,9 @@ export default class extends Component {
    */
   onScrollBegin = e => {
     // update scroll state
-    this.internals.isScrolling = true
-    this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.fullState(), this)
+    this.setState({ isScrolling: true }, () => {
+      this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.state, this)
+    })
   }
 
   /**
@@ -274,7 +256,9 @@ export default class extends Component {
    */
   onScrollEnd = e => {
     // update scroll state
-    this.internals.isScrolling = false
+    this.setState({
+      isScrolling: false
+    })
 
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
@@ -290,7 +274,7 @@ export default class extends Component {
       this.loopJump()
 
       // if `onMomentumScrollEnd` registered will be called here
-      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
+      this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.state, this)
     })
   }
 
@@ -301,14 +285,15 @@ export default class extends Component {
   onScrollEndDrag = e => {
     const { contentOffset } = e.nativeEvent
     const { horizontal, children } = this.props
-    const { index } = this.state
-    const { offset } = this.internals
+    const { offset, index } = this.state
     const previousOffset = horizontal ? offset.x : offset.y
     const newOffset = horizontal ? contentOffset.x : contentOffset.y
 
     if (previousOffset === newOffset &&
       (index === 0 || index === children.length - 1)) {
-      this.internals.isScrolling = false
+      this.setState({
+        isScrolling: false
+      })
     }
   }
 
@@ -320,7 +305,7 @@ export default class extends Component {
   updateIndex = (offset, dir, cb) => {
     const state = this.state
     let index = state.index
-    const diff = offset[dir] - this.internals.offset[dir]
+    const diff = offset[dir] - state.offset[dir]
     const step = dir === 'x' ? state.width : state.height
     let loopJump = false
 
@@ -344,9 +329,9 @@ export default class extends Component {
       }
     }
 
-    this.internals.offset = offset
     this.setState({
       index: index,
+      offset: offset,
       loopJump: loopJump
     }, cb)
   }
@@ -358,7 +343,7 @@ export default class extends Component {
    */
 
   scrollBy = (index, animated = true) => {
-    if (this.internals.isScrolling || this.state.total < 2) return
+    if (this.state.isScrolling || this.state.total < 2) return
     const state = this.state
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
@@ -373,8 +358,8 @@ export default class extends Component {
     }
 
     // update scroll state
-    this.internals.isScrolling = true
     this.setState({
+      isScrolling: true,
       autoplayEnd: false
     })
 
@@ -412,7 +397,7 @@ export default class extends Component {
         prop !== 'onScrollBeginDrag'
       ) {
         let originResponder = props[prop]
-        overrides[prop] = (e) => originResponder(e, this.fullState(), this)
+        overrides[prop] = (e) => originResponder(e, this.state, this)
       }
     }
 
