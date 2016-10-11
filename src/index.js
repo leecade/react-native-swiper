@@ -575,7 +575,7 @@ export default class extends Component {
         }
       })
     } else {
-      pages = <View style={pageStyle}>{children}</View>
+      pages = <View style={pageStyle} key={0}>{children}</View>
     }
 
     return (
