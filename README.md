@@ -308,7 +308,7 @@ $ react-native run-ios
 
 Then launch simulator for preview, note that, you just need edit the source file `src/index.js`, the change will auto sync to examples.
 
-And now this project follow the [standard](https://github.com/feross/standard) code style, you'd better prepare it for IDE.
+And now that this project follows the [standard](https://github.com/feross/standard) code style, you'd better prepare it for IDE.
 
 ## Contribution
 
