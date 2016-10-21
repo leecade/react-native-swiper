@@ -161,6 +161,7 @@ export default class extends Component {
   componentWillReceiveProps (nextProps) {
     const sizeChanged = (nextProps.width || width) !== this.state.width ||
                         (nextProps.height || height) !== this.state.height
+    if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
     this.setState(this.initState(nextProps, sizeChanged))
   }
 
