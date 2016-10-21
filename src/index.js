@@ -112,6 +112,7 @@ export default class extends Component {
     showsButtons: PropTypes.bool,
     loadMinimal: PropTypes.bool,
     loadMinimalSize: PropTypes.number,
+    loadMinimalLoader: PropTypes.element,
     loop: PropTypes.bool,
     autoplay: PropTypes.bool,
     autoplayTimeout: PropTypes.number,
@@ -604,7 +605,11 @@ export default class extends Component {
             i <= (index + loopVal + props.loadMinimalSize)) {
             return <View style={pageStyle} key={i}>{children[page]}</View>
           } else {
-            return <View style={pageStyleLoading} key={`loading-${i}`}><ActivityIndicator /></View>
+            return (
+              <View style={pageStyleLoading} key={`loading-${i}`}>
+                {props.loadMinimalLoader ? props.loadMinimalLoader() : <ActivityIndicator />}
+              </View>
+            );
           }
         } else {
           return <View style={pageStyle} key={i}>{children[page]}</View>
