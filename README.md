@@ -24,7 +24,7 @@
 ## Changelogs
 
 - **[1.5.3]**
-  + Add loadMinimalLoader prop to customize <ActivityIndicator /> (thanks [@Exilz](https://github.com/Exilz))
+  + Add loadMinimalLoader prop to customize `<ActivityIndicator />` (thanks [@Exilz](https://github.com/Exilz))
   + Disable autoplay timer when prop changes to false (thanks [@dizlexik](https://github.com/dizlexik))
   + Special thanks to [@hypatiah](https://github.com/dizlexik) for fixed some grammatical errors in README
 
