@@ -1,3 +1,17 @@
+- [1.5.1]
+  + Allow scroll without animate, ref: [scrollBy(index, animated)](#scrollbyindex-animated)
+  + Remove [#254](https://github.com/leecade/react-native-swiper/pull/254) which break the scroll direction in loop mode
+
+- [1.5.0]
+  + Improve develop [workflow](#development) for support watch & use real pkg name in examples
+  + Update examples for support `React-native 0.33` + `Xcode8` + `ios10` + `iphone7`
+  + Switch to [standard](https://github.com/feross/standard) code style
+  + Rewrite source code with ES6 syntex
+  + Cancel transform the source code when publish
+  + Add a [demo](examples/components/LoadMinimal) for `loadMinimal` + `lazyload`
+  + Add a [demo](examples/components/PhotoView) for multi-images viewer
+  + [#254](https://github.com/leecade/react-native-swiper/pull/254) Fix jitter when quickly swiping back and forth between pages (iOS) (@thanks [@nemophrost](https://github.com/nemophrost)).
+
 - [1.4.11]
   + Adds loadMinimalSize property
 
