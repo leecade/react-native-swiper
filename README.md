@@ -232,6 +232,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | scrollsToTop | false | `bool` | If true, the scroll view scrolls to top when the status bar is tapped.  |
 | removeClippedSubviews | true | `bool` | If true, offscreen child views (whose overflow value is hidden) are removed from their native backing superview when offscreen. This canimprove scrolling performance on long lists.  |
 | automaticallyAdjustContentInsets | false | `bool` | Set to `true` if you need adjust content insets automation. |
+| scrollEnabled | true | `bool` | Enables/Disables swiping |
 
 > @see: http://facebook.github.io/react-native/docs/scrollview.html
 
