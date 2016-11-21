@@ -23,7 +23,11 @@
 
 ## Changelogs
 
-- **[1.5.3]**
+- **[1.5.4]**
+  + Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
+  + Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
+
+- [1.5.3]
   + Add loadMinimalLoader prop to customize `<ActivityIndicator />` (thanks [@Exilz](https://github.com/Exilz))
   + Disable autoplay timer when prop changes to false (thanks [@dizlexik](https://github.com/dizlexik))
   + Special thanks to [@hypatiah](https://github.com/dizlexik) for fixed some grammatical errors in README
@@ -194,7 +198,11 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | paginationStyle | {...} | `style` | Custom styles will merge with the default styles. |
 | renderPagination | - | `function` | Complete control how to render pagination with three params (`index`, `total`, `context`) ref to `this.state.index` / `this.state.total` / `this`, For example: show numbers instead of dots. |
 | dot | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the dot element. |
-| activeDot | `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the active-dot element. |
+| activeDot | - | `element` | Allow custom the active-dot element. |
+| dotStyle | - | `object` | Allow custom the active-dot element. |
+| dotColor | - | `string` | Allow custom the active-dot element. |
+| activeDotColor | - | `string` | Allow custom the active-dot element. |
+| activeDotStyle | - | `object` | Allow custom the active-dot element. |
 
 #### Autoplay
 

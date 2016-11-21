@@ -122,7 +122,7 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string,
+    activeDotColor: PropTypes.string
   }
 
   /**
@@ -147,7 +147,7 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0,
+    index: 0
   }
 
   /**
@@ -450,44 +450,44 @@ export default class extends Component {
    * Render pagination
    * @return {object} react-dom
    */
-   renderPagination = () => {
+  renderPagination = () => {
      // By default, dots only show when `total` >= 2
-     if (this.state.total <= 1) return null
+    if (this.state.total <= 1) return null
 
-     let dots = []
-     const ActiveDot = this.props.activeDot || <View style={[{
-         backgroundColor: this.props.activeDotColor || '#007aff',
-         width: 8,
-         height: 8,
-         borderRadius: 4,
-         marginLeft: 3,
-         marginRight: 3,
-         marginTop: 3,
-         marginBottom: 3
-       }, this.props.activeDotStyle]} />
-     const Dot = this.props.dot || <View style={[{
-         backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
-         width: 8,
-         height: 8,
-         borderRadius: 4,
-         marginLeft: 3,
-         marginRight: 3,
-         marginTop: 3,
-         marginBottom: 3
-       }, this.props.dotStyle ]} />
-     for (let i = 0; i < this.state.total; i++) {
-       dots.push(i === this.state.index
-         ? React.cloneElement(ActiveDot, {key: i})
-         : React.cloneElement(Dot, {key: i})
-       )
-     }
+    let dots = []
+    const ActiveDot = this.props.activeDot || <View style={[{
+      backgroundColor: this.props.activeDotColor || '#007aff',
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      marginLeft: 3,
+      marginRight: 3,
+      marginTop: 3,
+      marginBottom: 3
+    }, this.props.activeDotStyle]} />
+    const Dot = this.props.dot || <View style={[{
+      backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
+      width: 8,
+      height: 8,
+      borderRadius: 4,
+      marginLeft: 3,
+      marginRight: 3,
+      marginTop: 3,
+      marginBottom: 3
+    }, this.props.dotStyle ]} />
+    for (let i = 0; i < this.state.total; i++) {
+      dots.push(i === this.state.index
+        ? React.cloneElement(ActiveDot, {key: i})
+        : React.cloneElement(Dot, {key: i})
+      )
+    }
 
-     return (
-       <View pointerEvents='none' style={[styles['pagination_' + this.state.dir], this.props.paginationStyle]}>
-         {dots}
-       </View>
-     )
-   }
+    return (
+      <View pointerEvents='none' style={[styles['pagination_' + this.state.dir], this.props.paginationStyle]}>
+        {dots}
+      </View>
+    )
+  }
 
   renderTitle = () => {
     const child = this.props.children[this.state.index]
@@ -614,7 +614,7 @@ export default class extends Component {
               <View style={pageStyleLoading} key={`loading-${i}`}>
                 {props.loadMinimalLoader ? props.loadMinimalLoader : <ActivityIndicator />}
               </View>
-            );
+            )
           }
         } else {
           return <View style={pageStyle} key={i}>{children[page]}</View>
