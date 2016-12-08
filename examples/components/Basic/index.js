@@ -10,18 +10,21 @@ var styles = {
   },
   slide1: {
     flex: 1,
+    width: null,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#9DD6EB'
   },
   slide2: {
     flex: 1,
+    width: null, 
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#97CAE5'
   },
   slide3: {
     flex: 1,
+    width: null,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#92BBD9'
