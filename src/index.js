@@ -9,7 +9,6 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
-  ViewPagerAndroid,
   Platform,
   ActivityIndicator
 } from 'react-native'
@@ -393,11 +392,8 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
-    } else {
+
       this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y, animated })
-    }
 
     // update scroll state
     this.internals.isScrolling = true
@@ -545,7 +541,6 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
-    if (Platform.OS === 'ios') {
       return (
         <ScrollView ref='scrollView'
           {...this.props}
@@ -558,16 +553,6 @@ export default class extends Component {
           {pages}
         </ScrollView>
        )
-    }
-    return (
-      <ViewPagerAndroid ref='scrollView'
-        {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageSelected={this.onScrollEnd}
-        style={{flex: 1}}>
-        {pages}
-      </ViewPagerAndroid>
-    )
   }
 
   /**
