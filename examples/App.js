@@ -6,4 +6,5 @@ import Basic from './components/Basic/'
 // import SwiperNumber from './components/SwiperNumber/'
 // import LoadMinimal from './components/LoadMinimal/'
 // import PhotoView from './components/PhotoView/'
-AppRegistry.registerComponent('examples', () => Basic)
+// import Header from './components/Header/'
+AppRegistry.registerComponent('examples', () => Header)
