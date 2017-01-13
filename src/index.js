@@ -2,8 +2,9 @@
  * react-native-swiper
  * @author leecade<leecade@163.com>
  */
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
 import {
+  Image,
   Text,
   View,
   ScrollView,
@@ -12,9 +13,13 @@ import {
   ViewPagerAndroid,
   Platform,
   ActivityIndicator
-} from 'react-native'
+} from 'react-native';
 
-const { width, height } = Dimensions.get('window')
+const { width, height } = Dimensions.get('window');
+const imageDimensions = {
+  height: window.height,
+  width: window.width
+};
 
 /**
  * Default styles
@@ -87,7 +92,16 @@ const styles = {
     fontSize: 50,
     color: '#007aff',
     fontFamily: 'Arial'
-  }
+  },
+
+  backgroundImage: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    flexDirection: 'column',
+    alignSelf: 'stretch',
+    overflow: 'visible',
+  },
 }
 
 // missing `module.exports = exports['default'];` with babel6
@@ -122,7 +136,10 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    showsBackgroundImage: PropTypes.bool,
+    // require() returns a number
+    backgroundImage: PropTypes.number,
   }
 
   /**
@@ -147,7 +164,8 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0
+    index: 0,
+    showsBackgroundImage: false,
   }
 
   /**
@@ -555,7 +573,7 @@ export default class extends Component {
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}>
-          {pages}
+            {pages}
         </ScrollView>
        )
     }
@@ -624,6 +642,28 @@ export default class extends Component {
       pages = <View style={pageStyle} key={0}>{children}</View>
     }
 
+    // For adding a background image
+    if (this.props.showsBackgroundImage) {
+      return (
+        <View style={[styles.container, {
+          width: state.width,
+          height: state.height
+        }]}>
+          <Image 
+            style={styles.backgroundImage}
+            source={this.props.backgroundImage}>
+
+            {this.renderScrollView(pages)}
+            {props.showsPagination && (props.renderPagination
+              ? this.props.renderPagination(state.index, state.total, this)
+              : this.renderPagination())}
+            {this.renderTitle()}
+            {this.props.showsButtons && this.renderButtons()}
+
+          </Image>
+        </View>
+      ) 
+    }
     return (
       <View style={[styles.container, {
         width: state.width,
@@ -636,6 +676,6 @@ export default class extends Component {
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}
       </View>
-    )
+    ) 
   }
 }
