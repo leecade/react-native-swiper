@@ -6,7 +6,7 @@ import {
   Dimensions
 } from 'react-native';
 import Swiper from 'react-native-swiper';
-import Header from './Header';
+import Header from './header';
 
 const { width } = Dimensions.get('window')
 
@@ -24,7 +24,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB'
+    backgroundColor: 'transparent'
   },
 
   slide2: {
@@ -38,7 +38,7 @@ const styles = {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9'
+    backgroundColor: 'transparent'
   },
 
   text: {
@@ -53,7 +53,7 @@ const styles = {
   }
 }
 
-const bgImage = require('./img/1.jpg');
+const bgImage = require('./images/1.jpg');
 
 export default class extends Component {
 
@@ -67,12 +67,14 @@ export default class extends Component {
     return (
       <Swiper 
         style={styles.wrapper} 
-        horizontal={false} 
+        horizontal={true} 
         renderHeader={this.renderHeader}
         showsBackgroundImage={true}
         backgroundImage={bgImage}>
         <View style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>
+          <Text style={styles.text}>I have a Header & Background Image</Text>
+          
         </View>
         <View style={styles.slide2}>
           <Text style={styles.text}>Beautiful</Text>

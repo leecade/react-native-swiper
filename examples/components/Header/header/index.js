@@ -31,7 +31,7 @@ const Header = () => {
          <Image 
             source={require('../images/back.png')} 
             style={icons.default} />
-        </Button>
+        </TouchableOpacity>
       </View>
 
       <View style={[styles.action, {flex:5}]}>
@@ -39,7 +39,7 @@ const Header = () => {
           // Logo or Home Button
          >
          <Image 
-            source={images.logo} 
+            // source={} 
             style={icons.logo} />
         </TouchableOpacity>
       </View>
