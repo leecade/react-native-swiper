@@ -140,6 +140,7 @@ export default class extends Component {
     showsBackgroundImage: PropTypes.bool,
     // require() returns a number
     backgroundImage: PropTypes.number,
+    renderHeader: PropTypes.func,
   }
 
   /**
@@ -653,6 +654,7 @@ export default class extends Component {
             style={styles.backgroundImage}
             source={this.props.backgroundImage}>
 
+            {this.props.renderHeader()}
             {this.renderScrollView(pages)}
             {props.showsPagination && (props.renderPagination
               ? this.props.renderPagination(state.index, state.total, this)
