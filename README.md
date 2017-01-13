@@ -188,8 +188,11 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | style | {...} | `style` | See default style in source. |
 | loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize | 1 | `number` | see `loadMinimal`   |
-| loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
-
+| loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded |
+| showsBackgroundImage | false | `bool` | Use a background image for all slides |
+| backgroundImage | - | `number` | Only works with require('./images/example.png') |
+| renderHeader | - | `function` | Complete control with adding a Header of NavBar to your swiper see [examples](https://github.com/leecade/react-native-swiper/tree/master/examples/) |
+ 
 #### Pagination
 
 | Prop  | Default  | Type | Description |
