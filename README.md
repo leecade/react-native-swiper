@@ -82,6 +82,7 @@
   + [Props of Children](#props-of-children)
   + [Basic props of `<ScrollView />`](#basic-props-of-scrollview-)
   + [Supported ScrollResponder](#supported-scrollresponder)
+  + [Flex sizing](#flex-sizing)
 - [Examples](#examples)
 - [Development](#development)
 
@@ -186,6 +187,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
 | height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
 | style | {...} | `style` | See default style in source. |
+| containerStyle | undefined | `style` | Applied to the view that wraps the swiper |
 | loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize | 1 | `number` | see `loadMinimal`   |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
@@ -274,6 +276,39 @@ var swiper = React.createClass({
 ```
 
 > More ScrollResponder info, see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
+
+#### Flex sizing
+
+To create a flexibly sized swiper, use a wrapper with the `onLayout` prop, as below:
+```jsx
+// creating our component
+class Layout extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      height: -1,
+      width: -1
+    }
+  }
+
+  measureLayout({nativeEvent}) {
+    const height = nativeEvent.layout.height;
+    const width = nativeEvent.layout.width;
+    this.setState({height, width});
+  }
+
+  render() {
+    return (
+        <View onLayout={this.measureLayout} style={{flex: 1}}>
+          <Swiper height={this.state.height} width={this.state.width}>
+            {...}
+          </Swiper>
+        </View>
+      );
+  }
+
+}
+```
 
 ### Methods
 
