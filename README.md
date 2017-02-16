@@ -275,6 +275,8 @@ var swiper = React.createClass({
 })
 ```
 
+> More ScrollResponder info, see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
+
 #### Flex sizing
 
 To create a flexibly sized swiper, use a wrapper with the `onLayout` prop, as below:
@@ -307,8 +309,6 @@ class Layout extends Component {
 
 }
 ```
-
-> More ScrollResponder info, see: https://github.com/facebook/react-native/blob/master/Libraries/Components/ScrollResponder.js
 
 ### Methods
 
