@@ -278,7 +278,7 @@ var swiper = React.createClass({
 #### Flex sizing
 
 To create a flexibly sized swiper, use a wrapper with the `onLayout` prop, as below:
-``jsx
+```jsx
 // creating our component
 class Layout extends Component {
   constructor(props) {
