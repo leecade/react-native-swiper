@@ -587,13 +587,13 @@ export default class extends Component {
 
     let pages = []
 
-    const pageStyle = [{width: state.width, height: state.height}, styles.slide]
-    const pageStyleLoading = {
+    const pageStyle = [{width: state.width, height: state.height}, styles.slide, props.slideStyle]
+    const pageStyleLoading = [{
       width: this.state.width,
       height: this.state.height,
       justifyContent: 'center',
       alignItems: 'center'
-    }
+    }, props.slideLoadingStyle]
 
     // For make infinite at least total > 1
     if (total > 1) {
@@ -628,7 +628,7 @@ export default class extends Component {
       <View style={[styles.container, {
         width: state.width,
         height: state.height
-      }, this.props.containerStyle]}>
+      }, props.containerStyle]}>
         {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
