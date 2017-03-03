@@ -119,8 +119,8 @@ export default class extends Component {
     autoplayDirection: PropTypes.bool,
     index: PropTypes.number,
     renderPagination: PropTypes.func,
-    dotStyle: view.propTypes.style,
-    activeDotStyle: view.propTypes.style,
+    dotStyle: View.propTypes.style,
+    activeDotStyle: View.propTypes.style,
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string
   }
