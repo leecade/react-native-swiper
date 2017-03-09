@@ -101,6 +101,9 @@ export default class extends Component {
     horizontal: PropTypes.bool,
     children: PropTypes.node.isRequired,
     style: View.propTypes.style,
+    containerStyle: View.propTypes.style,
+    pageStyle: View.propTypes.style,
+    pageStyleLoading: View.propTypes.style,
     pagingEnabled: PropTypes.bool,
     showsHorizontalScrollIndicator: PropTypes.bool,
     showsVerticalScrollIndicator: PropTypes.bool,
@@ -587,13 +590,13 @@ export default class extends Component {
 
     let pages = []
 
-    const pageStyle = [{width: state.width, height: state.height}, styles.slide]
-    const pageStyleLoading = {
+    const pageStyle = [{width: state.width, height: state.height}, styles.slide, props.pageStyle]
+    const pageStyleLoading = [{
       width: this.state.width,
       height: this.state.height,
       justifyContent: 'center',
       alignItems: 'center'
-    }
+    }, props.pageStyleLoading]
 
     // For make infinite at least total > 1
     if (total > 1) {
@@ -628,7 +631,7 @@ export default class extends Component {
       <View style={[styles.container, {
         width: state.width,
         height: state.height
-      }]}>
+      }, props.containerStyle]}>
         {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
