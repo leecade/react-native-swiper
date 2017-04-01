@@ -56,7 +56,7 @@
     "rimraf": "^2.5.4",
     "snazzy": "^5.0.0",
     "standard": "^8.5.0",
-    "updtr": "^0.2.3"
+    "updtr": "^1.0.0"
   },
   "dependencies": {}
 }
