@@ -86,7 +86,7 @@ const styles = {
   buttonText: {
     fontSize: 50,
     color: '#007aff',
-    fontFamily: 'Arial'
+    fontFamily: Platform.select({ios: 'Arial', android: 'normal'})
   }
 }
 
