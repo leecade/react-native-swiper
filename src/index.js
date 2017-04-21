@@ -122,7 +122,8 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    onIndexUpdate: PropTypes.func,
   }
 
   /**
@@ -147,7 +148,8 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0
+    index: 0,
+    onIndexUpdate: () => {},
   }
 
   /**
@@ -291,12 +293,15 @@ export default class extends Component {
       }
     }
 
+    const previousIndex = this.state.index;
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir, () => {
       this.autoplay()
       this.loopJump()
 
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
+
+      previousIndex != this.state.index && this.props.onIndexUpdate(this.state.index, this.state.total)
     })
   }
 
