@@ -22,6 +22,7 @@ declare module "react-native-swiper" {
         renderPagination?: (index: number, total: number, swiper: Swiper) => JSX.Element;
         dotStyle?: React.ViewStyle;
         activeDotStyle?: React.ViewStyle;
+        paginationStyle?: React.ViewStyle;
         dotColor?: string;
         activeDotColor?: string;
     }
