@@ -45,27 +45,27 @@
 
 ### [examples/components/Basic](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Basic)
 
-![](http://i.imgur.com/zrsazAG.gif =300x)
+![](http://i.imgur.com/zrsazAG.gif=300x)
 
 ### [examples/components/Swiper](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Swiper)
 
-![](http://i.imgur.com/hP3f3oO.gif =300x)
+![](http://i.imgur.com/hP3f3oO.gif=300x)
 
 ### [examples/components/SwiperNumber](https://github.com/leecade/react-native-swiper/blob/master/examples/components/SwiperNumber)
 
-![](http://i.imgur.com/0rqESVb.gif =300x)
+![](http://i.imgur.com/0rqESVb.gif=300x)
 
 ### [examples/components/Phone](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Phone)
 
-![](http://i.imgur.com/c1BhjZm.gif =300x)
+![](http://i.imgur.com/c1BhjZm.gif=300x)
 
 ### [examples/components/LoadMinimal](https://github.com/leecade/react-native-swiper/blob/master/examples/components/LoadMinimal)
 
-![](http://i.imgur.com/LAOHbJA.gif =300x)
+![](http://i.imgur.com/LAOHbJA.gif=300x)
 
 ### [examples/components/PhotoView](https://github.com/leecade/react-native-swiper/blob/master/examples/components/PhotoView)
 
-![](http://i.imgur.com/GkIRzjO.gif =300x)
+![](http://i.imgur.com/GkIRzjO.gif=300x)
 
 > with [react-native-photo-view](https://github.com/alwx/react-native-photo-view)
 
