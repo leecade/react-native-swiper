@@ -122,7 +122,11 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    /**
+     * Called when the index has changed because the user swiped.
+     */
+    onIndexChanged: PropTypes.func
   }
 
   /**
@@ -147,7 +151,8 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0
+    index: 0,
+    onIndexChanged: () => null
   }
 
   /**
@@ -349,6 +354,9 @@ export default class extends Component {
         loopJump = true
       }
     }
+
+    // Notify that the index has changed
+    this.props.onIndexChanged(index)
 
     const newState = {}
     newState.index = index
