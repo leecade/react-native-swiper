@@ -184,6 +184,11 @@ export default class extends Component {
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
+  componentWillUpdate (nextProps, nextState) {
+    // If the index has changed, we notify the parent via the onIndexChanged callback
+    if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
+  }
+
   initState (props, setOffsetInState) {
     // set the current state
     const state = this.state || {}
@@ -354,9 +359,6 @@ export default class extends Component {
         loopJump = true
       }
     }
-
-    // Notify that the index has changed
-    this.props.onIndexChanged(index)
 
     const newState = {}
     newState.index = index
