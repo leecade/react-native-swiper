@@ -122,7 +122,8 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    onIndexChanged: PropTypes.func
   }
 
   /**
@@ -147,7 +148,8 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0
+    index: 0,
+    onIndexChanged: () => null
   }
 
   /**
@@ -177,6 +179,11 @@ export default class extends Component {
   componentWillUnmount () {
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
+  }
+
+  componentWillUpdate (nextProps, nextState) {
+    // If the index has changed, we notify the parent via the onIndexChanged callback
+    if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
   }
 
   initState (props, setOffsetInState) {
