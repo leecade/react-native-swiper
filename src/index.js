@@ -143,7 +143,7 @@ export default class extends Component {
     automaticallyAdjustContentInsets: false,
     showsPagination: true,
     showsButtons: false,
-    loop: false,
+    loop: true,
     loadMinimal: false,
     loadMinimalSize: 1,
     autoplay: false,

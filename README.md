@@ -178,6 +178,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
+| condensed | false | `bool` | When `total` is greater than 7, you can set it to `true`. This property allows the dots to be slipped and faded. When its value is `true`, the prop `loop` must be set to `false`. |
 
 #### Custom basic style & content
 
