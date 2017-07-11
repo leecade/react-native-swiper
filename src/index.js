@@ -7,7 +7,6 @@ import {
   Text,
   View,
   ScrollView,
-  Animated,
   Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
