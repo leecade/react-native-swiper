@@ -123,7 +123,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
-    condensed: PropTypes.bool,
+    dotType: PropTypes.string,
     maxDotNumber: PropTypes.number,
   }
 
@@ -150,7 +150,7 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    condensed: false,
+    dotType: 'default',
     maxDotNumber: 7,
   }
 
@@ -313,7 +313,7 @@ export default class extends Component {
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
-      if (this.props.condensed) {
+      if (this.props.dotType === 'instagram') {
         if (this.state.diff > 0 && this.state.endHead === this.state.index + 2) {
           this.setState({ dotOffset: this.state.dotOffset + 1, startHead: this.state.startHead + 1, endHead: this.state.index + 1 + 2 })
         }
@@ -481,10 +481,10 @@ export default class extends Component {
   }
 
   /**
-   * Render pagination condensed
+   * Render pagination dotType
    * @return {object} react-dom
    */
-   renderPaginationCondensed = () => {
+   renderPaginationDotType = () => {
      const props = this.props;
      const { index, total, maxDotNumber, diff, dotOffset } = this.state;
 
@@ -768,10 +768,10 @@ export default class extends Component {
         height: state.height
       }]}>
         {this.renderScrollView(pages)}
-        {!props.condensed && props.showsPagination && (props.renderPagination
+        {props.dotType === 'default' && props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
           : this.renderPagination())}
-        {props.condensed && this.renderPaginationCondensed()}
+        {props.dotType === 'instagram' && this.renderPaginationDotType()}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}
       </View>
