@@ -313,18 +313,20 @@ export default class extends Component {
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
-      if (this.state.diff > 0 && this.state.endHead === this.state.index + 2) {
-        this.setState({ dotOffset: this.state.dotOffset + 1, startHead: this.state.startHead + 1, endHead: this.state.index + 1 + 2 })
-      }
-      if (this.state.diff < 0 && this.state.startHead === this.state.index + 2) {
-        this.setState({ dotOffset: this.state.dotOffset - 1, startHead: this.state.index - 1 + 2, endHead: this.state.endHead - 1 })
-      }
+      if (this.props.condensed) {
+        if (this.state.diff > 0 && this.state.endHead === this.state.index + 2) {
+          this.setState({ dotOffset: this.state.dotOffset + 1, startHead: this.state.startHead + 1, endHead: this.state.index + 1 + 2 })
+        }
+        if (this.state.diff < 0 && this.state.startHead === this.state.index + 2) {
+          this.setState({ dotOffset: this.state.dotOffset - 1, startHead: this.state.index - 1 + 2, endHead: this.state.endHead - 1 })
+        }
 
-      // dot moving
-      if (this.state.diff > 0 && this.state.index + 2 === this.state.endHead) {
-        this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 2 < 0) ? 0 : (this.state.index - 2) * 14), y: 0, animated: true })
-      } else if (this.state.diff < 0 && this.state.index + 2 === this.state.startHead) {
-        this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 1 < 0) ? 0 : (this.state.index) * 14), y: 0, animated: true })
+        // dot moving
+        if (this.state.diff > 0 && this.state.index + 2 === this.state.endHead) {
+          this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 2 < 0) ? 0 : (this.state.index - 2) * 14), y: 0, animated: true })
+        } else if (this.state.diff < 0 && this.state.index + 2 === this.state.startHead) {
+          this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 1 < 0) ? 0 : (this.state.index) * 14), y: 0, animated: true })
+        }
       }
     })
   }
