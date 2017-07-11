@@ -7,6 +7,7 @@ import {
   Text,
   View,
   ScrollView,
+  Animated,
   Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
@@ -122,7 +123,9 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    condensed: PropTypes.bool,
+    maxDotNumber: PropTypes.number,
   }
 
   /**
@@ -147,7 +150,9 @@ export default class extends Component {
     autoplay: false,
     autoplayTimeout: 2.5,
     autoplayDirection: true,
-    index: 0
+    index: 0,
+    condensed: false,
+    maxDotNumber: 7,
   }
 
   /**
@@ -185,7 +190,18 @@ export default class extends Component {
 
     const initState = {
       autoplayEnd: false,
-      loopJump: false
+      loopJump: false,
+      maxDotNumber: props.maxDotNumber,
+      diff: 1,
+      startHead: 1,
+      endHead: props.maxDotNumber - 2,
+      dotOffset: 0,
+    }
+
+    // only value are currently supported. when the value is illegal, the default is restored
+    if (props.maxDotNumber !== 7) {
+      initState.maxDotNumber = 7
+      initState.endHead = 5
     }
 
     const newInternals = {
@@ -297,6 +313,20 @@ export default class extends Component {
 
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
+
+      if (this.state.diff > 0 && this.state.endHead === this.state.index + 2) {
+        this.setState({ dotOffset: this.state.dotOffset + 1, startHead: this.state.startHead + 1, endHead: this.state.index + 1 + 2 })
+      }
+      if (this.state.diff < 0 && this.state.startHead === this.state.index + 2) {
+        this.setState({ dotOffset: this.state.dotOffset - 1, startHead: this.state.index - 1 + 2, endHead: this.state.endHead - 1 })
+      }
+
+      // dot moving
+      if (this.state.diff > 0 && this.state.index + 2 === this.state.endHead) {
+        this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 2 < 0) ? 0 : (this.state.index - 2) * 14), y: 0, animated: true })
+      } else if (this.state.diff < 0 && this.state.index + 2 === this.state.startHead) {
+        this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 1 < 0) ? 0 : (this.state.index) * 14), y: 0, animated: true })
+      }
     })
   }
 
@@ -332,6 +362,9 @@ export default class extends Component {
 
     // Do nothing if offset no change.
     if (!diff) return
+
+    this.setState({ diff });
+
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
@@ -445,6 +478,110 @@ export default class extends Component {
 
     return overrides
   }
+
+  /**
+   * Render pagination condensed
+   * @return {object} react-dom
+   */
+   renderPaginationCondensed = () => {
+     const props = this.props;
+     const { index, total, maxDotNumber, diff, dotOffset } = this.state;
+
+     // By default, dots only show when `total` >= 7
+     if (this.state.total <= 7) return this.renderPagination()
+
+     const dots = [];
+
+     const activeDot = this.props.activeDot || <View style={[{
+       backgroundColor: this.props.activeDotColor || '#007aff',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }, this.props.activeDotStyle]} />
+     const normalDot = props.dot || <View style={[{
+       backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }, props.dotStyle ]} />
+     const smallDot = props.dot || <View style={[{
+       backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
+       width: 6,
+       height: 6,
+       borderRadius: 3,
+       marginLeft: 4,
+       marginRight: 4,
+       marginTop: 4,
+       marginBottom: 4
+     }, props.dotStyle ]} />
+     const minimalDot = props.dot || <View style={[{
+       backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
+       width: 4,
+       height: 4,
+       borderRadius: 2,
+       marginLeft: 5,
+       marginRight: 5,
+       marginTop: 5,
+       marginBottom: 5
+     }, props.dotStyle ]} />
+     const invisibleDot = props.dot || <View style={[{
+       backgroundColor: 'transparent',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }]} />
+
+     for (let i = 0; i < total + 4; i++) {
+       dots.push(React.cloneElement(minimalDot, {key: 'minimal' + i}));
+     }
+
+     for (let i = 0; i < maxDotNumber; i++) {
+       let n = dotOffset + i;
+
+       if (i < 2) {
+         dots.splice(n, 2, React.cloneElement(minimalDot, {key: 'minimal' + n}), React.cloneElement(smallDot, {key: 'small' + n + 1}));
+         i++;
+         continue;
+       }
+       if (i >= maxDotNumber - 2) {
+         dots.splice(n, 2, React.cloneElement(smallDot, {key: 'small' + n}), React.cloneElement(minimalDot, {key: 'minimal' + n + 1}));
+         break;
+       }
+       dots.splice(n, 1, React.cloneElement(normalDot, {key: 'normal' + n}));
+     }
+
+     dots.splice(index + 2, 1, React.cloneElement(activeDot, {key: 'active' + index + 2}));
+
+     dots.splice(0, 2, React.cloneElement(invisibleDot, {key: 'invisible0'}), React.cloneElement(invisibleDot, {key: 'invisible1'}));
+     dots.splice(total + 2, 2, React.cloneElement(invisibleDot, {key: 'invisible00'}), React.cloneElement(invisibleDot, {key: 'invisible01'}));
+
+     return (
+       <View style={[
+         styles['pagination_' + this.state.dir],
+         props.paginationStyle,
+         {
+           width: maxDotNumber * (3 + 3 + 8),
+           left: (width - maxDotNumber * (3 + 3 + 8)) / 2,
+         },
+       ]}>
+        <ScrollView pointerEvents='none' ref="scrollViewDot" horizontal={true} showsHorizontalScrollIndicator={false}>
+          {dots}
+        </ScrollView>
+       </View>
+     )
+   }
 
   /**
    * Render pagination
@@ -630,9 +767,10 @@ export default class extends Component {
         height: state.height
       }]}>
         {this.renderScrollView(pages)}
-        {props.showsPagination && (props.renderPagination
+        {!props.condensed && props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
           : this.renderPagination())}
+        {props.condensed && this.renderPaginationCondensed()}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}
       </View>
