@@ -305,13 +305,13 @@ export default class extends Component {
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
       if (this.props.dotType === 'instagram') {
-        const { index, diff, startHead, endHead } = this.state;
+        const { index, diff, dotOffset, startHead, endHead } = this.state;
 
         if (diff > 0 && endHead === index + 2) {
-          this.setState({ dotOffset: this.state.dotOffset + 1, startHead: startHead + 1, endHead: index + 1 + 2 })
+          this.setState({ dotOffset: dotOffset + 1, startHead: startHead + 1, endHead: index + 1 + 2 })
         }
         if (diff < 0 && startHead === index + 2) {
-          this.setState({ dotOffset: this.state.dotOffset - 1, startHead: index - 1 + 2, endHead: endHead - 1 })
+          this.setState({ dotOffset: dotOffset - 1, startHead: index - 1 + 2, endHead: endHead - 1 })
         }
 
         // dot moving
@@ -479,15 +479,15 @@ export default class extends Component {
    */
    renderPaginationDotType = () => {
      const props = this.props;
-     const { index, total, diff, dotOffset } = this.state;
+     const { index, total, diff, dotOffset, dir } = this.state;
 
      // By default, dots only show when `total` >= 7
-     if (this.state.total <= 7) return this.renderPagination()
+     if (total <= 7) return this.renderPagination()
 
      const dots = [];
 
-     const activeDot = this.props.activeDot || <View style={[{
-       backgroundColor: this.props.activeDotColor || '#007aff',
+     const activeDot = props.activeDot || <View style={[{
+       backgroundColor: props.activeDotColor || '#007aff',
        width: 8,
        height: 8,
        borderRadius: 4,
@@ -495,7 +495,7 @@ export default class extends Component {
        marginRight: 3,
        marginTop: 3,
        marginBottom: 3
-     }, this.props.activeDotStyle]} />
+     }, props.activeDotStyle]} />
      const normalDot = props.dot || <View style={[{
        backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
        width: 8,
@@ -563,7 +563,7 @@ export default class extends Component {
 
      return (
        <View style={[
-         styles['pagination_' + this.state.dir],
+         styles['pagination_' + dir],
          props.paginationStyle,
          {
            width: 7 * (3 + 3 + 8),
