@@ -124,7 +124,6 @@ export default class extends Component {
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
     dotType: PropTypes.string,
-    maxDotNumber: PropTypes.number,
   }
 
   /**
@@ -151,7 +150,6 @@ export default class extends Component {
     autoplayDirection: true,
     index: 0,
     dotType: 'default',
-    maxDotNumber: 7,
   }
 
   /**
@@ -190,17 +188,10 @@ export default class extends Component {
     const initState = {
       autoplayEnd: false,
       loopJump: false,
-      maxDotNumber: props.maxDotNumber,
       diff: 1,
       startHead: 1,
-      endHead: props.maxDotNumber - 2,
+      endHead: 5,
       dotOffset: 0,
-    }
-
-    // only value are currently supported. when the value is illegal, the default is restored
-    if (props.maxDotNumber !== 7) {
-      initState.maxDotNumber = 7
-      initState.endHead = 5
     }
 
     const newInternals = {
@@ -314,18 +305,20 @@ export default class extends Component {
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
       if (this.props.dotType === 'instagram') {
-        if (this.state.diff > 0 && this.state.endHead === this.state.index + 2) {
-          this.setState({ dotOffset: this.state.dotOffset + 1, startHead: this.state.startHead + 1, endHead: this.state.index + 1 + 2 })
+        const { index, diff, startHead, endHead } = this.state;
+
+        if (diff > 0 && endHead === index + 2) {
+          this.setState({ dotOffset: this.state.dotOffset + 1, startHead: startHead + 1, endHead: index + 1 + 2 })
         }
-        if (this.state.diff < 0 && this.state.startHead === this.state.index + 2) {
-          this.setState({ dotOffset: this.state.dotOffset - 1, startHead: this.state.index - 1 + 2, endHead: this.state.endHead - 1 })
+        if (diff < 0 && startHead === index + 2) {
+          this.setState({ dotOffset: this.state.dotOffset - 1, startHead: index - 1 + 2, endHead: endHead - 1 })
         }
 
         // dot moving
-        if (this.state.diff > 0 && this.state.index + 2 === this.state.endHead) {
-          this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 2 < 0) ? 0 : (this.state.index - 2) * 14), y: 0, animated: true })
-        } else if (this.state.diff < 0 && this.state.index + 2 === this.state.startHead) {
-          this.refs.scrollViewDot.scrollTo({ x: ((this.state.index - 1 < 0) ? 0 : (this.state.index) * 14), y: 0, animated: true })
+        if (diff > 0 && index + 2 === endHead) {
+          this.refs.scrollViewDot.scrollTo({ x: ((index - 2 < 0) ? 0 : (index - 2) * 14), y: 0, animated: true })
+        } else if (diff < 0 && index + 2 === startHead) {
+          this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * 14), y: 0, animated: true })
         }
       }
     })
@@ -481,12 +474,12 @@ export default class extends Component {
   }
 
   /**
-   * Render pagination dotType
+   * Render Instgram Pagination
    * @return {object} react-dom
    */
    renderPaginationDotType = () => {
      const props = this.props;
-     const { index, total, maxDotNumber, diff, dotOffset } = this.state;
+     const { index, total, diff, dotOffset } = this.state;
 
      // By default, dots only show when `total` >= 7
      if (this.state.total <= 7) return this.renderPagination()
@@ -548,7 +541,7 @@ export default class extends Component {
        dots.push(React.cloneElement(minimalDot, {key: 'minimal' + i}));
      }
 
-     for (let i = 0; i < maxDotNumber; i++) {
+     for (let i = 0; i < 7; i++) {
        let n = dotOffset + i;
 
        if (i < 2) {
@@ -556,7 +549,7 @@ export default class extends Component {
          i++;
          continue;
        }
-       if (i >= maxDotNumber - 2) {
+       if (i >= 7 - 2) {
          dots.splice(n, 2, React.cloneElement(smallDot, {key: 'small' + n}), React.cloneElement(minimalDot, {key: 'minimal' + n + 1}));
          break;
        }
@@ -573,8 +566,8 @@ export default class extends Component {
          styles['pagination_' + this.state.dir],
          props.paginationStyle,
          {
-           width: maxDotNumber * (3 + 3 + 8),
-           left: (width - maxDotNumber * (3 + 3 + 8)) / 2,
+           width: 7 * (3 + 3 + 8),
+           left: (width - 7 * (3 + 3 + 8)) / 2,
          },
        ]}>
         <ScrollView pointerEvents='none' ref="scrollViewDot" horizontal={true} showsHorizontalScrollIndicator={false}>
