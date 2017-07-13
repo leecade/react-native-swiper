@@ -165,6 +165,18 @@ export default class extends Component {
   autoplayTimer = null
   loopJumpTimer = null
 
+  /*
+   * dotType === instagram
+   */
+  instagramAttributes = {
+    startHead: 1,
+    endHead: 5,
+  }
+
+  slideCountOfShortTime = 0
+
+  oldIndex = 0
+
   componentWillReceiveProps (nextProps) {
     const sizeChanged = (nextProps.width || width) !== this.state.width ||
                         (nextProps.height || height) !== this.state.height
@@ -189,8 +201,6 @@ export default class extends Component {
       autoplayEnd: false,
       loopJump: false,
       diff: 1,
-      startHead: 1,
-      endHead: 5,
       dotOffset: 0,
     }
 
@@ -276,6 +286,7 @@ export default class extends Component {
    */
   onScrollBegin = e => {
     // update scroll state
+    this.slideCountOfShortTime += 1
     this.internals.isScrolling = true
     this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.fullState(), this)
   }
@@ -305,21 +316,39 @@ export default class extends Component {
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
       if (this.props.dotType === 'instagram') {
-        const { index, diff, dotOffset, startHead, endHead } = this.state;
+        const { index, diff, dotOffset } = this.state;
+        const { startHead, endHead } = this.instagramAttributes;
 
-        if (diff > 0 && endHead === index + 2) {
-          this.setState({ dotOffset: dotOffset + 1, startHead: startHead + 1, endHead: index + 1 + 2 })
+        console.log(this.slideCountOfShortTime)
+        if (diff > 0 && this.oldIndex + 2 !== endHead - 1) {
+          this.slideCountOfShortTime = (endHead - 1) - (this.oldIndex + 2) - 1
         }
-        if (diff < 0 && startHead === index + 2) {
-          this.setState({ dotOffset: dotOffset - 1, startHead: index - 1 + 2, endHead: endHead - 1 })
+        if (diff < 0 && this.oldIndex + 2 !== startHead + 1) {
+          this.slideCountOfShortTime = (this.oldIndex + 2) - (startHead + 1) - 1
         }
 
-        // dot moving
-        if (diff > 0 && index + 2 === endHead) {
-          this.refs.scrollViewDot.scrollTo({ x: ((index - 2 < 0) ? 0 : (index - 2) * 14), y: 0, animated: true })
-        } else if (diff < 0 && index + 2 === startHead) {
-          this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * 14), y: 0, animated: true })
+        if (diff > 0 && (endHead === index + 2 || endHead + this.slideCountOfShortTime - 1 === index + 2)) {
+          this.setState({ dotOffset: dotOffset + this.slideCountOfShortTime }, () => {
+            this.slideCountOfShortTime = 0
+            if (!!this.refs.scrollViewDot) {
+              this.refs.scrollViewDot.scrollTo({ x: ((index - 2 < 0) ? 0 : (index - 2) * 14), y: 0, animated: true })
+            }
+          })
+          this.instagramAttributes.startHead += this.slideCountOfShortTime
+          this.instagramAttributes.endHead = index + this.slideCountOfShortTime + 2
         }
+        if (diff < 0 && (startHead === index + 2 || startHead - this.slideCountOfShortTime + 1 === index + 2)) {
+          this.setState({ dotOffset: dotOffset - this.slideCountOfShortTime }, () => {
+            this.slideCountOfShortTime = 0
+            if (!!this.refs.scrollViewDot) {
+              this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * 14), y: 0, animated: true })
+            }
+          })
+          this.instagramAttributes.startHead = index - this.slideCountOfShortTime + 2
+          this.instagramAttributes.endHead -= this.slideCountOfShortTime
+        }
+        this.slideCountOfShortTime = 0
+        this.oldIndex = index
       }
     })
   }
@@ -358,7 +387,6 @@ export default class extends Component {
     if (!diff) return
 
     this.setState({ diff });
-
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
@@ -413,6 +441,9 @@ export default class extends Component {
 
   scrollBy = (index, animated = true) => {
     if (this.internals.isScrolling || this.state.total < 2) return
+
+    this.slideCountOfShortTime += 1
+
     const state = this.state
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
