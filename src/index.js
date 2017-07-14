@@ -316,18 +316,17 @@ export default class extends Component {
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
       if (this.props.dotType === 'instagram') {
-        const { index, diff, dotOffset } = this.state;
+        const { index, total, diff, dotOffset } = this.state;
         const { startHead, endHead } = this.instagramAttributes;
 
-        console.log(this.slideCountOfShortTime)
-        if (diff > 0 && this.oldIndex + 2 !== endHead - 1) {
-          this.slideCountOfShortTime = (endHead - 1) - (this.oldIndex + 2) - 1
+        if (diff > 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + 2 !== endHead - 1 || index + 1 === total)) {
+          this.slideCountOfShortTime = index + 2 - (endHead - 1) > 0 ? (index + 2 - (endHead - 1)) : 1 + (index + 1 === total ? -1 : 0)
         }
-        if (diff < 0 && this.oldIndex + 2 !== startHead + 1) {
-          this.slideCountOfShortTime = (this.oldIndex + 2) - (startHead + 1) - 1
+        if (diff < 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + 2 !== startHead + 1 || index === 0)) {
+          this.slideCountOfShortTime = startHead + 1 - (index + 2) > 0 ? (startHead + 1 - (index + 2)) : 1 + (index + 1 === total ? 1 : 0)
         }
 
-        if (diff > 0 && (endHead === index + 2 || endHead + this.slideCountOfShortTime - 1 === index + 2)) {
+        if (diff > 0 && (endHead === index + 2 || endHead + this.slideCountOfShortTime - 1 === index + 2 || index + 1 === total)) {
           this.setState({ dotOffset: dotOffset + this.slideCountOfShortTime }, () => {
             this.slideCountOfShortTime = 0
             if (!!this.refs.scrollViewDot) {
@@ -335,7 +334,7 @@ export default class extends Component {
             }
           })
           this.instagramAttributes.startHead += this.slideCountOfShortTime
-          this.instagramAttributes.endHead = index + this.slideCountOfShortTime + 2
+          this.instagramAttributes.endHead = index + 1 + 2
         }
         if (diff < 0 && (startHead === index + 2 || startHead - this.slideCountOfShortTime + 1 === index + 2)) {
           this.setState({ dotOffset: dotOffset - this.slideCountOfShortTime }, () => {
@@ -344,7 +343,7 @@ export default class extends Component {
               this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * 14), y: 0, animated: true })
             }
           })
-          this.instagramAttributes.startHead = index - this.slideCountOfShortTime + 2
+          this.instagramAttributes.startHead = index - 1 + 2
           this.instagramAttributes.endHead -= this.slideCountOfShortTime
         }
         this.slideCountOfShortTime = 0
