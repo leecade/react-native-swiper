@@ -17,6 +17,14 @@ import {
 const { width, height } = Dimensions.get('window')
 
 /**
+ * the constant of dotType's value is instagram
+ * @type {Number}
+ */
+const VISIBLE_DOT_NUMBER = 7
+const DOT_WIDTH = 14
+const DOT_INDEX_OFFSET = 2
+
+/**
  * Default styles
  * @type {StyleSheetPropType}
  */
@@ -165,16 +173,25 @@ export default class extends Component {
   autoplayTimer = null
   loopJumpTimer = null
 
-  /*
-   * dotType === instagram
+  /**
+   * As the flag of whether the origin is sliding
+   * @type {Object}
    */
   instagramAttributes = {
     startHead: 1,
     endHead: 5,
   }
 
+  /**
+   * Fast Slide Distance Records
+   * @type {Number}
+   */
   slideCountOfShortTime = 0
 
+  /**
+   * Record the last position of the activation point
+   * @type {Number}
+   */
   oldIndex = 0
 
   componentWillReceiveProps (nextProps) {
@@ -200,8 +217,8 @@ export default class extends Component {
     const initState = {
       autoplayEnd: false,
       loopJump: false,
-      diff: 1,
-      dotOffset: 0,
+      diff: 1,  // Left and right slides the flag
+      dotOffset: 0, // The initial offset of visible dot
     }
 
     const newInternals = {
@@ -319,31 +336,31 @@ export default class extends Component {
         const { index, total, diff, dotOffset } = this.state;
         const { startHead, endHead } = this.instagramAttributes;
 
-        if (diff > 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + 2 !== endHead - 1 || index + 1 === total)) {
-          this.slideCountOfShortTime = index + 2 - (endHead - 1) > 0 ? (index + 2 - (endHead - 1)) : 1 + (index + 1 === total ? -1 : 0)
+        if (diff > 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + DOT_INDEX_OFFSET !== endHead - 1 || index + 1 === total)) {
+          this.slideCountOfShortTime = index + DOT_INDEX_OFFSET - (endHead - 1) > 0 ? (index + DOT_INDEX_OFFSET - (endHead - 1)) : 1 + (index + 1 === total ? -1 : 0)
         }
-        if (diff < 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + 2 !== startHead + 1 || index === 0)) {
-          this.slideCountOfShortTime = startHead + 1 - (index + 2) > 0 ? (startHead + 1 - (index + 2)) : 1 + (index + 1 === total ? 1 : 0)
+        if (diff < 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + DOT_INDEX_OFFSET !== startHead + 1 || index === 0)) {
+          this.slideCountOfShortTime = startHead + 1 - (index + DOT_INDEX_OFFSET) > 0 ? (startHead + 1 - (index + DOT_INDEX_OFFSET)) : 1 + (index + 1 === total ? 1 : 0)
         }
 
-        if (diff > 0 && (endHead === index + 2 || endHead + this.slideCountOfShortTime - 1 === index + 2 || index + 1 === total)) {
+        if (diff > 0 && (endHead === index + DOT_INDEX_OFFSET || endHead + this.slideCountOfShortTime - 1 === index + DOT_INDEX_OFFSET || index + 1 === total)) {
           this.setState({ dotOffset: dotOffset + this.slideCountOfShortTime }, () => {
             this.slideCountOfShortTime = 0
             if (!!this.refs.scrollViewDot) {
-              this.refs.scrollViewDot.scrollTo({ x: ((index - 2 < 0) ? 0 : (index - 2) * 14), y: 0, animated: true })
+              this.refs.scrollViewDot.scrollTo({ x: ((index - DOT_INDEX_OFFSET < 0) ? 0 : (index - DOT_INDEX_OFFSET) * DOT_WIDTH), y: 0, animated: true })
             }
           })
           this.instagramAttributes.startHead += this.slideCountOfShortTime
-          this.instagramAttributes.endHead = index + 1 + 2
+          this.instagramAttributes.endHead = index + DOT_INDEX_OFFSET + 1
         }
-        if (diff < 0 && (startHead === index + 2 || startHead - this.slideCountOfShortTime + 1 === index + 2)) {
+        if (diff < 0 && (startHead === index + DOT_INDEX_OFFSET || startHead - this.slideCountOfShortTime + 1 === index + DOT_INDEX_OFFSET)) {
           this.setState({ dotOffset: dotOffset - this.slideCountOfShortTime }, () => {
             this.slideCountOfShortTime = 0
             if (!!this.refs.scrollViewDot) {
-              this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * 14), y: 0, animated: true })
+              this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * DOT_WIDTH), y: 0, animated: true })
             }
           })
-          this.instagramAttributes.startHead = index - 1 + 2
+          this.instagramAttributes.startHead = index + DOT_INDEX_OFFSET - 1
           this.instagramAttributes.endHead -= this.slideCountOfShortTime
         }
         this.slideCountOfShortTime = 0
@@ -512,7 +529,7 @@ export default class extends Component {
      const { index, total, diff, dotOffset, dir } = this.state;
 
      // By default, dots only show when `total` >= 7
-     if (total <= 7) return this.renderPagination()
+     if (total <= VISIBLE_DOT_NUMBER) return this.renderPagination()
 
      const dots = [];
 
@@ -571,33 +588,33 @@ export default class extends Component {
        dots.push(React.cloneElement(minimalDot, {key: 'minimal' + i}));
      }
 
-     for (let i = 0; i < 7; i++) {
+     for (let i = 0; i < VISIBLE_DOT_NUMBER; i++) {
        let n = dotOffset + i;
 
-       if (i < 2) {
-         dots.splice(n, 2, React.cloneElement(minimalDot, {key: 'minimal' + n}), React.cloneElement(smallDot, {key: 'small' + n + 1}));
+       if (i < DOT_INDEX_OFFSET) {
+         dots.splice(n, DOT_INDEX_OFFSET, React.cloneElement(minimalDot, {key: 'minimal' + n}), React.cloneElement(smallDot, {key: 'small' + n + 1}));
          i++;
          continue;
        }
-       if (i >= 7 - 2) {
+       if (i >= VISIBLE_DOT_NUMBER - DOT_INDEX_OFFSET) {
          dots.splice(n, 2, React.cloneElement(smallDot, {key: 'small' + n}), React.cloneElement(minimalDot, {key: 'minimal' + n + 1}));
          break;
        }
        dots.splice(n, 1, React.cloneElement(normalDot, {key: 'normal' + n}));
      }
 
-     dots.splice(index + 2, 1, React.cloneElement(activeDot, {key: 'active' + index + 2}));
+     dots.splice(index + DOT_INDEX_OFFSET, 1, React.cloneElement(activeDot, {key: 'active' + index + DOT_INDEX_OFFSET}));
 
      dots.splice(0, 2, React.cloneElement(invisibleDot, {key: 'invisible0'}), React.cloneElement(invisibleDot, {key: 'invisible1'}));
-     dots.splice(total + 2, 2, React.cloneElement(invisibleDot, {key: 'invisible00'}), React.cloneElement(invisibleDot, {key: 'invisible01'}));
+     dots.splice(total + DOT_INDEX_OFFSET, 2, React.cloneElement(invisibleDot, {key: 'invisible00'}), React.cloneElement(invisibleDot, {key: 'invisible01'}));
 
      return (
        <View style={[
          styles['pagination_' + dir],
          props.paginationStyle,
          {
-           width: 7 * (3 + 3 + 8),
-           left: (width - 7 * (3 + 3 + 8)) / 2,
+           width: VISIBLE_DOT_NUMBER * DOT_WIDTH,
+           left: (width - VISIBLE_DOT_NUMBER * DOT_WIDTH) / 2,
          },
        ]}>
         <ScrollView pointerEvents='none' ref="scrollViewDot" horizontal={true} showsHorizontalScrollIndicator={false}>
