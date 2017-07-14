@@ -121,6 +121,8 @@ import Swiper from 'react-native-swiper';
 var styles = StyleSheet.create({
   wrapper: {
   },
+  content: {
+  },
   slide1: {
     flex: 1,
     justifyContent: 'center',
@@ -149,7 +151,7 @@ var styles = StyleSheet.create({
 var swiper = React.createClass({
   render: function() {
     return (
-      <Swiper style={styles.wrapper} showsButtons={true}>
+      <Swiper style={styles.wrapper} contentStyle={styles.content} showsButtons={true}>
         <View style={styles.slide1}>
           <Text style={styles.text}>Hello Swiper</Text>
         </View>
@@ -185,7 +187,8 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | :------------ |:---------------:| :---------------:| :-----|
 | width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
 | height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
-| style | {...} | `style` | See default style in source. |
+| style | {...} | `style` | Customize the style of the View container. |
+| contentStyle | {...} | `style` | Customize the style of the ScrollView that has the content. |
 | loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize | 1 | `number` | see `loadMinimal`   |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
@@ -225,7 +228,6 @@ AppRegistry.registerComponent('myproject', () => swiper);
 
 | Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
-| style | {...} | `style` | Custom styles will merge with the default styles. |
 | title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. |
 
 #### Basic props of `<ScrollView />`
