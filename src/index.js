@@ -187,23 +187,21 @@ export default class extends Component {
       loopJump: false
     }
 
-    const newInternals = {
-      isScrolling: false
-    }
-
     initState.total = props.children ? props.children.length || 1 : 0
-
-    if (state.total === initState.total) {
-      // retain the index
-      initState.index = state.index
-    } else {
-      initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
-    }
+    initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
 
     // Default: horizontal
     initState.dir = props.horizontal === false ? 'y' : 'x'
 
-    this.internals = newInternals
+    this.internals = {
+      ...this.internals,
+      isScrolling: false
+    }
+
+    // Update scroll if index changed
+    if (state.index != null && state.index !== initState.index) {
+      this.scrollBy(initState.index - state.index)
+    }
     return initState
   }
 
