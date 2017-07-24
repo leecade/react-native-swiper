@@ -58,5 +58,7 @@
     "standard": "^8.5.0",
     "updtr": "^0.2.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
 }
