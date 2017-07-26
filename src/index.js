@@ -611,7 +611,7 @@ export default class extends Component {
             return <View style={pageStyle} key={i}>{children[page]}</View>
           } else {
             return (
-              <View style={pageStyleLoading} key={`loading-${i}`}>
+              <View style={pageStyleLoading} key={i}>
                 {props.loadMinimalLoader ? props.loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
