@@ -22,6 +22,9 @@
 > see: [ROADMAP.md](ROADMAP.md)
 
 ## Changelogs
+- **[1.5.5]**
+  + Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
+
 
 - **[1.5.4]**
   + Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
