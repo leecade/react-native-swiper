@@ -22,11 +22,15 @@
 > see: [ROADMAP.md](ROADMAP.md)
 
 ## Changelogs
-- **[1.5.5]**
+- **[1.5.6]**
+  + Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
+  + Add containerStyle prop to customize the view container.
+  
+- [1.5.5]
   + Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
 
-- **[1.5.4]**
+- [1.5.4]
   + Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
   + Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
 
