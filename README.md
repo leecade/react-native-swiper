@@ -210,6 +210,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | dotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotStyle | - | `object` | Allow custom the active-dot element. |
+| onIndexUpdate | - | `function` | Callback trigger when index is changed with two params (`index`, `total`) ref to `this.state.index` / `this.state.total`. |
 
 #### Autoplay
 
