@@ -1,11 +1,7 @@
 {
   "name": "react-native-swiper",
-  "keywords": [
-    "react-component",
-    "react-native",
-    "ios"
-  ],
-  "version": "1.5.4",
+  "keywords": ["react-component", "react-native", "ios"],
+  "version": "1.5.6",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -16,9 +12,7 @@
     "test": "npm run lint"
   },
   "pre-commit": {
-    "run": [
-      "precommit"
-    ],
+    "run": ["precommit"],
     "silent": true
   },
   "standard": {
@@ -31,11 +25,7 @@
       "setImmediate",
       "fetch"
     ],
-    "ignore": [
-      "dist/",
-      "mock/",
-      "node_modules/"
-    ]
+    "ignore": ["dist/", "mock/", "node_modules/"]
   },
   "ava": {
     "babel": "inherit",
@@ -58,5 +48,7 @@
     "standard": "^8.5.0",
     "updtr": "^0.2.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
 }
