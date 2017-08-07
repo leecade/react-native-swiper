@@ -125,7 +125,8 @@ export default class extends Component {
     dotStyle: PropTypes.object,
     activeDotStyle: PropTypes.object,
     dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string
+    activeDotColor: PropTypes.string,
+    buttonColor: PropTypes.string
   }
 
   /**
@@ -510,7 +511,7 @@ export default class extends Component {
 
     if (this.props.loop ||
       this.state.index !== this.state.total - 1) {
-      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+      button = this.props.nextButton || <Text style={[styles.buttonText, {color: this.props.buttonColor || '#007aff'}]}>›</Text>
     }
 
     return (
@@ -526,7 +527,7 @@ export default class extends Component {
     let button = null
 
     if (this.props.loop || this.state.index !== 0) {
-      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      button = this.props.prevButton || <Text style={[styles.buttonText, {color: this.props.buttonColor || '#007aff'}]}>‹</Text>
     }
 
     return (
