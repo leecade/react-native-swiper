@@ -185,6 +185,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
+| onIndexChanged | (index) => null | `func` | Called with the new index when the user swiped |
 
 #### Custom basic style & content
 
