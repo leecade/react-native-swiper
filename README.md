@@ -103,7 +103,7 @@ $ npm i react-native-swiper --save
 - Install `react-native` first
 
 ```bash
-$ npm i react-native -g
+$ npm i react-native-cli -g
 ```
 
 - Initialization of a react-native project
