@@ -70,11 +70,6 @@
 
 ![](http://i.imgur.com/LAOHbJA.gif=300x)
 
-### [examples/components/PhotoView](https://github.com/leecade/react-native-swiper/blob/master/examples/components/PhotoView)
-
-![](http://i.imgur.com/GkIRzjO.gif=300x)
-
-> with [react-native-photo-view](https://github.com/alwx/react-native-photo-view)
 
 ## Getting Started
 
