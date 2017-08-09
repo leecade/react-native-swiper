@@ -209,7 +209,7 @@ export default class extends Component {
       isScrolling: false
     }
 
-    initState.total = props.children ? props.children.length || 1 : 0
+    initState.total = props.children ? React.Children.count(props.children) || 1 : 0
 
     if (state.total === initState.total) {
       // retain the index
@@ -268,7 +268,7 @@ export default class extends Component {
    * Automatic rolling
    */
   autoplay = () => {
-    if (!Array.isArray(this.props.children) ||
+    if (React.Children.count(this.props.children) <= 1 ||
       !this.props.autoplay ||
       this.internals.isScrolling ||
       this.state.autoplayEnd) return
@@ -512,11 +512,12 @@ export default class extends Component {
   }
 
   renderTitle = () => {
-    const child = this.props.children[this.state.index]
+    const children = React.Children.toArray(this.props.children);
+    const child = children[this.state.index]
     const title = child && child.props && child.props.title
     return title
       ? (<View style={styles.title}>
-        {this.props.children[this.state.index].props.title}
+        {children[this.state.index].props.title}
       </View>)
       : null
   }
@@ -599,7 +600,7 @@ export default class extends Component {
   render () {
     const state = this.state
     const props = this.props
-    const children = props.children
+    const children = React.Children.toArray(props.children)
     const index = state.index
     const total = state.total
     const loop = props.loop
