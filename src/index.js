@@ -198,15 +198,11 @@ export default class extends Component {
 
   initState (props) {
     // set the current state
-    const state = this.state || {}
+    const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
 
     const initState = {
       autoplayEnd: false,
       loopJump: false
-    }
-
-    const newInternals = {
-      isScrolling: false
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
@@ -224,7 +220,10 @@ export default class extends Component {
     initState.height = props.height || height
     newInternals.offset = {}
 
-    this.internals = newInternals
+    this.internals = {
+      ...this.internals,
+      isScrolling: false
+    };
     return initState
   }
 
@@ -646,7 +645,7 @@ export default class extends Component {
             return <View style={pageStyle} key={i}>{children[page]}</View>
           } else {
             return (
-              <View style={pageStyleLoading} key={`loading-${i}`}>
+              <View style={pageStyleLoading} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
