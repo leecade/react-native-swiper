@@ -4,6 +4,7 @@
 
 ### Is it a new feature ?
 - Yes or no ?
+- Include documentation, demo GIF if applicable
 
 ### Describe what you've done:
 
