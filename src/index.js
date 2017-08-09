@@ -25,15 +25,21 @@ const { width, height } = Dimensions.get('window')
 const styles = {
   container: {
     backgroundColor: 'transparent',
-    position: 'relative'
+    position: 'relative',
+    flex: 1
   },
 
-  wrapper: {
-    backgroundColor: 'transparent'
+  wrapperIOS: {
+    backgroundColor: 'transparent',
+  },
+
+  wrapperAndroid: {
+    backgroundColor: 'transparent',
+    flex: 1
   },
 
   slide: {
-    backgroundColor: 'transparent'
+    backgroundColor: 'transparent',
   },
 
   pagination_x: {
@@ -198,15 +204,11 @@ export default class extends Component {
 
   initState (props) {
     // set the current state
-    const state = this.state || {}
+    const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
 
     const initState = {
       autoplayEnd: false,
       loopJump: false
-    }
-
-    const newInternals = {
-      isScrolling: false
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
@@ -224,7 +226,10 @@ export default class extends Component {
     initState.height = props.height || height
     newInternals.offset = {}
 
-    this.internals = newInternals
+    this.internals = {
+      ...this.internals,
+      isScrolling: false
+    };
     return initState
   }
 
@@ -572,7 +577,7 @@ export default class extends Component {
         <ScrollView ref='scrollView'
           {...this.props}
           {...this.scrollViewPropOverrides()}
-          contentContainerStyle={[styles.wrapper, this.props.style]}
+          contentContainerStyle={[styles.wrapperIOS, this.props.style]}
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
@@ -586,7 +591,7 @@ export default class extends Component {
         {...this.props}
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
         onPageSelected={this.onScrollEnd}
-        style={{flex: 1}}>
+        style={[styles.wrapperAndroid, this.props.style]}>
         {pages}
       </ViewPagerAndroid>
     )
@@ -599,20 +604,33 @@ export default class extends Component {
   render () {
     const state = this.state
     const props = this.props
-    const children = props.children
-    const index = state.index
-    const total = state.total
-    const loop = props.loop
+    const {
+      index,
+      total,
+      width,
+      height
+    } = this.state;
+    const {
+      children,
+      containerStyle,
+      loop,
+      loadMinimal,
+      loadMinimalSize,
+      loadMinimalLoader,
+      renderPagination,
+      showsButtons,
+      showsPagination,
+    } = this.props;
     // let dir = state.dir
     // let key = 0
     const loopVal = loop ? 1 : 0
-
     let pages = []
 
-    const pageStyle = [{width: state.width, height: state.height}, styles.slide]
+    const pageStyle = [{width: width, height: height}, styles.slide]
     const pageStyleLoading = {
-      width: this.state.width,
-      height: this.state.height,
+      width,
+      height,
+      flex: 1,
       justifyContent: 'center',
       alignItems: 'center'
     }
@@ -627,14 +645,14 @@ export default class extends Component {
       }
 
       pages = pages.map((page, i) => {
-        if (props.loadMinimal) {
-          if (i >= (index + loopVal - props.loadMinimalSize) &&
-            i <= (index + loopVal + props.loadMinimalSize)) {
+        if (loadMinimal) {
+          if (i >= (index + loopVal - loadMinimalSize) &&
+            i <= (index + loopVal + loadMinimalSize)) {
             return <View style={pageStyle} key={i}>{children[page]}</View>
           } else {
             return (
-              <View style={pageStyleLoading} key={`loading-${i}`}>
-                {props.loadMinimalLoader ? props.loadMinimalLoader : <ActivityIndicator />}
+              <View style={pageStyleLoading} key={i}>
+                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
           }
@@ -647,13 +665,13 @@ export default class extends Component {
     }
 
     return (
-      <View style={[styles.container, this.props.containerStyle]} onLayout={this.onLayout}>
+      <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
         {this.renderScrollView(pages)}
-        {props.showsPagination && (props.renderPagination
-          ? this.props.renderPagination(state.index, state.total, this)
+        {showsPagination && (renderPagination
+          ? renderPagination(index, total, this)
           : this.renderPagination())}
         {this.renderTitle()}
-        {this.props.showsButtons && this.renderButtons()}
+        {showsButtons && this.renderButtons()}
       </View>
     )
   }

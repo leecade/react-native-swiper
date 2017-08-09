@@ -75,8 +75,8 @@ export default class extends Component {
   }
   render () {
     return (
-      <View>
-        <Swiper loadMinimal loadMinimalSize={1} style={styles.wrapper} height={240} loop={false}>
+      <View style={{flex: 1}}>
+        <Swiper loadMinimal loadMinimalSize={1} style={styles.wrapper} loop={false}>
           {
             this.state.imgList.map((item, i) => <Slide
               loadHandle={this.loadHandle}
