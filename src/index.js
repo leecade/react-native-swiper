@@ -224,7 +224,6 @@ export default class extends Component {
     initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
-    newInternals.offset = {}
 
     this.internals = {
       ...this.internals,
