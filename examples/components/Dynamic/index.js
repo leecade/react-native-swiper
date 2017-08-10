@@ -6,8 +6,6 @@ import {
 import Swiper from 'react-native-swiper'
 
 const styles = {
-  wrapper: {
-  },
   slide1: {
     flex: 1,
     justifyContent: 'center',
