@@ -1,7 +1,7 @@
 {
   "name": "react-native-swiper",
   "keywords": ["react-component", "react-native", "ios"],
-  "version": "1.5.8",
+  "version": "1.5.9",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
