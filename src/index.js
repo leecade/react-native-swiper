@@ -9,14 +9,11 @@ import {
   View,
   ViewPropTypes,
   ScrollView,
-  Dimensions,
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
   ActivityIndicator
 } from 'react-native'
-
-const { width, height } = Dimensions.get('window')
 
 /**
  * Default styles
@@ -238,6 +235,29 @@ export default class extends Component {
   }
 
   onLayout = (event) => {
+    const { width, height } = event.nativeEvent.layout
+    const offset = this.internals.offset = {}
+    const state = { width, height }
+
+    if (this.state.total > 1) {
+      let setup = this.state.index
+      if (this.props.loop) {
+        setup++
+      }
+      offset[this.state.dir] = this.state.dir === 'y'
+        ? height * setup
+        : width * setup
+    }
+
+    // only update the offset in state if needed, updating offset while swiping
+    // causes some bad jumping / stuttering
+    if (width !== this.state.width || height !== this.state.height) {
+      state.offset = offset
+    }
+    this.setState(state)
+  }
+
+  setDimensions = (event) => {
     const { width, height } = event.nativeEvent.layout
     const offset = this.internals.offset = {}
     const state = { width, height }
