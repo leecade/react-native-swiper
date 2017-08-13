@@ -254,7 +254,7 @@ export default class extends Component {
 
     // only update the offset in state if needed, updating offset while swiping
     // causes some bad jumping / stuttering
-    if (width !== this.state.width || height !== this.state.height) {
+    if (!this.state.offset || width !== this.state.width || height !== this.state.height) {
       state.offset = offset
     }
     this.setState(state)
