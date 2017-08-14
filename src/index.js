@@ -239,6 +239,7 @@ export default class extends Component {
 
   onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
+    const firstLayout = typeof this.internals.offset === 'undefined'
     const offset = this.internals.offset = {}
     const state = { width, height }
 
@@ -254,7 +255,7 @@ export default class extends Component {
 
     // only update the offset in state if needed, updating offset while swiping
     // causes some bad jumping / stuttering
-    if (width !== this.state.width || height !== this.state.height) {
+    if (firstLayout || (width !== this.state.width || height !== this.state.height)) {
       state.offset = offset
     }
     this.setState(state)
