@@ -1,3 +1,5 @@
+### Which OS ?
+
 ### Version
 Which versions are you using:
 
@@ -11,9 +13,11 @@ Which versions are you using:
 ### Actual behaviour
 
 
+### How to reproduce it>
+To help us, please fork this component, modify one example in examples folder to reproduce your issue and include link here.
+-
 
 ### Steps to reproduce
-For non-obvious bugs, please fork this component, modify Example project to reproduce your issue and include link here.
 1.
 2.
 3.
