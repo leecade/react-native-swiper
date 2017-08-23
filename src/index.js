@@ -125,6 +125,7 @@ export default class extends Component {
     automaticallyAdjustContentInsets: PropTypes.bool,
     showsPagination: PropTypes.bool,
     showsButtons: PropTypes.bool,
+    disableNextButton: PropTypes.bool,
     loadMinimal: PropTypes.bool,
     loadMinimalSize: PropTypes.number,
     loadMinimalLoader: PropTypes.element,
@@ -160,6 +161,7 @@ export default class extends Component {
     automaticallyAdjustContentInsets: false,
     showsPagination: true,
     showsButtons: false,
+    disableNextButton: false,
     loop: true,
     loadMinimal: false,
     loadMinimalSize: 1,
@@ -534,7 +536,10 @@ export default class extends Component {
     }
 
     return (
-      <TouchableOpacity onPress={() => button !== null && this.scrollBy(1)}>
+      <TouchableOpacity
+        onPress={() => button !== null && this.scrollBy(1)}
+        disabled={this.props.disableNextButton}
+      >
         <View>
           {button}
         </View>
