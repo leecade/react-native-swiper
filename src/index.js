@@ -78,7 +78,19 @@ const styles = {
     backgroundColor: 'transparent'
   },
 
-  buttonWrapper: {
+  buttonsWrapper: {
+    backgroundColor: 'transparent',
+    position: 'absolute',
+  },
+
+  buttonCloseWrapper: {
+    backgroundColor: 'transparent',
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    alignItems: 'flex-end'
+  },
+
+  buttonLeftRightWrapper: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
     position: 'absolute',
@@ -92,9 +104,15 @@ const styles = {
   },
 
   buttonText: {
-    fontSize: 50,
-    color: '#007aff',
-    fontFamily: 'Arial'
+    fontFamily: 'Arial',
+    fontSize: 60,
+    color: '#fff', //#007aff',
+    opacity: .12,
+    textShadowColor: '#000',
+    textShadowOffset: { width: 2, height: 2 },
+    textShadowRadius: 1,
+    paddingHorizontal: 15, // for easy touch
+    paddingVertical: 0,
   }
 }
 
@@ -108,6 +126,7 @@ export default class extends Component {
   static propTypes = {
     horizontal: PropTypes.bool,
     children: PropTypes.node.isRequired,
+    close: PropTypes.func.isRequired,
     containerStyle: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number,
@@ -185,7 +204,7 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    this.setState(this.initState(nextProps))
   }
 
   componentDidMount () {
@@ -202,7 +221,7 @@ export default class extends Component {
     if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
   }
 
-  initState (props, updateIndex = false) {
+  initState (props) {
     // set the current state
     const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
 
@@ -213,7 +232,7 @@ export default class extends Component {
 
     initState.total = props.children ? props.children.length || 1 : 0
 
-    if (state.total === initState.total && !updateIndex) {
+    if (state.total === initState.total) {
       // retain the index
       initState.index = state.index
     } else {
@@ -525,12 +544,23 @@ export default class extends Component {
       : null
   }
 
+  renderCloseButton = () => {
+    let button = <Text style={styles.buttonText}>✖</Text>
+    return (
+      <TouchableOpacity onPress={() => { this.props.close() }}>
+        <View>
+          {button}
+        </View>
+      </TouchableOpacity>
+    )
+  }
+
   renderNextButton = () => {
     let button = null
 
     if (this.props.loop ||
       this.state.index !== this.state.total - 1) {
-      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text> //▸
     }
 
     return (
@@ -546,7 +576,7 @@ export default class extends Component {
     let button = null
 
     if (this.props.loop || this.state.index !== 0) {
-      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text> //◂
     }
 
     return (
@@ -560,12 +590,23 @@ export default class extends Component {
 
   renderButtons = () => {
     return (
-      <View pointerEvents='box-none' style={[styles.buttonWrapper, {
-        width: this.state.width,
-        height: this.state.height
-      }, this.props.buttonWrapperStyle]}>
-        {this.renderPrevButton()}
-        {this.renderNextButton()}
+      <View pointerEvents='box-none' style={[styles.buttonsWrapper, {
+          width: this.state.width,
+          height: this.state.height
+        }, this.props.buttonsWrapperStyle]}>
+        <View pointerEvents='box-none' style={[styles.buttonCloseWrapper, {
+          width: this.state.width,
+          height: this.state.height
+        }, this.props.buttonCloseWrapperStyle]}>
+          {this.renderCloseButton()}
+        </View>
+        <View pointerEvents='box-none' style={[styles.buttonLeftRightWrapper, {
+          width: this.state.width,
+          height: this.state.height
+        }, this.props.buttonLeftRightWrapperStyle]}>
+          {this.renderPrevButton()}
+          {this.renderNextButton()}
+        </View>
       </View>
     )
   }
