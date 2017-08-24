@@ -183,26 +183,26 @@ export default class extends Component {
   autoplayTimer = null
   loopJumpTimer = null
 
-  componentWillReceiveProps (nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
     this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.autoplay()
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
-  componentWillUpdate (nextProps, nextState) {
+  componentWillUpdate(nextProps, nextState) {
     // If the index has changed, we notify the parent via the onIndexChanged callback
     if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
   }
 
-  initState (props, updateIndex = false) {
+  initState(props, updateIndex = false) {
     // set the current state
     const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
 
@@ -233,13 +233,13 @@ export default class extends Component {
   }
 
   // include internals with state
-  fullState () {
+  fullState() {
     return Object.assign({}, this.state, this.internals)
   }
 
   onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
-    const offset = this.internals.offset = {}
+    const offset = this.internals.offset = { x: 0, y: 0 }
     const state = { width, height }
 
     if (this.state.total > 1) {
@@ -280,10 +280,10 @@ export default class extends Component {
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.autoplayTimer = setTimeout(() => {
       if (!this.props.loop && (
-          this.props.autoplayDirection
-            ? this.state.index === this.state.total - 1
-            : this.state.index === 0
-        )
+        this.props.autoplayDirection
+          ? this.state.index === this.state.total - 1
+          : this.state.index === 0
+      )
       ) return this.setState({ autoplayEnd: true })
 
       this.scrollBy(this.props.autoplayDirection ? 1 : -1)
@@ -311,9 +311,9 @@ export default class extends Component {
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
       if (this.state.dir === 'x') {
-        e.nativeEvent.contentOffset = {x: e.nativeEvent.position * this.state.width}
+        e.nativeEvent.contentOffset = { x: e.nativeEvent.position * this.state.width }
       } else {
-        e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
+        e.nativeEvent.contentOffset = { y: e.nativeEvent.position * this.state.height }
       }
     }
 
@@ -477,7 +477,7 @@ export default class extends Component {
    * @return {object} react-dom
    */
   renderPagination = () => {
-     // By default, dots only show when `total` >= 2
+    // By default, dots only show when `total` >= 2
     if (this.state.total <= 1) return null
 
     let dots = []
@@ -500,11 +500,11 @@ export default class extends Component {
       marginRight: 3,
       marginTop: 3,
       marginBottom: 3
-    }, this.props.dotStyle ]} />
+    }, this.props.dotStyle]} />
     for (let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
-        ? React.cloneElement(ActiveDot, {key: i})
-        : React.cloneElement(Dot, {key: i})
+        ? React.cloneElement(ActiveDot, { key: i })
+        : React.cloneElement(Dot, { key: i })
       )
     }
 
@@ -575,7 +575,7 @@ export default class extends Component {
       return (
         <ScrollView ref='scrollView'
           {...this.props}
-          {...this.scrollViewPropOverrides()}
+          {...this.scrollViewPropOverrides() }
           contentContainerStyle={[styles.wrapperIOS, this.props.style]}
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
@@ -583,7 +583,7 @@ export default class extends Component {
           onScrollEndDrag={this.onScrollEndDrag}>
           {pages}
         </ScrollView>
-       )
+      )
     }
     return (
       <ViewPagerAndroid ref='scrollView'
@@ -601,7 +601,7 @@ export default class extends Component {
    * Default render
    * @return {object} react-dom
    */
-  render () {
+  render() {
     const state = this.state
     const props = this.props
     const {
@@ -626,7 +626,7 @@ export default class extends Component {
     const loopVal = loop ? 1 : 0
     let pages = []
 
-    const pageStyle = [{width: width, height: height}, styles.slide]
+    const pageStyle = [{ width: width, height: height }, styles.slide]
     const pageStyleLoading = {
       width,
       height,
