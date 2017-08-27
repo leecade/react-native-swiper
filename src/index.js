@@ -208,7 +208,8 @@ export default class extends Component {
 
     const initState = {
       autoplayEnd: false,
-      loopJump: false
+      loopJump: false,
+      offset: {}
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
@@ -224,6 +225,9 @@ export default class extends Component {
     initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
+    initState.offset[initState.dir] = initState.dir === 'y'
+      ? height * props.index
+      : width * props.index
 
     this.internals = {
       ...this.internals,
