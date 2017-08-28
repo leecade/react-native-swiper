@@ -1,6 +1,9 @@
+import { ViewStyle } from 'react-native';
+import * as React from "react";
+
 declare module "react-native-swiper" {
     export interface SwiperProps {
-        style?: React.ViewStyle;
+        style?: ViewStyle;
         showsButtons?: boolean;
         horizontal?: boolean;
         pagingEnabled?: boolean;
@@ -20,9 +23,9 @@ declare module "react-native-swiper" {
         autoplayDirection?: boolean;
         index?: number;
         renderPagination?: (index: number, total: number, swiper: Swiper) => JSX.Element;
-        dotStyle?: React.ViewStyle;
-        activeDotStyle?: React.ViewStyle;
-        paginationStyle?: React.ViewStyle;
+        dotStyle?: ViewStyle;
+        activeDotStyle?: ViewStyle;
+        paginationStyle?: ViewStyle;
         dotColor?: string;
         activeDotColor?: string;
     }
