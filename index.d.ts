@@ -65,6 +65,19 @@ declare module 'react-native-swiper' {
         // Allow custom the prev button.
         prevButton?: JSX.Element
 
+        // Supported ScrollResponder
+        // When animation begins after letting up
+        onScrollBeginDrag?: any
+        // Makes no sense why this occurs first during bounce
+        onMomentumScrollEnd?: any
+        // Immediately after onMomentumScrollEnd
+        onTouchStartCapture?: any
+        // Same, but bubble phase
+        onTouchStart?: any
+        // You could hold the touch start for a long time
+        onTouchEnd?: any
+        // When lifting up - you could pause forever before * lifting
+        onResponderRelease?: any
 
         // If true, the scroll view stops on multiples of the scroll view's size when scrolling. This can be used for
         // horizontal pagination.
