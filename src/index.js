@@ -116,6 +116,10 @@ export default class extends Component {
       PropTypes.object,
       PropTypes.number,
     ]),
+    scrollViewStyle: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number,
+    ]),
     pagingEnabled: PropTypes.bool,
     showsHorizontalScrollIndicator: PropTypes.bool,
     showsVerticalScrollIndicator: PropTypes.bool,
@@ -593,7 +597,8 @@ export default class extends Component {
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
-          onScrollEndDrag={this.onScrollEndDrag}>
+          onScrollEndDrag={this.onScrollEndDrag}
+          style={this.props.scrollViewStyle}>
           {pages}
         </ScrollView>
        )
