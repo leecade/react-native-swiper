@@ -48,7 +48,7 @@ const styles = {
     left: 0,
     right: 0,
     flexDirection: 'row',
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent'
@@ -60,7 +60,7 @@ const styles = {
     top: 0,
     bottom: 0,
     flexDirection: 'column',
-    flex: 1,
+    flexGrow: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'transparent'
@@ -84,7 +84,7 @@ const styles = {
     position: 'absolute',
     top: 0,
     left: 0,
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: 10,
     paddingVertical: 10,
     justifyContent: 'space-between',
