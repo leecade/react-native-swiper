@@ -419,7 +419,7 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS === 'android') {
+    if (Platform.OS !== 'ios') {
       this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
       this.scrollView && this.scrollView.scrollTo({ x, y, animated })
@@ -432,7 +432,7 @@ export default class extends Component {
     })
 
     // trigger onScrollEnd manually in android
-    if (!animated || Platform.OS === 'android') {
+    if (!animated || Platform.OS !== 'ios') {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {
