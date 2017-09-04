@@ -263,7 +263,7 @@ export default class extends Component {
   loopJump = () => {
     if (!this.state.loopJump) return
     const i = this.state.index + (this.props.loop ? 1 : 0)
-    const scrollView = this.refs.scrollView
+    const scrollView = this.scrollView
     this.loopJumpTimer = setTimeout(() => scrollView.setPageWithoutAnimation &&
       scrollView.setPageWithoutAnimation(i), 50)
   }
@@ -420,9 +420,9 @@ export default class extends Component {
     if (state.dir === 'y') y = diff * state.height
 
     if (Platform.OS === 'android') {
-      this.refs.scrollView && this.refs.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
+      this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
-      this.refs.scrollView && this.refs.scrollView.scrollTo({ x, y, animated })
+      this.scrollView && this.scrollView.scrollTo({ x, y, animated })
     }
 
     // update scroll state
