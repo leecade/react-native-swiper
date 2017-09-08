@@ -5,7 +5,7 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.4",
+  "version": "1.5.11",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -54,9 +54,11 @@
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "rimraf": "^2.5.4",
-    "snazzy": "^5.0.0",
-    "standard": "^9.0.0",
+    "snazzy": "^6.0.0",
+    "standard": "^10.0.3",
     "updtr": "^0.2.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "prop-types": "^15.5.10"
+  }
 }
