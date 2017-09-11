@@ -5,7 +5,7 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.11",
+  "version": "1.5.12",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
