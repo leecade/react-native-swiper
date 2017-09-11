@@ -593,7 +593,9 @@ export default class extends Component {
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
-          onScrollEndDrag={this.onScrollEndDrag}>
+          onScrollEndDrag={this.onScrollEndDrag}
+          // https://github.com/facebook/react-native/issues/1831
+          removeClippedSubviews={false}>
           {pages}
         </ScrollView>
        )
