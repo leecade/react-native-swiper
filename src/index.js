@@ -66,6 +66,16 @@ const styles = {
     backgroundColor: 'transparent'
   },
 
+  paginationDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 3,
+    marginRight: 3,
+    marginTop: 3,
+    marginBottom: 3
+  },
+
   title: {
     height: 30,
     justifyContent: 'center',
@@ -93,10 +103,11 @@ const styles = {
 
   buttonText: {
     fontSize: 50,
-    color: '#007aff',
     fontFamily: 'Arial'
   }
 }
+
+const primaryColor = '#007aff';
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
@@ -139,6 +150,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    buttonColor: PropTypes.string,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -487,26 +499,16 @@ export default class extends Component {
     if (this.state.total <= 1) return null
 
     let dots = []
-    const ActiveDot = this.props.activeDot || <View style={[{
-      backgroundColor: this.props.activeDotColor || '#007aff',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.activeDotStyle]} />
-    const Dot = this.props.dot || <View style={[{
-      backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.dotStyle ]} />
+    const ActiveDot = this.props.activeDot || <View style={[
+      styles.paginationDot,
+      {backgroundColor: this.props.activeDotColor || primaryColor},
+      this.props.activeDotStyle
+    ]} />
+    const Dot = this.props.dot || <View style={[
+      styles.paginationDot,
+      {backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)'},
+      this.props.dotStyle
+    ]} />
     for (let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
         ? React.cloneElement(ActiveDot, {key: i})
@@ -534,9 +536,11 @@ export default class extends Component {
   renderNextButton = () => {
     let button = null
 
-    if (this.props.loop ||
-      this.state.index !== this.state.total - 1) {
-      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+    if (this.props.loop || this.state.index !== this.state.total - 1) {
+      button = this.props.nextButton || <Text style={[
+        styles.buttonText,
+        {color: this.props.buttonColor || primaryColor}
+      ]}>›</Text>
     }
 
     return (
@@ -555,7 +559,10 @@ export default class extends Component {
     let button = null
 
     if (this.props.loop || this.state.index !== 0) {
-      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      button = this.props.prevButton || <Text style={[
+        styles.buttonText,
+        {color: this.props.buttonColor || primaryColor}
+      ]}>‹</Text>
     }
 
     return (
