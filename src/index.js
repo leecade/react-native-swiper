@@ -274,7 +274,7 @@ export default class extends Component {
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
     if (Platform.OS === 'ios') {
-      if (this.initialRender && this.props.loop && this.state.total > 1) {
+      if (this.initialRender && this.state.total > 1) {
         this.scrollView.scrollTo({...offset, animated: false})
         this.initialRender = false;
       }
