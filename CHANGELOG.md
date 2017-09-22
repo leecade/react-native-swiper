@@ -1,3 +1,13 @@
+- [1.5.12]
+  + Update core packages
+  + Optionally disable the 'next' control button (thanks [@SSTPIERRE2](https://github.com/SSTPIERRE2))
+  + Fix `Uncaught TypeError: _this.refs.scrollView.scrollTo is not a function` (thanks [@flyskywhy](https://github.com/flyskywhy))
+  + Allow dotStyle and activeDotStyle PropTypes to accept Stylesheet (thanks [@knopt](https://github.com/knopt))
+  + Calculate the offset in the initial state instead of `onLayout` (thanks [@kjkta](https://github.com/kjkta))
+
+- [1.5.11]
+  + Typescript Definition
+
 - [1.5.1]
   + Allow scroll without animate, ref: [scrollBy(index, animated)](#scrollbyindex-animated)
   + Remove [#254](https://github.com/leecade/react-native-swiper/pull/254) which break the scroll direction in loop mode
