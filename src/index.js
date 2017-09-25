@@ -100,7 +100,7 @@ const styles = {
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
-export default class extends Component {
+export default class Swiper extends Component {
   /**
    * Props Validation
    * @type {Object}

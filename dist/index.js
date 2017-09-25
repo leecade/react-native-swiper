@@ -175,21 +175,21 @@
     // missing `module.exports = exports['default'];` with babel6
     // export default React.createClass({
   };
-  var _class = function (_Component) {
-    _inherits(_class, _Component);
+  var Swiper = function (_Component) {
+    _inherits(Swiper, _Component);
 
-    function _class() {
+    function Swiper() {
       var _ref;
 
       var _temp, _this, _ret;
 
-      _classCallCheck(this, _class);
+      _classCallCheck(this, Swiper);
 
       for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
         args[_key] = arguments[_key];
       }
 
-      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = _class.__proto__ || Object.getPrototypeOf(_class)).call.apply(_ref, [this].concat(args))), _this), _this.state = _this.initState(_this.props), _this.autoplayTimer = null, _this.loopJumpTimer = null, _this.onLayout = function (event) {
+      return _ret = (_temp = (_this = _possibleConstructorReturn(this, (_ref = Swiper.__proto__ || Object.getPrototypeOf(Swiper)).call.apply(_ref, [this].concat(args))), _this), _this.state = _this.initState(_this.props), _this.autoplayTimer = null, _this.loopJumpTimer = null, _this.onLayout = function (event) {
         var _event$nativeEvent$la = event.nativeEvent.layout,
             width = _event$nativeEvent$la.width,
             height = _event$nativeEvent$la.height;
@@ -506,7 +506,7 @@
       }, _temp), _possibleConstructorReturn(_this, _ret);
     }
 
-    _createClass(_class, [{
+    _createClass(Swiper, [{
       key: 'componentWillReceiveProps',
       value: function componentWillReceiveProps(nextProps) {
         if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer);
@@ -653,10 +653,10 @@
       }
     }]);
 
-    return _class;
+    return Swiper;
   }(_react.Component);
 
-  _class.propTypes = {
+  Swiper.propTypes = {
     horizontal: _propTypes2.default.bool,
     children: _propTypes2.default.node.isRequired,
     containerStyle: _propTypes2.default.oneOfType([_propTypes2.default.object, _propTypes2.default.number]),
@@ -695,7 +695,7 @@
      * @see http://facebook.github.io/react-native/docs/scrollview.html
      */
   };
-  _class.defaultProps = {
+  Swiper.defaultProps = {
     horizontal: true,
     pagingEnabled: true,
     showsHorizontalScrollIndicator: false,
@@ -723,6 +723,6 @@
      * @return {object} states
      */
   };
-  exports.default = _class;
+  exports.default = Swiper;
   module.exports = exports['default'];
 });
