@@ -480,27 +480,15 @@
       }, _this.refScrollView = function (view) {
         _this.scrollView = view;
       }, _this.renderScrollView = function (pages) {
-        if (_reactNative.Platform.OS === 'ios') {
-          return _react2.default.createElement(
-            _reactNative.ScrollView,
-            _extends({ ref: _this.refScrollView
-            }, _this.props, _this.scrollViewPropOverrides(), {
-              contentContainerStyle: [styles.wrapperIOS, _this.props.style],
-              contentOffset: _this.state.offset,
-              onScrollBeginDrag: _this.onScrollBegin,
-              onMomentumScrollEnd: _this.onScrollEnd,
-              onScrollEndDrag: _this.onScrollEndDrag }),
-            pages
-          );
-        }
         return _react2.default.createElement(
           _reactNative.ScrollView,
           _extends({ ref: _this.refScrollView
-          }, _this.props, {
-            initialPage: _this.props.loop ? _this.state.index + 1 : _this.state.index,
-            onPageSelected: _this.onScrollEnd,
-            key: pages.length,
-            style: [styles.wrapperAndroid, _this.props.style] }),
+          }, _this.props, _this.scrollViewPropOverrides(), {
+            contentContainerStyle: [styles.wrapperIOS, _this.props.style],
+            contentOffset: _this.state.offset,
+            onScrollBeginDrag: _this.onScrollBegin,
+            onMomentumScrollEnd: _this.onScrollEnd,
+            onScrollEndDrag: _this.onScrollEndDrag }),
           pages
         );
       }, _temp), _possibleConstructorReturn(_this, _ret);
