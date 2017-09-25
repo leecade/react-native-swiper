@@ -494,7 +494,7 @@
           );
         }
         return _react2.default.createElement(
-          _reactNative.ViewPagerAndroid,
+          _reactNative.ScrollView,
           _extends({ ref: _this.refScrollView
           }, _this.props, {
             initialPage: _this.props.loop ? _this.state.index + 1 : _this.state.index,
