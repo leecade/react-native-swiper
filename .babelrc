@@ -1,0 +1,11 @@
+{
+  "presets": ["es2015", "stage-2", "react"],
+  "env": {
+    "commonjs": {
+      "plugins": [
+        "add-module-exports",
+        "transform-es2015-modules-umd"
+      ]
+    }
+  }
+}
