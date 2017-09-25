@@ -7,11 +7,12 @@
   ],
   "version": "1.5.12",
   "description": "Swiper component for React Native.",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
     "start": "react-native start",
     "lint": "standard | snazzy",
     "update": "updtr",
+    "build": "cross-env BABEL_ENV=commonjs babel-changed src --out-dir dist",
     "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
     "test": "npm run lint"
   },
@@ -52,7 +53,12 @@
   },
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
+    "babel-changed": "^7.0.0",
     "babel-eslint": "^7.1.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
+    "cross-env": "^5.0.5",
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
     "standard": "^10.0.3",
