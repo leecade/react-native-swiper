@@ -2,7 +2,7 @@
  * react-native-swiper
  * @author leecade<leecade@163.com>
  */
-import React, { Component } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
@@ -100,7 +100,7 @@ const styles = {
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
-export default class Swiper extends Component {
+export default class Swiper extends React.Component {
   /**
    * Props Validation
    * @type {Object}

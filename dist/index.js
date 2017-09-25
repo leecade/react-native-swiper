@@ -175,8 +175,8 @@
     // missing `module.exports = exports['default'];` with babel6
     // export default React.createClass({
   };
-  var Swiper = function (_Component) {
-    _inherits(Swiper, _Component);
+  var Swiper = function (_React$Component) {
+    _inherits(Swiper, _React$Component);
 
     function Swiper() {
       var _ref;
@@ -654,7 +654,7 @@
     }]);
 
     return Swiper;
-  }(_react.Component);
+  }(_react2.default.Component);
 
   Swiper.propTypes = {
     horizontal: _propTypes2.default.bool,
