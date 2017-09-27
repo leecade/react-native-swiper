@@ -230,6 +230,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | :------------ |:---------------:| :---------------:| :-----|
 | style | {...} | `style` | Custom styles will merge with the default styles. |
 | title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. |
+| titleWrapperStyle | - | `style` | Custom styles for title wrapper. |
 
 #### Basic props of `<ScrollView />`
 
