@@ -52,7 +52,7 @@
   },
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
-    "babel-eslint": "^7.1.1",
+    "babel-eslint": "^8.0.1",
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
     "standard": "^10.0.3",
