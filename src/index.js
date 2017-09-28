@@ -114,6 +114,10 @@ export default class extends Component {
       PropTypes.object,
       PropTypes.number,
     ]),
+    scrollViewStyle: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number,
+    ]),
     pagingEnabled: PropTypes.bool,
     showsHorizontalScrollIndicator: PropTypes.bool,
     showsVerticalScrollIndicator: PropTypes.bool,
@@ -231,11 +235,27 @@ export default class extends Component {
     const { width, height } = Dimensions.get('window')
 
     initState.dir = props.horizontal === false ? 'y' : 'x'
-    initState.width = props.width || width
-    initState.height = props.height || height
+
+    if (props.width) {
+      initState.width = props.width
+    } else if (this.state && this.state.width){
+      initState.width = this.state.width
+    } else {
+      initState.width = width;
+    }
+
+    if (props.height) {
+      initState.height = props.height
+    } else if (this.state && this.state.height){
+      initState.height = this.state.height
+    } else {
+      initState.height = height;
+    }
+
     initState.offset[initState.dir] = initState.dir === 'y'
       ? height * props.index
       : width * props.index
+
 
     this.internals = {
       ...this.internals,
@@ -610,7 +630,8 @@ export default class extends Component {
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
-          onScrollEndDrag={this.onScrollEndDrag}>
+          onScrollEndDrag={this.onScrollEndDrag}
+          style={this.props.scrollViewStyle}>
           {pages}
         </ScrollView>
        )
