@@ -230,12 +230,14 @@ export default class extends Component {
     }
 
     // Default: horizontal
+    let _idx = 0;
+    if (props.loop) _idx = 1;
     initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? height * (props.index + _idx)
+      : width * (props.index + _idx)
 
     this.internals = {
       ...this.internals,
