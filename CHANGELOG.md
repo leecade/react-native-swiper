@@ -1,3 +1,7 @@
+- [1.5.13]
+  + Workaround for react-native 0.4.8 contentOffset regression #572 (thanks @nixoz)
+  + Fix wrong calculation of width and height after device rotation #581 (thanks @kostyaVyrodov)
+  + Calculated width & height on layout, used later on re-rendering. Possibility to change ScrollView styles #548 (thanks @germanst)
 - [1.5.12]
   + Update core packages
   + Optionally disable the 'next' control button (thanks [@SSTPIERRE2](https://github.com/SSTPIERRE2))
