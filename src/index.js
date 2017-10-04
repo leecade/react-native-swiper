@@ -137,8 +137,8 @@ export default class extends Component {
     autoplayDirection: PropTypes.bool,
     index: PropTypes.number,
     renderPagination: PropTypes.func,
-    dotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-    activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+    dotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
+    activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
     /**
