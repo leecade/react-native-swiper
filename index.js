@@ -1,2 +1,2 @@
-import Swiper from './src/'
+var Swiper = require('./src/')
 module.exports = Swiper
