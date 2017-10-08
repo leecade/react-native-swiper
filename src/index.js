@@ -96,6 +96,9 @@ const styles = {
   }
 }
 
+// hitSlop for control buttons
+const hitSlop = { top: 15, bottom: 15, left: 15, right: 15 };
+
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
 export default class extends Component {
@@ -580,6 +583,7 @@ export default class extends Component {
       <TouchableOpacity
         onPress={() => button !== null && this.scrollBy(1)}
         disabled={this.props.disableNextButton}
+        hitSlop={hitSlop}
       >
         <View>
           {button}
@@ -596,7 +600,10 @@ export default class extends Component {
     }
 
     return (
-      <TouchableOpacity onPress={() => button !== null && this.scrollBy(-1)}>
+      <TouchableOpacity 
+        onPress={() => button !== null && this.scrollBy(-1)}
+        hitSlop={hitSlop}
+      >
         <View>
           {button}
         </View>
