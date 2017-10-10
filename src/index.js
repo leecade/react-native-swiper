@@ -579,26 +579,6 @@ export default class extends Component {
        marginTop: 3,
        marginBottom: 3
      }, props.dotStyle ]} />
-    //  const smallDot = props.dot || <View style={[{
-    //    backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
-    //    width: 6,
-    //    height: 6,
-    //    borderRadius: 3,
-    //    marginLeft: 4,
-    //    marginRight: 4,
-    //    marginTop: 4,
-    //    marginBottom: 4
-    //  }, props.dotStyle ]} />
-    //  const minimalDot = props.dot || <View style={[{
-    //    backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
-    //    width: 4,
-    //    height: 4,
-    //    borderRadius: 2,
-    //    marginLeft: 5,
-    //    marginRight: 5,
-    //    marginTop: 5,
-    //    marginBottom: 5
-    //  }, props.dotStyle ]} />
      const invisibleDot = props.dot || <View style={[{
        backgroundColor: 'transparent',
        width: 8,
@@ -613,21 +593,6 @@ export default class extends Component {
      for (let i = 0; i < total + 4; i++) {
        dots.push(React.cloneElement(normalDot, {key: 'normalDot' + i}));
      }
-
-    //  for (let i = 0; i < VISIBLE_DOT_NUMBER; i++) {
-    //    let n = dotOffset + i;
-     //
-    //    if (i < DOT_INDEX_OFFSET) {
-    //      dots.splice(n, DOT_INDEX_OFFSET, React.cloneElement(minimalDot, {key: 'minimal' + n}), React.cloneElement(smallDot, {key: 'small' + n + 1}));
-    //      i++;
-    //      continue;
-    //    }
-    //    if (i >= VISIBLE_DOT_NUMBER - DOT_INDEX_OFFSET) {
-    //      dots.splice(n, 2, React.cloneElement(smallDot, {key: 'small' + n}), React.cloneElement(minimalDot, {key: 'minimal' + n + 1}));
-    //      break;
-    //    }
-    //    dots.splice(n, 1, React.cloneElement(normalDot, {key: 'normal' + n}));
-    //  }
 
      dots.splice(index + DOT_INDEX_OFFSET, 1, React.cloneElement(activeDot, {key: 'active' + index + DOT_INDEX_OFFSET}));
 
