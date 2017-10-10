@@ -180,6 +180,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
+| dotType | default | `string` | When `total` is greater than 7, you can set it to `instagram`. This property allows the dots to be slipped. When its value is `instagram`, the prop `loop` must be set to `false`. |
 | onIndexChanged | (index) => null | `func` | Called with the new index when the user swiped |
 
 #### Custom basic style & content

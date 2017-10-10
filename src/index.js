@@ -17,6 +17,14 @@ import {
 } from 'react-native'
 
 /**
+ * the constant of dotType's value is instagram
+ * @type {Number}
+ */
+const VISIBLE_DOT_NUMBER = 7
+const DOT_WIDTH = 14
+const DOT_INDEX_OFFSET = 2
+
+/**
  * Default styles
  * @type {StyleSheetPropType}
  */
@@ -141,6 +149,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    dotType: PropTypes.string,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -171,6 +180,7 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
+    dotType: 'default',
     onIndexChanged: () => null
   }
 
@@ -192,6 +202,27 @@ export default class extends Component {
    */
   autoplayTimer = null
   loopJumpTimer = null
+
+  /**
+   * As the flag of whether the origin is sliding
+   * @type {Object}
+   */
+  instagramAttributes = {
+    startHead: 1,
+    endHead: 5,
+  }
+
+  /**
+   * Fast Slide Distance Records
+   * @type {Number}
+   */
+  slideCountOfShortTime = 0
+
+  /**
+   * Record the last position of the activation point
+   * @type {Number}
+   */
+  oldIndex = 0
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
@@ -219,6 +250,8 @@ export default class extends Component {
     const initState = {
       autoplayEnd: false,
       loopJump: false,
+      diff: 1,  // Left and right slides the flag
+      dotOffset: 0, // The initial offset of visible dot
       offset: {}
     }
 
@@ -339,6 +372,7 @@ export default class extends Component {
    */
   onScrollBegin = e => {
     // update scroll state
+    this.slideCountOfShortTime += 1
     this.internals.isScrolling = true
     this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.fullState(), this)
   }
@@ -366,6 +400,41 @@ export default class extends Component {
 
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
+
+      if (this.props.dotType === 'instagram') {
+        const { index, total, diff, dotOffset } = this.state;
+        const { startHead, endHead } = this.instagramAttributes;
+
+        if (diff > 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + DOT_INDEX_OFFSET !== endHead - 1 || index + 1 === total)) {
+          this.slideCountOfShortTime = index + DOT_INDEX_OFFSET - (endHead - 1) > 0 ? (index + DOT_INDEX_OFFSET - (endHead - 1)) : 1 + (index + 1 === total ? -1 : 0)
+        }
+        if (diff < 0 && this.slideCountOfShortTime > 1 && (this.oldIndex + DOT_INDEX_OFFSET !== startHead + 1 || index === 0)) {
+          this.slideCountOfShortTime = startHead + 1 - (index + DOT_INDEX_OFFSET) > 0 ? (startHead + 1 - (index + DOT_INDEX_OFFSET)) : 1 + (index + 1 === total ? 1 : 0)
+        }
+
+        if (diff > 0 && (endHead === index + DOT_INDEX_OFFSET || endHead + this.slideCountOfShortTime - 1 === index + DOT_INDEX_OFFSET || index + 1 === total)) {
+          this.setState({ dotOffset: dotOffset + this.slideCountOfShortTime }, () => {
+            this.slideCountOfShortTime = 0
+            if (!!this.refs.scrollViewDot) {
+              this.refs.scrollViewDot.scrollTo({ x: ((index - DOT_INDEX_OFFSET < 0) ? 0 : (index - DOT_INDEX_OFFSET) * DOT_WIDTH), y: 0, animated: true })
+            }
+          })
+          this.instagramAttributes.startHead += this.slideCountOfShortTime
+          this.instagramAttributes.endHead = index + DOT_INDEX_OFFSET + 1
+        }
+        if (diff < 0 && (startHead === index + DOT_INDEX_OFFSET || startHead - this.slideCountOfShortTime + 1 === index + DOT_INDEX_OFFSET)) {
+          this.setState({ dotOffset: dotOffset - this.slideCountOfShortTime }, () => {
+            this.slideCountOfShortTime = 0
+            if (!!this.refs.scrollViewDot) {
+              this.refs.scrollViewDot.scrollTo({ x: ((index - 1 < 0) ? 0 : (index) * DOT_WIDTH), y: 0, animated: true })
+            }
+          })
+          this.instagramAttributes.startHead = index + DOT_INDEX_OFFSET - 1
+          this.instagramAttributes.endHead -= this.slideCountOfShortTime
+        }
+        this.slideCountOfShortTime = 0
+        this.oldIndex = index
+      }
     })
   }
 
@@ -401,6 +470,8 @@ export default class extends Component {
 
     // Do nothing if offset no change.
     if (!diff) return
+
+    this.setState({ diff });
 
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
@@ -455,6 +526,9 @@ export default class extends Component {
 
   scrollBy = (index, animated = true) => {
     if (this.internals.isScrolling || this.state.total < 2) return
+
+    this.slideCountOfShortTime += 1
+
     const state = this.state
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
@@ -514,6 +588,75 @@ export default class extends Component {
 
     return overrides
   }
+
+  /**
+   * Render Instgram Pagination
+   * @return {object} react-dom
+   */
+   renderPaginationDotType = () => {
+     const props = this.props;
+     const { index, total, diff, dotOffset, dir } = this.state;
+
+     // By default, dots only show when `total` >= 7
+     if (total <= VISIBLE_DOT_NUMBER) return this.renderPagination()
+
+     const dots = [];
+
+     const activeDot = props.activeDot || <View style={[{
+       backgroundColor: props.activeDotColor || '#007aff',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }, props.activeDotStyle]} />
+     const normalDot = props.dot || <View style={[{
+       backgroundColor: props.dotColor || 'rgba(0,0,0,.2)',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }, props.dotStyle ]} />
+     const invisibleDot = props.dot || <View style={[{
+       backgroundColor: 'transparent',
+       width: 8,
+       height: 8,
+       borderRadius: 4,
+       marginLeft: 3,
+       marginRight: 3,
+       marginTop: 3,
+       marginBottom: 3
+     }]} />
+
+     for (let i = 0; i < total + 4; i++) {
+       dots.push(React.cloneElement(normalDot, {key: 'normalDot' + i}));
+     }
+
+     dots.splice(index + DOT_INDEX_OFFSET, 1, React.cloneElement(activeDot, {key: 'active' + index + DOT_INDEX_OFFSET}));
+
+     dots.splice(0, 2, React.cloneElement(invisibleDot, {key: 'invisible0'}), React.cloneElement(invisibleDot, {key: 'invisible1'}));
+     dots.splice(total + DOT_INDEX_OFFSET, 2, React.cloneElement(invisibleDot, {key: 'invisible00'}), React.cloneElement(invisibleDot, {key: 'invisible01'}));
+
+     return (
+       <View style={[
+         styles['pagination_' + dir],
+         props.paginationStyle,
+         {
+           width: VISIBLE_DOT_NUMBER * DOT_WIDTH,
+           left: (width - VISIBLE_DOT_NUMBER * DOT_WIDTH) / 2,
+         },
+       ]}>
+        <ScrollView pointerEvents='none' ref="scrollViewDot" horizontal={true} showsHorizontalScrollIndicator={false}>
+          {dots}
+        </ScrollView>
+       </View>
+     )
+   }
 
   /**
    * Render pagination
@@ -671,6 +814,7 @@ export default class extends Component {
       renderPagination,
       showsButtons,
       showsPagination,
+      dotType,
     } = this.props;
     // let dir = state.dir
     // let key = 0
@@ -718,9 +862,10 @@ export default class extends Component {
     return (
       <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
         {this.renderScrollView(pages)}
-        {showsPagination && (renderPagination
+        {dotType === 'default' && showsPagination && (renderPagination
           ? renderPagination(index, total, this)
           : this.renderPagination())}
+        {props.dotType === 'instagram' && this.renderPaginationDotType()}
         {this.renderTitle()}
         {showsButtons && this.renderButtons()}
       </View>
