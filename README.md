@@ -206,7 +206,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | dotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotStyle | - | `object` | Allow custom the active-dot element. |
-| briefPagination | false | `bool` | Set to `true` make briefPagination mode. |
+| briefPagination | false | `bool` | Set to `true` make briefPagination mode. Of course, the total number of the carousel figure must be greater than the value of `visibleDotQuantity`. |
 | visibleDotQuantity | 7 | `number` | Set to display the number of dots in brief mode. Values can take the following values. `3`、`5`、`7`、`9` |
 | dotWidth | 14 | `number` | If you set the style of the dot, you must modify this value, otherwise it will cause slip errors. This value is generally `width` + `padding` + `margin` |
 
