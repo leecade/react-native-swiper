@@ -172,9 +172,9 @@ export default class extends Component {
     autoplayDirection: true,
     index: 0,
     onIndexChanged: () => null,
-    briefPagination: false,
-    visibleDotQuantity: 7,
-    dotWidth: 14
+    shrinkPagination: false,
+    paginationDotCount: 7,
+    dotSize: 14
   }
 
   /**
@@ -259,7 +259,7 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
-    initState.criticalValue = Math.ceil(props.visibleDotQuantity / 2) - 1;
+    initState.animationStartIndex = Math.ceil(props.paginationDotCount / 2) - 1;
 
     this.internals = {
       ...this.internals,
@@ -371,19 +371,26 @@ export default class extends Component {
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
 
-      // if props.briefPagination is false or this.scrollViewDot is false
-      if (!this.props.briefPagination || !this.scrollViewDot) {
+      // if props.shrinkPagination is false or this.scrollViewDot is false
+      if (!this.props.shrinkPagination || !this.scrollViewDot) {
         return;
       }
       // dot sliding logic
-      if (this.state.index > this.state.criticalValue && this.state.index < this.state.total - this.state.criticalValue) {
-        this.scrollViewDot.scrollTo({ x: (this.state.index - this.state.criticalValue) * this.props.dotWidth, y: 0, animated: true })
+      if (this.state.index > this.state.animationStartIndex && this.state.index < this.state.total - this.state.animationStartIndex) {
+        this.scrollViewDot.scrollTo({
+          x: this.props.horizontal ? (this.state.index - this.state.animationStartIndex) * this.props.dotSize : 0,
+          y: !this.props.horizontal ? (this.state.index - this.state.animationStartIndex) * this.props.dotSize : 0,
+          animated: true
+        })
       }
-      if (this.state.index === 0 || this.state.index === this.state.criticalValue) {
+      if (this.state.index === 0 || this.state.index === this.state.animationStartIndex) {
         this.scrollViewDot.scrollTo({ x: 0, y: 0, animated: true })
       }
       if (this.state.index === this.state.total - 1) {
-        this.scrollViewDot.scrollTo({ x: (this.state.total - this.props.visibleDotQuantity) * this.props.dotWidth, y: 0, animated: true })
+        this.scrollViewDot.scrollTo({
+          x: this.props.horizontal ? (this.state.total - this.props.paginationDotCount) * this.props.dotSize : 0,
+          y: !this.props.horizontal ? (this.state.total - this.props.paginationDotCount) * this.props.dotSize : 0
+        })
       }
     })
   }
@@ -539,8 +546,8 @@ export default class extends Component {
    * @return {object} react-dom
    */
   renderPagination = () => {
-    const { width } = Dimensions.get('window')
-    const { briefPagination, visibleDotQuantity, dotWidth } = this.props;
+    const { width, height } = Dimensions.get('window')
+    const { shrinkPagination, paginationDotCount, dotSize } = this.props;
      // By default, dots only show when `total` >= 2
     if (this.state.total <= 1) return null
 
@@ -572,21 +579,27 @@ export default class extends Component {
       )
     }
 
-    // briefPagination modal.
-    if (briefPagination && this.state.total > visibleDotQuantity && [3, 5, 7, 9].includes(visibleDotQuantity)) {
+    // shrinkPagination modal.
+    if (shrinkPagination && this.state.total > paginationDotCount && [3, 5, 7, 9].includes(paginationDotCount)) {
+      const shrinkPaginationViewStyle = this.props.horizontal
+      ? {
+       width: paginationDotCount * dotSize,
+       left: (width - paginationDotCount * dotSize) / 2,
+      }
+      : {
+        height: paginationDotCount * dotSize,
+        top: (height - paginationDotCount * dotSize) / 2,
+      }
       return (
         <View style={[
           styles['pagination_' + this.state.dir],
           this.props.paginationStyle,
-          {
-           width: visibleDotQuantity * dotWidth,
-           left: (width - visibleDotQuantity * dotWidth) / 2,
-          },
+          shrinkPaginationViewStyle
         ]}>
          <ScrollView
           pointerEvents='none'
           ref={ref => (this.scrollViewDot = ref)}
-          horizontal={true}
+          horizontal={this.props.horizontal}
           showsHorizontalScrollIndicator={false}
          >
           {dots}
