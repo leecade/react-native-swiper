@@ -271,7 +271,7 @@ export default class extends Component {
 
   onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
-    const offset = this.internals.offset = {}
+    const offset = this.internals.offset = {x:0, y:0}
     const state = { width, height }
 
     if (this.state.total > 1) {
