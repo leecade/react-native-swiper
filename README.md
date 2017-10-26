@@ -22,8 +22,15 @@
 > see: [ROADMAP.md](ROADMAP.md)
 
 ## Changelogs
+- **[1.5.6]**
+  + Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
+  + Add containerStyle prop to customize the view container.
+  
+- [1.5.5]
+  + Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
-- **[1.5.4]**
+
+- [1.5.4]
   + Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
   + Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
 
@@ -45,29 +52,24 @@
 
 ### [examples/components/Basic](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Basic)
 
-![](http://i.imgur.com/zrsazAG.gif =300x)
+![](http://i.imgur.com/zrsazAG.gif=300x)
 
 ### [examples/components/Swiper](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Swiper)
 
-![](http://i.imgur.com/hP3f3oO.gif =300x)
+![](http://i.imgur.com/hP3f3oO.gif=300x)
 
 ### [examples/components/SwiperNumber](https://github.com/leecade/react-native-swiper/blob/master/examples/components/SwiperNumber)
 
-![](http://i.imgur.com/0rqESVb.gif =300x)
+![](http://i.imgur.com/0rqESVb.gif=300x)
 
 ### [examples/components/Phone](https://github.com/leecade/react-native-swiper/blob/master/examples/components/Phone)
 
-![](http://i.imgur.com/c1BhjZm.gif =300x)
+![](http://i.imgur.com/c1BhjZm.gif=300x)
 
 ### [examples/components/LoadMinimal](https://github.com/leecade/react-native-swiper/blob/master/examples/components/LoadMinimal)
 
-![](http://i.imgur.com/LAOHbJA.gif =300x)
+![](http://i.imgur.com/LAOHbJA.gif=300x)
 
-### [examples/components/PhotoView](https://github.com/leecade/react-native-swiper/blob/master/examples/components/PhotoView)
-
-![](http://i.imgur.com/GkIRzjO.gif =300x)
-
-> with [react-native-photo-view](https://github.com/alwx/react-native-photo-view)
 
 ## Getting Started
 
@@ -96,7 +98,7 @@ $ npm i react-native-swiper --save
 - Install `react-native` first
 
 ```bash
-$ npm i react-native -g
+$ npm i react-native-cli -g
 ```
 
 - Initialization of a react-native project
@@ -178,6 +180,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | index | 0 | `number` | Index number of initial slide. |
 | showsButtons | false | `bool` | Set to `true` make control buttons visible. |
 | autoplay | false | `bool` | Set to `true` enable auto play mode. |
+| onIndexChanged | (index) => null | `func` | Called with the new index when the user swiped |
 
 #### Custom basic style & content
 

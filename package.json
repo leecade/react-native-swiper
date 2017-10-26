@@ -75,7 +75,8 @@
     "react-native",
     "ios"
   ],
-  "license": "ISC",
+  "version": "1.5.13",
+  "description": "Swiper component for React Native.",
   "main": "index.js",
   "maintainers": [
     {

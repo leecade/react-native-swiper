@@ -9,6 +9,10 @@ import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 
 const styles = {
+  container: {
+    flex: 1
+  },
+
   wrapper: {
   },
 
@@ -54,7 +58,7 @@ const styles = {
 export default class extends Component {
   render () {
     return (
-      <View>
+      <View style={styles.container}>
         <Swiper style={styles.wrapper} height={200} horizontal={false} autoplay>
           <View style={styles.slide1}>
             <Text style={styles.text}>Hello Swiper</Text>
