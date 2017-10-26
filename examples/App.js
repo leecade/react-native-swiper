@@ -7,4 +7,4 @@ import Basic from './components/Basic/'
 // import LoadMinimal from './components/LoadMinimal/'
 // import PhotoView from './components/PhotoView/'
 // import Header from './components/Header/'
-AppRegistry.registerComponent('examples', () => Header)
+AppRegistry.registerComponent('examples', () => Basic)

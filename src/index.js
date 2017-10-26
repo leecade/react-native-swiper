@@ -100,7 +100,7 @@ const styles = {
     height: undefined,
     flexDirection: 'column',
     alignSelf: 'stretch',
-    overflow: 'visible',
+    overflow: 'hidden',
   },
 }
 
@@ -140,7 +140,7 @@ export default class extends Component {
     showsBackgroundImage: PropTypes.bool,
     // require() returns a number
     backgroundImage: PropTypes.number,
-    renderHeader: PropTypes.func,
+    renderHeader: PropTypes.object,
   }
 
   /**
@@ -508,6 +508,15 @@ export default class extends Component {
     )
   }
 
+  // Set a header
+  renderHeader = () => {
+    if (this.props.renderHeader) {
+      return this.props.renderHeader;
+    } else {
+      return;
+    }
+  }
+
   renderTitle = () => {
     const child = this.props.children[this.state.index]
     const title = child && child.props && child.props.title
@@ -617,6 +626,7 @@ export default class extends Component {
     // For make infinite at least total > 1
     if (total > 1) {
       // Re-design a loop model for avoid img flickering
+      // @FIXME loading component twice
       pages = Object.keys(children)
       if (loop) {
         pages.unshift(total - 1 + '')
@@ -654,7 +664,7 @@ export default class extends Component {
             style={styles.backgroundImage}
             source={this.props.backgroundImage}>
 
-            {this.props.renderHeader()}
+            {this.renderHeader()}
             {this.renderScrollView(pages)}
             {props.showsPagination && (props.renderPagination
               ? this.props.renderPagination(state.index, state.total, this)
@@ -671,6 +681,7 @@ export default class extends Component {
         width: state.width,
         height: state.height
       }]}>
+        {this.renderHeader()}
         {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
           ? this.props.renderPagination(state.index, state.total, this)
