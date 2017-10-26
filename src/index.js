@@ -4,7 +4,9 @@
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+
 import {
+  Image,
   Text,
   View,
   ViewPropTypes,
@@ -14,7 +16,13 @@ import {
   ViewPagerAndroid,
   Platform,
   ActivityIndicator
-} from 'react-native'
+} from 'react-native';
+
+const { width, height } = Dimensions.get('window');
+const imageDimensions = {
+  height: window.height,
+  width: window.width
+};
 
 /**
  * Default styles
@@ -93,7 +101,16 @@ const styles = {
     fontSize: 50,
     color: '#007aff',
     fontFamily: 'Arial'
-  }
+  },
+
+  backgroundImage: {
+    flex: 1,
+    width: undefined,
+    height: undefined,
+    flexDirection: 'column',
+    alignSelf: 'stretch',
+    overflow: 'hidden',
+  },
 }
 
 // missing `module.exports = exports['default'];` with babel6
@@ -141,6 +158,9 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    showsBackgroundImage: PropTypes.bool,
+    backgroundImage: PropTypes.number,
+    renderHeader: PropTypes.object,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -171,6 +191,7 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
+    showsBackgroundImage: false,
     onIndexChanged: () => null
   }
 
@@ -558,6 +579,15 @@ export default class extends Component {
     )
   }
 
+  // Set a header
+  renderHeader = () => {
+    if (this.props.renderHeader) {
+      return this.props.renderHeader;
+    } else {
+      return;
+    }
+  }
+
   renderTitle = () => {
     const child = this.props.children[this.state.index]
     const title = child && child.props && child.props.title
@@ -689,6 +719,7 @@ export default class extends Component {
     // For make infinite at least total > 1
     if (total > 1) {
       // Re-design a loop model for avoid img flickering
+      // @FIXME loading component twice
       pages = Object.keys(children)
       if (loop) {
         pages.unshift(total - 1 + '')
@@ -715,8 +746,39 @@ export default class extends Component {
       pages = <View style={pageStyle} key={0}>{children}</View>
     }
 
+    // For adding a background image
+    if (this.props.showsBackgroundImage) {
+      return (
+        <View style={[styles.container, {
+          width: state.width,
+          height: state.height
+        }]}>
+          <Image 
+            style={styles.backgroundImage}
+            source={this.props.backgroundImage}>
+
+            {this.renderHeader()}
+            {this.renderScrollView(pages)}
+            {props.showsPagination && (props.renderPagination
+              ? this.props.renderPagination(state.index, state.total, this)
+              : this.renderPagination())}
+            {this.renderTitle()}
+            {this.props.showsButtons && this.renderButtons()}
+
+          </Image>
+        </View>
+      ) 
+    }
     return (
-      <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
+      <View style={[
+        styles.container, 
+        containerStyle, 
+        {
+          width: state.width,
+          height: state.height
+        }]} 
+        onLayout={this.onLayout}>
+        {this.renderHeader()}
         {this.renderScrollView(pages)}
         {showsPagination && (renderPagination
           ? renderPagination(index, total, this)
@@ -724,6 +786,6 @@ export default class extends Component {
         {this.renderTitle()}
         {showsButtons && this.renderButtons()}
       </View>
-    )
+    ) 
   }
 }

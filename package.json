@@ -1,5 +1,75 @@
 {
-  "name": "react-native-swiper",
+  "_args": [
+    [
+      {
+        "raw": "react-native-swiper",
+        "scope": null,
+        "escapedName": "react-native-swiper",
+        "name": "react-native-swiper",
+        "rawSpec": "",
+        "spec": "latest",
+        "type": "tag"
+      },
+      "/Users/charlle/Documents/Git/Atlas/atlas-mob"
+    ]
+  ],
+  "_from": "react-native-swiper@latest",
+  "_id": "react-native-swiper@1.5.4",
+  "_inCache": true,
+  "_location": "/react-native-swiper",
+  "_nodeVersion": "7.1.0",
+  "_npmOperationalInternal": {
+    "host": "packages-12-west.internal.npmjs.com",
+    "tmp": "tmp/react-native-swiper-1.5.4.tgz_1479688466532_0.9815433383919299"
+  },
+  "_npmUser": {
+    "name": "leecade",
+    "email": "leecade@163.com"
+  },
+  "_npmVersion": "4.0.2",
+  "_phantomChildren": {},
+  "_requested": {
+    "raw": "react-native-swiper",
+    "scope": null,
+    "escapedName": "react-native-swiper",
+    "name": "react-native-swiper",
+    "rawSpec": "",
+    "spec": "latest",
+    "type": "tag"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/react-native-swiper/-/react-native-swiper-1.5.4.tgz",
+  "_shasum": "a85535b5374ef8d605a7a720e447ac46816ac448",
+  "_shrinkwrap": null,
+  "_spec": "react-native-swiper",
+  "_where": "/Users/charlle/Documents/Git/Atlas/atlas-mob",
+  "author": "",
+  "ava": {
+    "babel": "inherit",
+    "require": []
+  },
+  "bugs": {
+    "url": "https://github.com/leecade/react-native-swiper/issues"
+  },
+  "dependencies": {},
+  "description": "Swiper component for React Native.",
+  "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "rimraf": "^2.5.4",
+    "snazzy": "^5.0.0",
+    "standard": "^8.5.0",
+    "updtr": "^0.2.3"
+  },
+  "directories": {},
+  "dist": {
+    "shasum": "a85535b5374ef8d605a7a720e447ac46816ac448",
+    "tarball": "https://registry.npmjs.org/react-native-swiper/-/react-native-swiper-1.5.4.tgz"
+  },
+  "gitHead": "2b99e5dd18d7bce38f603631c3370a220383855e",
+  "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "keywords": [
     "react-component",
     "react-native",
@@ -8,18 +78,39 @@
   "version": "1.5.13",
   "description": "Swiper component for React Native.",
   "main": "index.js",
-  "scripts": {
-    "start": "react-native start",
-    "lint": "standard | snazzy",
-    "update": "updtr",
-    "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
-    "test": "npm run lint"
-  },
+  "maintainers": [
+    {
+      "name": "leecade",
+      "email": "leecade@163.com"
+    },
+    {
+      "name": "rajkissu",
+      "email": "rajkissu@gmail.com"
+    },
+    {
+      "name": "tasiyo7333",
+      "email": "taisyo9170@yahoo.co.jp"
+    }
+  ],
+  "name": "react-native-swiper",
+  "optionalDependencies": {},
   "pre-commit": {
     "run": [
       "precommit"
     ],
     "silent": true
+  },
+  "readme": "ERROR: No README data found!",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leecade/react-native-swiper.git"
+  },
+  "scripts": {
+    "lint": "standard | snazzy",
+    "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
+    "start": "react-native start",
+    "test": "npm run lint",
+    "update": "updtr"
   },
   "standard": {
     "parser": "babel-eslint",
@@ -37,28 +128,5 @@
       "node_modules/"
     ]
   },
-  "ava": {
-    "babel": "inherit",
-    "require": []
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/leecade/react-native-swiper.git"
-  },
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/leecade/react-native-swiper/issues"
-  },
-  "homepage": "https://github.com/leecade/react-native-swiper#readme",
-  "devDependencies": {
-    "babel-eslint": "^8.0.1",
-    "rimraf": "^2.5.4",
-    "snazzy": "^6.0.0",
-    "standard": "^10.0.3",
-    "updtr": "^2.0.0"
-  },
-  "dependencies": {
-    "prop-types": "^15.5.10"
-  }
+  "version": "1.5.4"
 }
