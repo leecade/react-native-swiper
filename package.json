@@ -53,6 +53,13 @@
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
     "babel-eslint": "^8.0.1",
+    "babel-preset-react-native": "4.0.0",
+    "eslint": "^4.7.2",
+    "eslint-config-airbnb": "^15.1.0",
+    "eslint-plugin-import": "^2.7.0",
+    "eslint-plugin-jsx-a11y": "^5.1.1",
+    "eslint-plugin-react": "^7.4.0",
+    "eslint-plugin-react-native": "^3.1.0",
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
     "standard": "^10.0.3",
