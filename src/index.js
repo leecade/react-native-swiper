@@ -252,22 +252,24 @@ export default class extends Component {
       initState.height = height;
     }
 
+    // since defaultProps of index is 0
+    // when nextProps didnt contain index, initial offset would be { 0, 0 }
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? height * initState.index
+      : width * initState.index;
 
     // fix render last page first when loop = true
     if (props.loop) {
       initState.offset[initState.dir] = initState.dir === 'y'
-        ? height * (props.index + 1)
-        : width * (props.index + 1)
+        ? height * (initState.index + 1)
+        : width * (initState.index + 1);
     }
 
 
     this.internals = {
-      ...this.internals,
       // set initial offset
       offset: initState.offset,
+      ...this.internals,
       isScrolling: false
     };
     return initState
