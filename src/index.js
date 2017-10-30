@@ -256,9 +256,18 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
+    // fix render last page first when loop = true
+    if (props.loop) {
+      initState.offset[initState.dir] = initState.dir === 'y'
+        ? height * (props.index + 1)
+        : width * (props.index + 1)
+    }
+
 
     this.internals = {
       ...this.internals,
+      // set initial offset
+      offset: initState.offset,
       isScrolling: false
     };
     return initState
@@ -271,18 +280,24 @@ export default class extends Component {
 
   onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
-    const offset = this.internals.offset = {}
+    // if I have only one image as placeholder, and replace it when other images loaded,
+    // updateIndex would never be triggered until Carousel re-render;
+    // because initial offset is undefined when children.length === 1
+    // offset[dir] minus internals.offset[dir] would be NaN,
+    // function updateIndex would return immediately.
+    const offset = this.internals.offset
     const state = { width, height }
 
-    if (this.state.total > 1) {
-      let setup = this.state.index
-      if (this.props.loop) {
-        setup++
-      }
-      offset[this.state.dir] = this.state.dir === 'y'
-        ? height * setup
-        : width * setup
-    }
+    // seems unnecessary
+    // if (this.state.total > 1) {
+    //   let setup = this.state.index
+    //   if (this.props.loop) {
+    //     setup++
+    //   }
+    //   offset[this.state.dir] = this.state.dir === 'y'
+    //     ? height * setup
+    //     : width * setup
+    // }
 
     // only update the offset in state if needed, updating offset while swiping
     // causes some bad jumping / stuttering
