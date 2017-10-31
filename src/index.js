@@ -265,13 +265,18 @@ export default class extends Component {
         : width * (initState.index + 1);
     }
 
+    if (state.total === initState.total && !props.updateIndex) {
+      // retain the offset
+      initState.offset = this.internals.offset;
+    }
 
     this.internals = {
-      // set initial offset
-      offset: initState.offset,
       ...this.internals,
+      // update offset
+      offset: { ...initState.offset },
       isScrolling: false
     };
+
     return initState
   }
 
