@@ -223,7 +223,6 @@ export default class extends Component {
     }
 
     initState.total = props.children ? props.children.length || 1 : 0
-
     if (state.total === initState.total && !updateIndex) {
       // retain the index
       initState.index = state.index
@@ -256,11 +255,11 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
-
     this.internals = {
       ...this.internals,
       isScrolling: false
     };
+
     return initState
   }
 
@@ -271,7 +270,7 @@ export default class extends Component {
 
   onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
-    const offset = this.internals.offset = {x:0, y:0}
+    const offset = this.internals.offset = {x:-884, y:0}
     const state = { width, height }
 
     if (this.state.total > 1) {
@@ -359,11 +358,9 @@ export default class extends Component {
         e.nativeEvent.contentOffset = {y: e.nativeEvent.position * this.state.height}
       }
     }
-
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir, () => {
       this.autoplay()
       this.loopJump()
-
       // if `onMomentumScrollEnd` registered will be called here
       this.props.onMomentumScrollEnd && this.props.onMomentumScrollEnd(e, this.fullState(), this)
     })
@@ -626,8 +623,9 @@ export default class extends Component {
         <ScrollView ref={this.refScrollView}
           {...this.props}
           {...this.scrollViewPropOverrides()}
+          removeClippedSubviews={false}
           contentContainerStyle={[styles.wrapperIOS, this.props.style]}
-          contentOffset={this.state.offset}
+          // contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}
@@ -694,7 +692,6 @@ export default class extends Component {
         pages.unshift(total - 1 + '')
         pages.push('0')
       }
-
       pages = pages.map((page, i) => {
         if (loadMinimal) {
           if (i >= (index + loopVal - loadMinimalSize) &&
