@@ -355,6 +355,9 @@ export default class extends Component {
   onScrollEnd = e => {
     // update scroll state
     this.internals.isScrolling = false
+    this.setState({
+      autoplayEnd: false
+    })
 
     // making our events coming from android compatible to updateIndex logic
     if (!e.nativeEvent.contentOffset) {
