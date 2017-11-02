@@ -212,6 +212,11 @@ export default class extends Component {
     if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
   }
 
+  componentDidUpdate(oldProps) {
+    // If the autoplay was programmatically enabled
+    if (!oldProps.autoplay && this.props.autoplay) this.autoplay()
+  }
+
   initState (props, updateIndex = false) {
     // set the current state
     const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
