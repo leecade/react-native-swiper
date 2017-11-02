@@ -270,7 +270,7 @@ export default class extends Component {
   }
 
   onLayout = (event) => {
-    const { width, height } = event.nativeEvent.layout
+    const { width, height } = Dimensions.get('window')
     const offset = this.internals.offset = {}
     const state = { width, height }
 
