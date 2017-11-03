@@ -13,7 +13,8 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  PanResponder,
 } from 'react-native'
 
 /**
@@ -192,6 +193,20 @@ export default class extends Component {
    */
   autoplayTimer = null
   loopJumpTimer = null
+
+  componentWillMount () {
+    if (Platform.OS !== 'ios') {
+      this._panResponder = PanResponder.create({
+        onStartShouldSetPanResponder: (evt, gestureState) => true,
+        onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
+        onMoveShouldSetPanResponder: (evt, gestureState) => true,
+        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+        // blocking nativeResponder makes it hard to scroll ViewPagerAndroid in a ScrollView
+        // I don't know how it works since I know little about java, but it did work in my case
+        onShouldBlockNativeResponder: (evt, gestureState) => false,
+      })
+    }
+  }
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
@@ -664,7 +679,9 @@ export default class extends Component {
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
         onPageSelected={this.onScrollEnd}
         key={pages.length}
-        style={[styles.wrapperAndroid, this.props.style]}>
+        style={[styles.wrapperAndroid, this.props.style]}
+        {...this._panResponder.panHandlers}
+      >
         {pages}
       </ViewPagerAndroid>
     )
