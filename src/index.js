@@ -76,7 +76,7 @@ const styles = {
     backgroundColor: 'transparent'
   },
 
-  buttonWrapper: {
+  buttonWrapper_x: {
     backgroundColor: 'transparent',
     flexDirection: 'row',
     position: 'absolute',
@@ -89,10 +89,27 @@ const styles = {
     alignItems: 'center'
   },
 
-  buttonText: {
+  buttonWrapper_y: {
+    backgroundColor: 'transparent',
+    flexDirection: 'column-reverse',
+    position: 'absolute',
+    top: 20,
+    left: 0,
+    flex: 1,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+
+  horizontalButtonText: {
     fontSize: 50,
     color: '#007aff',
-    fontFamily: 'Arial'
+  },
+  verticalButtonText: {
+    fontSize: 50,
+    color: '#007aff',
+    transform: [ {rotate: '90deg'} ]
   }
 }
 
@@ -573,7 +590,11 @@ export default class extends Component {
 
     if (this.props.loop ||
       this.state.index !== this.state.total - 1) {
-      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+      if (this.props.horizontal) {
+        button = this.props.nextButton || <Text style={styles.horizontalButtonText}>›</Text>
+      } else {
+        button = this.props.nextButton || <Text style={styles.verticalButtonText}>›</Text>
+      }
     }
 
     return (
@@ -592,7 +613,11 @@ export default class extends Component {
     let button = null
 
     if (this.props.loop || this.state.index !== 0) {
-      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      if (this.props.horizontal) {
+        button = this.props.prevButton || <Text style={styles.horizontalButtonText}>‹</Text>
+      } else {
+        button = this.props.prevButton || <Text style={styles.verticalButtonText}>‹</Text>
+      }
     }
 
     return (
@@ -605,15 +630,28 @@ export default class extends Component {
   }
 
   renderButtons = () => {
-    return (
-      <View pointerEvents='box-none' style={[styles.buttonWrapper, {
-        width: this.state.width,
-        height: this.state.height
-      }, this.props.buttonWrapperStyle]}>
-        {this.renderPrevButton()}
-        {this.renderNextButton()}
-      </View>
-    )
+    if (this.props.horizontal) {
+      return (
+        <View pointerEvents='box-none' style={[styles.buttonWrapper_x, {
+          width: this.state.width,
+          height: this.state.height
+        }, this.props.buttonWrapperStyle]}>
+          {this.renderPrevButton()}
+          {this.renderNextButton()}
+        </View>
+      )
+    }
+    else {
+      return (
+        <View pointerEvents='box-none' style={[styles.buttonWrapper_y, {
+          width: this.state.width,
+          height: this.state.height
+        }, this.props.buttonWrapperStyle]}>
+          {this.renderNextButton()}
+          {this.renderPrevButton()}
+        </View>
+      )
+    }
   }
 
   refScrollView = view => {
