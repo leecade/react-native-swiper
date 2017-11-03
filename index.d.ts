@@ -2,7 +2,7 @@ declare module 'react-native-swiper' {
     import { ViewStyle } from 'react-native'
     import { Component } from 'react'
 
-    interface SwiperProps {
+    export interface SwiperProps {
         // Basic
         // If true, the scroll view's children are arranged horizontally in a row instead of vertically in a column.
         horizontal?: boolean
