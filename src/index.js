@@ -196,14 +196,18 @@ export default class extends Component {
 
   componentWillMount () {
     if (Platform.OS !== 'ios') {
+      const shouldSetResponder = (evt, gestureState) => this.props.horizontal
+        && (Math.abs(gestureState.vx) > Math.abs(gestureState.vy));
       this._panResponder = PanResponder.create({
-        onStartShouldSetPanResponder: (evt, gestureState) => true,
-        onStartShouldSetPanResponderCapture: (evt, gestureState) => true,
-        onMoveShouldSetPanResponder: (evt, gestureState) => true,
-        onMoveShouldSetPanResponderCapture: (evt, gestureState) => true,
+        onStartShouldSetPanResponder: shouldSetResponder,
+        onStartShouldSetPanResponderCapture: shouldSetResponder,
+        onMoveShouldSetPanResponder: shouldSetResponder,
+        onMoveShouldSetPanResponderCapture: shouldSetResponder,
+        onPanResponderRelease: () => false,
+        onPanResponderTerminate: () => false,
         // blocking nativeResponder makes it hard to scroll ViewPagerAndroid in a ScrollView
         // I don't know how it works since I know little about java, but it did work in my case
-        onShouldBlockNativeResponder: (evt, gestureState) => false,
+        onShouldBlockNativeResponder: () => false,
       })
     }
   }
@@ -469,16 +473,8 @@ export default class extends Component {
       // Setting the offset to the same thing will not do anything,
       // so we increment it by 1 then immediately set it to what it should be,
       // after render.
-      if (offset[dir] === this.internals.offset[dir]) {
-        newState.offset = { x: 0, y: 0 }
-        newState.offset[dir] = offset[dir] + 1
-        this.setState(newState, () => {
-          this.setState({ offset: offset }, cb)
-        })
-      } else {
-        newState.offset = offset
-        this.setState(newState, cb)
-      }
+      newState.offset = offset
+      this.setState(newState, cb)
     } else {
       this.setState(newState, cb)
     }
