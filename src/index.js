@@ -106,10 +106,6 @@ export default class extends Component {
   static propTypes = {
     horizontal: PropTypes.bool,
     children: PropTypes.node.isRequired,
-<<<<<<< HEAD
-    containerStyle: View.propTypes.style,
-    style: View.propTypes.style,
-=======
     containerStyle: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number,
@@ -122,7 +118,6 @@ export default class extends Component {
       PropTypes.object,
       PropTypes.number,
     ]),
->>>>>>> 5336a4ac2cef24595caf5312733598832be46c70
     pagingEnabled: PropTypes.bool,
     showsHorizontalScrollIndicator: PropTypes.bool,
     showsVerticalScrollIndicator: PropTypes.bool,
@@ -721,13 +716,7 @@ export default class extends Component {
     }
 
     return (
-<<<<<<< HEAD
-      <View style={[styles.container,
-        {width: state.width, height: state.height},
-        props.containerStyle]}>
-=======
       <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
->>>>>>> 5336a4ac2cef24595caf5312733598832be46c70
         {this.renderScrollView(pages)}
         {showsPagination && (renderPagination
           ? renderPagination(index, total, this)
