@@ -284,6 +284,10 @@ var swiper = React.createClass({
 
 Scroll by relative index.
 
+#### scrollTo(toIndex)
+
+Scroll to specific index.
+
 Parameters:
 
 | Name  | Type     | default | Description |

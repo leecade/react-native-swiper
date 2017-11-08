@@ -486,6 +486,18 @@ export default class extends Component {
     }
   }
 
+  /**
+   * Scroll to specific index
+   * @param  {number} toIndex the index to scroll to
+   */
+  scrollTo = (toIndex) => {
+    if (this.state.index < toIndex) {
+      this.scrollBy(-1 * (this.state.index - toIndex))
+    } else {
+      this.scrollBy(toIndex - this.state.index)
+    }
+  }
+
   scrollViewPropOverrides = () => {
     const props = this.props
     let overrides = {}
