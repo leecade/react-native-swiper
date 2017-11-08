@@ -454,7 +454,7 @@ export default class extends Component {
    */
 
   scrollBy = (index, animated = true) => {
-    if (this.internals.isScrolling || this.state.total < 2) return
+    if (index == 0 || this.internals.isScrolling || this.state.total < 2) return
     const state = this.state
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
@@ -492,9 +492,9 @@ export default class extends Component {
    */
   scrollTo = (toIndex) => {
     if (this.state.index < toIndex) {
-      this.scrollBy(-1 * (this.state.index - toIndex))
-    } else {
       this.scrollBy(toIndex - this.state.index)
+    } else {
+      this.scrollBy(-1 * (this.state.index - toIndex))
     }
   }
 
