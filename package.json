@@ -11,6 +11,7 @@
   "scripts": {
     "start": "react-native start",
     "lint": "standard | snazzy",
+    "format": "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
     "update": "updtr",
     "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
     "test": "npm run lint"
@@ -36,6 +37,10 @@
       "mock/",
       "node_modules/"
     ]
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   },
   "ava": {
     "babel": "inherit",
