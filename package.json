@@ -1,31 +1,24 @@
 {
   "name": "react-native-swiper",
-  "keywords": [
-    "react-component",
-    "react-native",
-    "ios"
-  ],
+  "keywords": ["react-component", "react-native", "ios"],
   "version": "1.5.13",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
     "start": "react-native start",
     "lint": "eslint '*.js' '**/*.js'",
-    "format": "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
+    "format": "npm run format:js && npm run format:json",
+    "format:js":
+      "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
+    "format:json": "prettier --write --parser json '*.json' 'examples/*.json'",
     "precommit": "lint-staged",
     "update": "updtr",
     "test": "npm run lint"
   },
   "eslintConfig": {
     "parser": "babel-eslint",
-    "plugins": [
-      "react"
-    ],
-    "extends": [
-      "standard",
-      "plugin:react/recommended",
-      "prettier"
-    ],
+    "plugins": ["react"],
+    "extends": ["standard", "plugin:react/recommended", "prettier"],
     "env": {
       "es6": true,
       "browser": true,
@@ -48,11 +41,8 @@
   },
   "pre-commit": "precommit",
   "lint-staged": {
-    "*.js": [
-      "prettier --write",
-      "eslint",
-      "git add"
-    ]
+    "*.js": ["prettier --write", "eslint", "git add"],
+    "*.json": ["prettier --write --parser json", "git add"]
   },
   "ava": {
     "babel": "inherit",
