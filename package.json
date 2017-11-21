@@ -7,10 +7,11 @@
   "scripts": {
     "start": "react-native start",
     "lint": "eslint '*.js' '**/*.js'",
-    "format": "npm run format:js && npm run format:json",
+    "format": "npm run format:js && npm run format:json && npm run format:md",
     "format:js":
       "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
     "format:json": "prettier --write --parser json '*.json' 'examples/*.json'",
+    "format:md": "prettier --write --parser markdown '*.md'",
     "precommit": "lint-staged",
     "update": "updtr",
     "test": "npm run lint"
@@ -42,7 +43,8 @@
   "pre-commit": "precommit",
   "lint-staged": {
     "*.js": ["prettier --write", "eslint", "git add"],
-    "*.json": ["prettier --write --parser json", "git add"]
+    "*.json": ["prettier --write --parser json", "git add"],
+    "*.md": ["prettier --write --parser markdown", "git add"]
   },
   "ava": {
     "babel": "inherit",

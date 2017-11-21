@@ -1,47 +1,51 @@
 ### V2
 
-- [ ] Improve performance
+* [ ] Improve performance
 
-- [ ] Landscape mode
+* [ ] Landscape mode
 
-> Please track in [milestones:v2](https://github.com/leecade/react-native-swiper/milestones/v2)
+> Please track in
+> [milestones:v2](https://github.com/leecade/react-native-swiper/milestones/v2)
 
-> Contribute code to [branch:Android](https://github.com/leecade/react-native-swiper/tree/android) and [branch:V2](https://github.com/leecade/react-native-swiper/tree/v2)
+> Contribute code to
+> [branch:Android](https://github.com/leecade/react-native-swiper/tree/android)
+> and [branch:V2](https://github.com/leecade/react-native-swiper/tree/v2)
 
-> Provide creative in [issues](https://github.com/leecade/react-native-swiper/issues)
+> Provide creative in
+> [issues](https://github.com/leecade/react-native-swiper/issues)
 
------
+---
 
 ### V1
 
-- [x] **Support for Android**
+* [x] **Support for Android**
 
-- [ ] More switch effects
+* [ ] More switch effects
 
-- [ ] Unit tests
+* [ ] Unit tests
 
-- [ ] Check typo
+* [ ] Check typo
 
-- [ ] Fix bugs
+* [ ] Fix bugs
 
-- [x] Improve performance
+* [x] Improve performance
 
-- [x] Infinite loop
+* [x] Infinite loop
 
-- [x] Direction control
+* [x] Direction control
 
-- [x] Complete custom style
+* [x] Complete custom style
 
-- [x] Allow title display & custom
+* [x] Allow title display & custom
 
-- [x] Multiple instances
+* [x] Multiple instances
 
-- [x] Custom container size
+* [x] Custom container size
 
-- [x] Control buttons
+* [x] Control buttons
 
-- [x] Autoplay
+* [x] Autoplay
 
-- [x] Custom pagination style
+* [x] Custom pagination style
 
-- [x] State inject
+* [x] State inject
