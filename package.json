@@ -10,10 +10,9 @@
   "main": "index.js",
   "scripts": {
     "start": "react-native start",
-    "lint": "standard | snazzy",
+    "lint": "eslint '*.js' '**/*.js'",
     "format": "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
     "update": "updtr",
-    "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
     "test": "npm run lint"
   },
   "pre-commit": {
@@ -22,21 +21,31 @@
     ],
     "silent": true
   },
-  "standard": {
+  "eslintConfig": {
     "parser": "babel-eslint",
-    "global": [
-      "__DEV__",
-      "FormData",
-      "requestAnimationFrame",
-      "alert",
-      "setImmediate",
-      "fetch"
+    "plugins": [
+      "react"
     ],
-    "ignore": [
-      "dist/",
-      "mock/",
-      "node_modules/"
-    ]
+    "extends": [
+      "standard",
+      "plugin:react/recommended",
+      "prettier"
+    ],
+    "env": {
+      "es6": true,
+      "browser": true,
+      "node": true,
+      "jest": true
+    },
+    "parserOptions": {
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "globals": {
+      "__DEV__": true
+    }
   },
   "prettier": {
     "semi": false,
@@ -58,10 +67,16 @@
   "homepage": "https://github.com/leecade/react-native-swiper#readme",
   "devDependencies": {
     "babel-eslint": "^8.0.1",
+    "eslint": "^4.11.0",
+    "eslint-config-prettier": "^2.8.0",
+    "eslint-config-standard": "^10.2.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^5.2.1",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-react": "^7.5.1",
+    "eslint-plugin-standard": "^3.0.1",
     "prettier": "1.8.2",
     "rimraf": "^2.5.4",
-    "snazzy": "^6.0.0",
-    "standard": "^10.0.3",
     "updtr": "^2.0.0"
   },
   "dependencies": {
