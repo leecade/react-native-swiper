@@ -281,7 +281,7 @@ export default class extends Component {
 
     initState.animationStartIndex = Math.ceil(props.paginationDotCount / 2) - 1;
 
-    const loopIndex = this.props.loop
+    const loopIndex = this.props.loop && initState.total > 1
       ? initState.index + 1
       : initState.index
 
