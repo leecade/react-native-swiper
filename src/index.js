@@ -7,7 +7,6 @@ import PropTypes from 'prop-types'
 import {
   Text,
   View,
-  ViewPropTypes,
   ScrollView,
   Dimensions,
   TouchableOpacity,
@@ -135,7 +134,18 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    onScrollBeginDrag: PropTypes.func,
+    onMomentumScrollEnd: PropTypes.func,
+    activeDot: PropTypes.element,
+    dot: PropTypes.element,
+    paginationStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+    nextButton: PropTypes.element,
+    prevButton: PropTypes.element,
+    buttonWrapperStyle: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number
+    ])
   }
 
   /**
@@ -695,8 +705,6 @@ export default class extends Component {
    * @return {object} react-dom
    */
   render() {
-    const state = this.state
-    const props = this.props
     const { index, total, width, height } = this.state
     const {
       children,
@@ -709,7 +717,7 @@ export default class extends Component {
       showsButtons,
       showsPagination
     } = this.props
-    // let dir = state.dir
+    // let dir = this.state.dir
     // let key = 0
     const loopVal = loop ? 1 : 0
     let pages = []
@@ -746,7 +754,7 @@ export default class extends Component {
           } else {
             return (
               <View style={pageStyleLoading} key={i}>
-                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
+                {loadMinimalLoader || <ActivityIndicator />}
               </View>
             )
           }
