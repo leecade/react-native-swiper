@@ -1,17 +1,11 @@
 import React, { Component } from 'react'
-import {
-  Text,
-  View,
-  Image,
-  Dimensions
-} from 'react-native'
+import { Text, View, Image, Dimensions } from 'react-native'
 import Swiper from 'react-native-swiper'
 const { width } = Dimensions.get('window')
 const loading = require('./img/loading.gif')
 
 const styles = {
-  wrapper: {
-  },
+  wrapper: {},
 
   slide: {
     flex: 1,
@@ -42,18 +36,24 @@ const styles = {
 }
 
 const Slide = props => {
-  return (<View style={styles.slide}>
-    <Image onLoad={props.loadHandle.bind(null, props.i)} style={styles.image} source={{uri: props.uri}} />
-    {
-      !props.loaded && <View style={styles.loadingView}>
-        <Image style={styles.loadingImage} source={loading} />
-      </View>
-    }
-  </View>)
+  return (
+    <View style={styles.slide}>
+      <Image
+        onLoad={props.loadHandle.bind(null, props.i)}
+        style={styles.image}
+        source={{ uri: props.uri }}
+      />
+      {!props.loaded && (
+        <View style={styles.loadingView}>
+          <Image style={styles.loadingImage} source={loading} />
+        </View>
+      )}
+    </View>
+  )
 }
 
 export default class extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       imgList: [
@@ -66,25 +66,31 @@ export default class extends Component {
     }
     this.loadHandle = this.loadHandle.bind(this)
   }
-  loadHandle (i) {
+  loadHandle(i) {
     let loadQueue = this.state.loadQueue
     loadQueue[i] = 1
     this.setState({
       loadQueue
     })
   }
-  render () {
+  render() {
     return (
-      <View style={{flex: 1}}>
-        <Swiper loadMinimal loadMinimalSize={1} style={styles.wrapper} loop={false}>
-          {
-            this.state.imgList.map((item, i) => <Slide
+      <View style={{ flex: 1 }}>
+        <Swiper
+          loadMinimal
+          loadMinimalSize={1}
+          style={styles.wrapper}
+          loop={false}
+        >
+          {this.state.imgList.map((item, i) => (
+            <Slide
               loadHandle={this.loadHandle}
               loaded={!!this.state.loadQueue[i]}
               uri={item}
               i={i}
-              key={i} />)
-          }
+              key={i}
+            />
+          ))}
         </Swiper>
         <View>
           <Text>Current Loaded Images: {this.state.loadQueue}</Text>
