@@ -12,14 +12,9 @@
     "start": "react-native start",
     "lint": "eslint '*.js' '**/*.js'",
     "format": "prettier --write '*.js' 'src/**/*.js' 'examples/*.js' 'examples/**/*.js'",
+    "precommit": "lint-staged",
     "update": "updtr",
     "test": "npm run lint"
-  },
-  "pre-commit": {
-    "run": [
-      "precommit"
-    ],
-    "silent": true
   },
   "eslintConfig": {
     "parser": "babel-eslint",
@@ -51,6 +46,14 @@
     "semi": false,
     "singleQuote": true
   },
+  "pre-commit": "precommit",
+  "lint-staged": {
+    "*.js": [
+      "prettier --write",
+      "eslint",
+      "git add"
+    ]
+  },
   "ava": {
     "babel": "inherit",
     "require": []
@@ -75,6 +78,8 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.5.1",
     "eslint-plugin-standard": "^3.0.1",
+    "lint-staged": "^5.0.0",
+    "pre-commit": "^1.2.2",
     "prettier": "1.8.2",
     "rimraf": "^2.5.4",
     "updtr": "^2.0.0"
