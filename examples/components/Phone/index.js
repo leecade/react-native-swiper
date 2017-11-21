@@ -29,7 +29,7 @@ const styles = {
   }
 }
 
-export default class extends Component {
+export default class Phone extends Component {
   render() {
     return (
       <View style={styles.container}>

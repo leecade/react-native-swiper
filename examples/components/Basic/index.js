@@ -29,7 +29,7 @@ var styles = {
   }
 }
 
-export default () => (
+const Basic = () => (
   <Swiper style={styles.wrapper} showsButtons>
     <View style={styles.slide1}>
       <Text style={styles.text}>Hello Swiper</Text>
@@ -42,3 +42,7 @@ export default () => (
     </View>
   </Swiper>
 )
+
+Basic.displayName = 'Basic'
+
+export default Basic

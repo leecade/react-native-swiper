@@ -40,7 +40,7 @@ const renderPagination = (index, total, context) => {
   )
 }
 
-export default class extends Component {
+export default class SwiperNumber extends Component {
   render() {
     return (
       <Swiper

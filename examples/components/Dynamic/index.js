@@ -31,7 +31,7 @@ const styles = {
   }
 }
 
-export default class extends Component {
+export default class Dynamic extends Component {
   constructor(props) {
     super(props)
     this.state = {
