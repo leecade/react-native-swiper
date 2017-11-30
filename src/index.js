@@ -144,7 +144,8 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    onLayoutReady: PropTypes.func
   }
 
   /**
@@ -171,7 +172,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    onLayoutReady: () => null
   }
 
   /**
@@ -305,7 +307,7 @@ export default class extends Component {
       }
     }
 
-    this.setState(state)
+    this.setState(state, this.props.onLayoutReady)
   }
 
   loopJump = () => {
