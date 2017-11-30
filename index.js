@@ -1,2 +1,2 @@
 import Swiper from './src/'
-export defualt Swiper
+export default Swiper
