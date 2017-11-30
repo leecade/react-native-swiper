@@ -1,2 +1,2 @@
 import Swiper from './src/'
-module.exports = Swiper
+export defualt Swiper
