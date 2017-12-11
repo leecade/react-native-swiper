@@ -102,6 +102,7 @@ declare module 'react-native-swiper' {
     }
 
     export default class Swiper extends Component<SwiperProps, any> {
+        // Scroll by relative index. Animated is set to true by default
         scrollBy(index: number, animated?: boolean): void;
     }
 }
