@@ -166,7 +166,7 @@ export default class Swiper extends Component {
   }
 }
 
-AppRegistry.registerComponent('myproject', () => swiper);
+AppRegistry.registerComponent('myproject', () => Swiper);
 ```
 
 ### Properties
