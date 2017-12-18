@@ -120,7 +120,7 @@ import {
 
 import Swiper from 'react-native-swiper';
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
   wrapper: {
   },
   slide1: {
@@ -148,8 +148,8 @@ var styles = StyleSheet.create({
   }
 })
 
-var swiper = React.createClass({
-  render: function() {
+export default class Swiper extends Component {
+  render(){
     return (
       <Swiper style={styles.wrapper} showsButtons={true}>
         <View style={styles.slide1}>
@@ -162,9 +162,9 @@ var swiper = React.createClass({
           <Text style={styles.text}>And simple</Text>
         </View>
       </Swiper>
-    )
+    );
   }
-})
+}
 
 AppRegistry.registerComponent('myproject', () => swiper);
 ```
