@@ -53,7 +53,7 @@ declare module 'react-native-swiper' {
 
         // Autoplay
         // Delay between auto play transitions (in second).
-        autoplayTimeout?: boolean
+        autoplayTimeout?: number
         // Cycle direction control.
         autoplayDirection?: boolean
 
