@@ -783,7 +783,13 @@ export default class extends Component {
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
       if (loop) {
-        pages.unshift(total - 1 + '')
+        // Avoid displaying last slide when component is on layout
+        if (this.initialRender) {
+          pages.unshift('0');
+        } else {
+          pages.unshift(total - 1 + '')
+        }
+
         pages.push('0')
       }
 
