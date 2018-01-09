@@ -281,15 +281,13 @@ export default class extends Component {
     const offset = this.internals.offset = {}
     const state = { width, height }
 
-    if (this.state.total > 1) {
-      let setup = this.state.index
-      if (this.props.loop) {
-        setup++
-      }
-      offset[this.state.dir] = this.state.dir === 'y'
-        ? height * setup
-        : width * setup
+    let setup = this.state.index
+    if (this.props.loop) {
+      setup++
     }
+    offset[this.state.dir] = this.state.dir === 'y'
+      ? height * setup
+      : width * setup
 
     // only update the offset in state if needed, updating offset while swiping
     // causes some bad jumping / stuttering
