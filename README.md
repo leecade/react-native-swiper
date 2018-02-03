@@ -192,6 +192,7 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize | 1 | `number` | see `loadMinimal`   |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
+| activityColor | `string` | Defines a color for the <ActivityIndicator> on the loading page. |
 
 #### Pagination
 
@@ -252,8 +253,6 @@ AppRegistry.registerComponent('myproject', () => swiper);
 | Prop  | Params  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | onScrollBeginDrag | `e` / `state` / `context` | `function` | When animation begins after letting up |
-| onScrollSettlingDrag | `e` / `state` | `function` | Right before drag animation ends [Android] |
-| onScrollEndDrag | `e` / `state` / `context` | `function` | When animation ends after dragging |
 | onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce |
 | onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd` |
 | onTouchStart | `e` / `state` / `context` | `function` | Same, but bubble phase |
