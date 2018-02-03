@@ -141,6 +141,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    activityColor: PropTypes.string,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -331,26 +332,6 @@ export default class extends Component {
 
       this.scrollBy(this.props.autoplayDirection ? 1 : -1)
     }, this.props.autoplayTimeout * 1000)
-  }
-
-  /**
-   * [Android Only] Listens for scroll events
-   * @param  {string} e native event of values: 'dragging', 'settling', 'idle'
-   */
-  onPageScrollStateChanged(e) {
-    switch (e) {
-      case 'dragging':
-        this.internals.isScrolling = true
-        this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.fullState())
-        break;
-      case 'settling':
-        this.props.onScrollSettlingDrag && this.props.onScrollSettlingDrag(e, this.fullState())
-        break;
-      case 'idle':
-        this.internals.isScrolling = false
-        this.props.onScrollEndDrag && this.props.onScrollEndDrag(e, this.fullState())
-        break;
-    }
   }
 
   /**
@@ -660,7 +641,6 @@ export default class extends Component {
       <ViewPagerAndroid ref={this.refScrollView}
         {...this.props}
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageScrollStateChanged={this.onPageScrollStateChanged.bind(this)}
         onPageSelected={this.onScrollEnd}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
@@ -724,7 +704,7 @@ export default class extends Component {
           } else {
             return (
               <View style={pageStyleLoading} key={i}>
-                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
+                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator color={this.props.activityColor} />}
               </View>
             )
           }
