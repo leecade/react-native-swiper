@@ -46,7 +46,7 @@
     "url": "git+https://github.com/leecade/react-native-swiper.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/leecade/react-native-swiper/issues"
   },
