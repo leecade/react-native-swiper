@@ -55,7 +55,7 @@
     "babel-eslint": "^8.0.1",
     "rimraf": "^2.5.4",
     "snazzy": "^6.0.0",
-    "standard": "^10.0.3",
+    "standard": "^11.0.0",
     "updtr": "^2.0.0"
   },
   "dependencies": {
