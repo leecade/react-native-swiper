@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   }
 })
 
-export default class Swiper extends Component {
+export default class SwiperComponent extends Component {
   render(){
     return (
       <Swiper style={styles.wrapper} showsButtons={true}>
@@ -166,7 +166,7 @@ export default class Swiper extends Component {
   }
 }
 
-AppRegistry.registerComponent('myproject', () => Swiper);
+AppRegistry.registerComponent('myproject', () => SwiperComponent);
 ```
 
 ### Properties
