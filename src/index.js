@@ -256,10 +256,25 @@ export default class extends Component {
       : width * props.index
 
 
-    this.internals = {
-      ...this.internals,
-      isScrolling: false
-    };
+      if (this.internals 
+        && this.internals.offset 
+        && Object.keys(this.internals.offset).length === 0 
+        && this.internals.offset.constructor === Object) {
+          // set correct offset if render from componentWillReceiveProps and empty offset is presetnt in internals 
+          let offset = initState.offset
+          this.internals = {
+            ...this.internals,
+            offset, 
+            isScrolling: false
+          }
+        } else {
+          // normal flow
+          this.internals = {
+            ...this.internals,
+            isScrolling: false
+          }
+        }
+
     return initState
   }
 
