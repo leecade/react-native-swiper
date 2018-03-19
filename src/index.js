@@ -195,7 +195,11 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    this.setState(this.initState(nextProps, this.props.index !== nextProps.index), () => {
+      if (nextProps.autoplay) {
+        this.autoplay(nextProps.autoplay)
+      }
+    })
   }
 
   componentDidMount () {
@@ -314,9 +318,10 @@ export default class extends Component {
   /**
    * Automatic rolling
    */
-  autoplay = () => {
+  autoplay = (shouldAutoPlay) => {
+    const autoplay = shouldAutoPlay ? shouldAutoPlay : this.props.autoplay
     if (!Array.isArray(this.props.children) ||
-      !this.props.autoplay ||
+      !autoplay ||
       this.internals.isScrolling ||
       this.state.autoplayEnd) return
 
