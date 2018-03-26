@@ -127,6 +127,7 @@ export default class extends Component {
     showsPagination: PropTypes.bool,
     showsButtons: PropTypes.bool,
     disableNextButton: PropTypes.bool,
+    disablePrevButton: PropTypes.bool,
     loadMinimal: PropTypes.bool,
     loadMinimalSize: PropTypes.number,
     loadMinimalLoader: PropTypes.element,
@@ -163,6 +164,7 @@ export default class extends Component {
     showsPagination: true,
     showsButtons: false,
     disableNextButton: false,
+    disablePrevButton: false,
     loop: true,
     loadMinimal: false,
     loadMinimalSize: 1,
@@ -595,7 +597,10 @@ export default class extends Component {
     }
 
     return (
-      <TouchableOpacity onPress={() => button !== null && this.scrollBy(-1)}>
+      <TouchableOpacity 
+        onPress={() => button !== null && this.scrollBy(-1)}
+        disabled={this.props.disablePrevButton}
+      >
         <View>
           {button}
         </View>
