@@ -251,9 +251,10 @@ export default class extends Component {
       initState.height = height;
     }
 
+    const rIndex = this.getPageKeys().indexOf(props.index.toString());
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? height * rIndex
+      : width * rIndex
 
 
     this.internals = {
@@ -647,6 +648,17 @@ export default class extends Component {
     )
   }
 
+  getPageKeys() {
+    const pageKeys = Object.keys(this.props.children)
+    // Re-design a loop model for avoid img flickering
+    if (this.props.loop) {
+      pageKeys.unshift(pageKeys[pageKeys.length - 1] + '')
+      pageKeys.push('0')
+    }
+
+    return pageKeys;
+  }
+
   /**
    * Default render
    * @return {object} react-dom
@@ -687,12 +699,7 @@ export default class extends Component {
 
     // For make infinite at least total > 1
     if (total > 1) {
-      // Re-design a loop model for avoid img flickering
-      pages = Object.keys(children)
-      if (loop) {
-        pages.unshift(total - 1 + '')
-        pages.push('0')
-      }
+      pages = this.getPageKeys();
 
       pages = pages.map((page, i) => {
         if (loadMinimal) {
