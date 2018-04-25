@@ -13,14 +13,15 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  StyleSheet
 } from 'react-native'
 
 /**
  * Default styles
  * @type {StyleSheetPropType}
  */
-const styles = {
+const styles = StyleSheet.create({
   container: {
     backgroundColor: 'transparent',
     position: 'relative',
@@ -93,8 +94,18 @@ const styles = {
     fontSize: 50,
     color: '#007aff',
     fontFamily: 'Arial'
-  }
-}
+  },
+
+  dot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    marginLeft: 3,
+    marginRight: 3,
+    marginTop: 3,
+    marginBottom: 3
+  },
+});
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
@@ -199,12 +210,12 @@ export default class extends Component {
   }
 
   componentDidMount () {
-    this.autoplay()
+    this.autoplay();
   }
 
   componentWillUnmount () {
-    this.autoplayTimer && clearTimeout(this.autoplayTimer)
-    this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
+    this.autoplayTimer && clearTimeout(this.autoplayTimer);
+    this.loopJumpTimer && clearTimeout(this.loopJumpTimer);
   }
 
   componentWillUpdate (nextProps, nextState) {
@@ -214,13 +225,13 @@ export default class extends Component {
 
   initState (props, updateIndex = false) {
     // set the current state
-    const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
+    const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } };
 
     const initState = {
       autoplayEnd: false,
       loopJump: false,
       offset: {}
-    }
+    };
 
     initState.total = props.children ? props.children.length || 1 : 0
 
@@ -252,15 +263,9 @@ export default class extends Component {
       initState.height = height;
     }
 
-    initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+    initState.offset[initState.dir] = initState.dir === 'y' ? height * props.index : width * props.index
+    this.internals = {...this.internals, isScrolling: false};
 
-
-    this.internals = {
-      ...this.internals,
-      isScrolling: false
-    };
     return initState
   }
 
@@ -279,9 +284,7 @@ export default class extends Component {
       if (this.props.loop) {
         setup++
       }
-      offset[this.state.dir] = this.state.dir === 'y'
-        ? height * setup
-        : width * setup
+      offset[this.state.dir] = this.state.dir === 'y' ? height * setup : width * setup
     }
 
     // only update the offset in state if needed, updating offset while swiping
@@ -315,22 +318,20 @@ export default class extends Component {
    * Automatic rolling
    */
   autoplay = () => {
-    if (!Array.isArray(this.props.children) ||
-      !this.props.autoplay ||
+    const {children, autoplay, loop, autoplayDirection, autoplayTimeout} = this.props;
+
+    if (!Array.isArray(children) ||
+      !autoplay ||
       this.internals.isScrolling ||
       this.state.autoplayEnd) return
 
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.autoplayTimer = setTimeout(() => {
-      if (!this.props.loop && (
-          this.props.autoplayDirection
-            ? this.state.index === this.state.total - 1
-            : this.state.index === 0
-        )
-      ) return this.setState({ autoplayEnd: true })
+      if (!loop && (autoplayDirection ? this.state.index === this.state.total - 1 : this.state.index === 0))
+        return this.setState({ autoplayEnd: true })
 
-      this.scrollBy(this.props.autoplayDirection ? 1 : -1)
-    }, this.props.autoplayTimeout * 1000)
+      this.scrollBy(autoplayDirection ? 1 : -1)
+    }, autoplayTimeout * 1000)
   }
 
   /**
@@ -376,8 +377,8 @@ export default class extends Component {
   onScrollEndDrag = e => {
     const { contentOffset } = e.nativeEvent
     const { horizontal, children } = this.props
-    const { index } = this.state
-    const { offset } = this.internals
+    const index = this.state.index;
+    const offset = this.internals.offset;
     const previousOffset = horizontal ? offset.x : offset.y
     const newOffset = horizontal ? contentOffset.x : contentOffset.y
 
@@ -521,58 +522,42 @@ export default class extends Component {
    */
   renderPagination = () => {
      // By default, dots only show when `total` >= 2
-    if (this.state.total <= 1) return null
+    if (this.state.total <= 1) {
+      return null;
+    }
+
+    const {activeDot, dot, activeDotColor, activeDotStyle, dotColor, dotStyle, paginationStyle} = this.props;
 
     let dots = []
-    const ActiveDot = this.props.activeDot || <View style={[{
-      backgroundColor: this.props.activeDotColor || '#007aff',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.activeDotStyle]} />
-    const Dot = this.props.dot || <View style={[{
-      backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.dotStyle ]} />
+    const ActiveDot = activeDot || <View style={StyleSheet.flatten([styles.dot, {backgroundColor: activeDotColor || '#007aff',}, activeDotStyle])}/>;
+    const Dot = dot || <View style={StyleSheet.flatten(styles.dot, [{backgroundColor: dotColor || 'rgba(0,0,0,0.2)'}, dotStyle])}/>;
+
     for (let i = 0; i < this.state.total; i++) {
-      dots.push(i === this.state.index
-        ? React.cloneElement(ActiveDot, {key: i})
-        : React.cloneElement(Dot, {key: i})
-      )
+      dots.push(i === this.state.index ? React.cloneElement(ActiveDot, {key: i}) : React.cloneElement(Dot, {key: i}));
     }
 
     return (
-      <View pointerEvents='none' style={[styles['pagination_' + this.state.dir], this.props.paginationStyle]}>
+      <View pointerEvents='none' style={StyleSheet.flatten([styles['pagination_' + this.state.dir], paginationStyle])}>
         {dots}
       </View>
-    )
+    );
   }
 
   renderTitle = () => {
-    const child = this.props.children[this.state.index]
-    const title = child && child.props && child.props.title
-    return title
-      ? (<View style={styles.title}>
-        {this.props.children[this.state.index].props.title}
-      </View>)
-      : null
+    const child = this.props.children[this.state.index];
+    const title = child && child.props && child.props.title;
+
+    return title ? (
+      <View style={styles.title}>
+        {title}
+      </View>
+    ) : null;
   }
 
   renderNextButton = () => {
     let button = null
 
-    if (this.props.loop ||
-      this.state.index !== this.state.total - 1) {
+    if (this.props.loop || this.state.index !== this.state.total - 1) {
       button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
     }
 
@@ -621,17 +606,20 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
+    const {style, scrollViewStyle, loop} = this.props;
+
     if (Platform.OS === 'ios') {
       return (
         <ScrollView ref={this.refScrollView}
           {...this.props}
           {...this.scrollViewPropOverrides()}
-          contentContainerStyle={[styles.wrapperIOS, this.props.style]}
+          contentContainerStyle={StyleSheet.flatten([styles.wrapperIOS, style])}
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}
-          style={this.props.scrollViewStyle}>
+          style={scrollViewStyle}
+        >
           {pages}
         </ScrollView>
        )
@@ -639,10 +627,11 @@ export default class extends Component {
     return (
       <ViewPagerAndroid ref={this.refScrollView}
         {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+        initialPage={loop ? this.state.index + 1 : this.state.index}
         onPageSelected={this.onScrollEnd}
         key={pages.length}
-        style={[styles.wrapperAndroid, this.props.style]}>
+        style={StyleSheet.flatten([styles.wrapperAndroid, style])}
+      >
         {pages}
       </ViewPagerAndroid>
     )
@@ -653,38 +642,13 @@ export default class extends Component {
    * @return {object} react-dom
    */
   render () {
-    const state = this.state
-    const props = this.props
-    const {
-      index,
-      total,
-      width,
-      height
-    } = this.state;
-    const {
-      children,
-      containerStyle,
-      loop,
-      loadMinimal,
-      loadMinimalSize,
-      loadMinimalLoader,
-      renderPagination,
-      showsButtons,
-      showsPagination,
-    } = this.props;
-    // let dir = state.dir
-    // let key = 0
-    const loopVal = loop ? 1 : 0
-    let pages = []
+    const {index, total, width, height} = this.state;
+    const {children, containerStyle, loop, loadMinimal, loadMinimalSize, loadMinimalLoader, renderPagination, showsButtons, showsPagination} = this.props;
 
-    const pageStyle = [{width: width, height: height}, styles.slide]
-    const pageStyleLoading = {
-      width,
-      height,
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center'
-    }
+    const loopVal = loop ? 1 : 0;
+    let pages = [];
+
+    const pageStyle = StyleSheet.flatten([{width, height}, styles.slide]);
 
     // For make infinite at least total > 1
     if (total > 1) {
@@ -697,33 +661,31 @@ export default class extends Component {
 
       pages = pages.map((page, i) => {
         if (loadMinimal) {
-          if (i >= (index + loopVal - loadMinimalSize) &&
-            i <= (index + loopVal + loadMinimalSize)) {
-            return <View style={pageStyle} key={i}>{children[page]}</View>
+          if (i >= (index + loopVal - loadMinimalSize) && i <= (index + loopVal + loadMinimalSize)) {
+            return <View style={pageStyle} key={i}>{children[page]}</View>;
           } else {
             return (
-              <View style={pageStyleLoading} key={i}>
+              <View style={StyleSheet.flatten([{width, height, flex: 1, justifyContent: 'center', alignItems: 'center'}])} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
-            )
+            );
           }
         } else {
-          return <View style={pageStyle} key={i}>{children[page]}</View>
+          return <View style={pageStyle} key={i}>{children[page]}</View>;
         }
-      })
+      });
+
     } else {
-      pages = <View style={pageStyle} key={0}>{children}</View>
+      pages = <View style={pageStyle} key={0}>{children}</View>;
     }
 
     return (
-      <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
+      <View style={StyleSheet.flatten([styles.container, containerStyle])} onLayout={this.onLayout}>
         {this.renderScrollView(pages)}
-        {showsPagination && (renderPagination
-          ? renderPagination(index, total, this)
-          : this.renderPagination())}
+        {showsPagination && (renderPagination ? renderPagination(index, total, this) : this.renderPagination())}
         {this.renderTitle()}
         {showsButtons && this.renderButtons()}
       </View>
-    )
+    );
   }
 }
