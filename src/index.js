@@ -91,7 +91,8 @@ const styles = {
 
   buttonText: {
     fontSize: 50,
-    color: '#007aff'
+    color: '#007aff',
+    fontFamily: 'Arial'
   }
 }
 
@@ -194,7 +195,10 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+
+    if (this.props.index !== nextProps.index) {
+      this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    }
   }
 
   componentDidMount () {
