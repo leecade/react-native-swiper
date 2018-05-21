@@ -102,5 +102,11 @@ declare module 'react-native-swiper' {
     }
 
     export default class Swiper extends Component<SwiperProps, any> {
+        /**
+         * Scroll by index
+         * @param  {number} index offset index
+         * @param  {bool} animated default true
+         */
+        public scrollBy(index: number, animated?: boolean): void;
     }
 }
