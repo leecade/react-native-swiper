@@ -107,6 +107,6 @@ declare module 'react-native-swiper' {
          * @param  {number} index offset index
          * @param  {bool} animated default true
          */
-        public scrollBy(index: number, animated?: boolean): void;
+        public scrollBy = (index: number, animated: boolean = true) => {};
     }
 }
