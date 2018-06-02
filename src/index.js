@@ -16,13 +16,16 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-const { width, height } = Dimensions.get('window')
-
 /**
  * Default styles
  * @type {StyleSheetPropType}
  */
 const styles = {
+  color: {
+    primary: '#007aff',
+    transpBlack: 'rgba(0,0,0,.2)'
+  },
+  
   container: {
     backgroundColor: 'transparent',
     position: 'relative',
@@ -101,13 +104,11 @@ const styles = {
     alignItems: 'center'
   },
 
-  buttonText: {
+  button: {
     fontSize: 50,
     fontFamily: 'Arial'
   }
 }
-
-const primaryColor = '#007aff';
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
@@ -124,6 +125,10 @@ export default class extends Component {
       PropTypes.number,
     ]),
     style: PropTypes.oneOfType([
+      PropTypes.object,
+      PropTypes.number,
+    ]),
+    scrollViewStyle: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number,
     ]),
@@ -191,6 +196,12 @@ export default class extends Component {
   state = this.initState(this.props)
 
   /**
+   * Initial render flag
+   * @type {bool}
+   */
+  initialRender = true
+
+  /**
    * autoplay timer
    * @type {null}
    */
@@ -236,12 +247,30 @@ export default class extends Component {
     }
 
     // Default: horizontal
+    const { width, height } = Dimensions.get('window')
+
     initState.dir = props.horizontal === false ? 'y' : 'x'
-    initState.width = props.width || width
-    initState.height = props.height || height
+
+    if (props.width) {
+      initState.width = props.width
+    } else if (this.state && this.state.width){
+      initState.width = this.state.width
+    } else {
+      initState.width = width;
+    }
+
+    if (props.height) {
+      initState.height = props.height
+    } else if (this.state && this.state.height){
+      initState.height = this.state.height
+    } else {
+      initState.height = height;
+    }
+
     initState.offset[initState.dir] = initState.dir === 'y'
       ? height * props.index
       : width * props.index
+
 
     this.internals = {
       ...this.internals,
@@ -275,6 +304,17 @@ export default class extends Component {
     if (!this.state.offset || width !== this.state.width || height !== this.state.height) {
       state.offset = offset
     }
+
+    // related to https://github.com/leecade/react-native-swiper/issues/570
+    // contentOffset is not working in react 0.48.x so we need to use scrollTo
+    // to emulate offset.
+    if (Platform.OS === 'ios') {
+      if (this.initialRender && this.state.total > 1) {
+        this.scrollView.scrollTo({...offset, animated: false})
+        this.initialRender = false;
+      }
+    }
+
     this.setState(state)
   }
 
@@ -501,12 +541,12 @@ export default class extends Component {
     let dots = []
     const ActiveDot = this.props.activeDot || <View style={[
       styles.paginationDot,
-      {backgroundColor: this.props.activeDotColor || primaryColor},
+      {backgroundColor: this.props.activeDotColor || style.color.primary},
       this.props.activeDotStyle
     ]} />
     const Dot = this.props.dot || <View style={[
       styles.paginationDot,
-      {backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)'},
+      {backgroundColor: this.props.dotColor || style.color.transpBlack},
       this.props.dotStyle
     ]} />
     for (let i = 0; i < this.state.total; i++) {
@@ -538,8 +578,8 @@ export default class extends Component {
 
     if (this.props.loop || this.state.index !== this.state.total - 1) {
       button = this.props.nextButton || <Text style={[
-        styles.buttonText,
-        {color: this.props.buttonColor || primaryColor}
+        styles.button,
+        {color: this.props.buttonColor || style.color.primary}
       ]}>›</Text>
     }
 
@@ -560,8 +600,8 @@ export default class extends Component {
 
     if (this.props.loop || this.state.index !== 0) {
       button = this.props.prevButton || <Text style={[
-        styles.buttonText,
-        {color: this.props.buttonColor || primaryColor}
+        styles.button,
+        {color: this.props.buttonColor || style.color.primary}
       ]}>‹</Text>
     }
 
@@ -600,7 +640,8 @@ export default class extends Component {
           contentOffset={this.state.offset}
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
-          onScrollEndDrag={this.onScrollEndDrag}>
+          onScrollEndDrag={this.onScrollEndDrag}
+          style={this.props.scrollViewStyle}>
           {pages}
         </ScrollView>
        )
