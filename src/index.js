@@ -256,6 +256,18 @@ export default class extends Component {
       : width * props.index
 
 
+    if ( (Platform.OS == "android" && this.props.horizontal === false) || Platform.OS == "ios" ) {
+        if ( props.index > 0 ) {
+            initState.hasScrolled = false;
+        }
+        else {
+            initState.hasScrolled = true;
+        }
+    }
+    else {
+        initState.hasScrolled = true;
+    }
+
     this.internals = {
       ...this.internals,
       isScrolling: false
@@ -292,9 +304,14 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || (Platform.OS === 'android' && this.props.horizontal === false) ) {
       if (this.initialRender && this.state.total > 1) {
         this.scrollView.scrollTo({...offset, animated: false})
+
+        this.setState({
+            hasScrolled: true
+        })
+
         this.initialRender = false;
       }
     }
@@ -635,16 +652,26 @@ export default class extends Component {
         </ScrollView>
        )
     }
-    return (
-      <ViewPagerAndroid ref={this.refScrollView}
-        {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageSelected={this.onScrollEnd}
-        key={pages.length}
-        style={[styles.wrapperAndroid, this.props.style]}>
-        {pages}
-      </ViewPagerAndroid>
-    )
+
+    return this.props.horizontal === false?
+             <VertViewPager ref={this.refScrollView}
+                            {...this.props}
+                            initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+                            onPageSelected={this.onScrollEnd}
+                            onMomentumScrollEnd={this.onScrollEnd}
+                            key={pages.length}
+                            style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style])}>
+               {pages}
+             </VertViewPager>:
+             <ViewPagerAndroid ref={this.refScrollView}
+                               {...this.props}
+                               initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+                               onPageSelected={this.onScrollEnd}
+                               onMomentumScrollEnd={this.onScrollEnd}
+                               key={pages.length}
+                               style={[styles.wrapperAndroid, this.props.style]}>
+               {pages}
+             </ViewPagerAndroid>
   }
 
   /**
@@ -698,16 +725,22 @@ export default class extends Component {
         if (loadMinimal) {
           if (i >= (index + loopVal - loadMinimalSize) &&
             i <= (index + loopVal + loadMinimalSize)) {
-            return <View style={pageStyle} key={i}>{children[page]}</View>
+            return <View style={[pageStyle, {
+                    opacity: this.state.hasScrolled ? 1 : 0
+                }]} key={i}>{children[page]}</View>
           } else {
             return (
-              <View style={pageStyleLoading} key={i}>
+              <View style={[pageStyleLoading, {
+                      opacity: this.state.hasScrolled ? 1 : 0
+                  }]} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
           }
         } else {
-          return <View style={pageStyle} key={i}>{children[page]}</View>
+          return <View style={[pageStyle, {
+                  opacity: this.state.hasScrolled ? 1 : 0
+              }]} key={i}>{children[page]}</View>
         }
       })
     } else {
