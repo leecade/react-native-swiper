@@ -664,7 +664,7 @@ export default class extends Component {
                             onPageSelected={this.onScrollEnd}
                             onMomentumScrollEnd={this.onScrollEnd}
                             key={pages.length}
-                            style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style])}>
+                            style={[styles.wrapperAndroid, this.props.style]}>
                {pages}
              </VertViewPager>:
              <ViewPagerAndroid ref={this.refScrollView}
