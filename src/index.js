@@ -15,7 +15,8 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  StyleSheet
 } from 'react-native'
 
 import VertViewPager from 'react-native-vertical-view-pager'
@@ -664,7 +665,7 @@ export default class extends Component {
                             onPageSelected={this.onScrollEnd}
                             onMomentumScrollEnd={this.onScrollEnd}
                             key={pages.length}
-                            style={[styles.wrapperAndroid, this.props.style]}>
+                            style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style])}>
                {pages}
              </VertViewPager>:
              <ViewPagerAndroid ref={this.refScrollView}
