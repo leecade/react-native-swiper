@@ -260,6 +260,8 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
+    initState.offsetDone = false;
+
     this.internals = {
       ...this.internals,
       isScrolling: false
@@ -621,6 +623,14 @@ export default class extends Component {
 
   refScrollView = view => {
     this.scrollView = view;
+
+    if ( Platform.OS === 'android' && this.props.horizontal === false ) {
+        setTimeout(function() {
+          this.setState({
+              offsetDone: true
+          })
+        }.bind(this), 25)
+    }
   }
 
   renderScrollView = pages => {
@@ -647,7 +657,9 @@ export default class extends Component {
                             onPageSelected={this.onScrollEnd}
                             onMomentumScrollEnd={this.onScrollEnd}
                             key={pages.length}
-                            style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style])}>
+                            style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style, {
+                                opacity: this.state.offsetDone ? 1 : 0
+                            }])}>
                {pages}
              </VertViewPager>:
              <ViewPagerAndroid ref={this.refScrollView}
