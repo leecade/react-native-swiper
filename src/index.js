@@ -260,19 +260,6 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
-
-    if ( (Platform.OS == "android" && this.props.horizontal === false) || Platform.OS == "ios" ) {
-        if ( props.index > 0 ) {
-            initState.hasScrolled = false;
-        }
-        else {
-            initState.hasScrolled = true;
-        }
-    }
-    else {
-        initState.hasScrolled = true;
-    }
-
     this.internals = {
       ...this.internals,
       isScrolling: false
@@ -312,11 +299,6 @@ export default class extends Component {
     if (Platform.OS === 'ios' || (Platform.OS === 'android' && this.props.horizontal === false) ) {
       if (this.initialRender && this.state.total > 1) {
         this.scrollView.scrollTo({...offset, animated: false})
-
-        this.setState({
-            hasScrolled: true
-        })
-
         this.initialRender = false;
       }
     }
@@ -661,7 +643,7 @@ export default class extends Component {
     return this.props.horizontal === false?
              <VertViewPager ref={this.refScrollView}
                             {...this.props}
-                            initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+                            contentOffset={this.state.offset}
                             onPageSelected={this.onScrollEnd}
                             onMomentumScrollEnd={this.onScrollEnd}
                             key={pages.length}
@@ -730,22 +712,16 @@ export default class extends Component {
         if (loadMinimal) {
           if (i >= (index + loopVal - loadMinimalSize) &&
             i <= (index + loopVal + loadMinimalSize)) {
-            return <View style={[pageStyle, {
-                    opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
-                }]} key={i}>{children[page]}</View>
+            return <View style={pageStyle} key={i}>{children[page]}</View>
           } else {
             return (
-              <View style={[pageStyleLoading, {
-                      opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
-                  }]} key={i}>
+              <View style={pageStyleLoading} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
           }
         } else {
-          return <View style={[pageStyle, {
-                  opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
-              }]} key={i}>{children[page]}</View>
+          return <View style={pageStyle} key={i}>{children[page]}</View>
         }
       })
     } else {
