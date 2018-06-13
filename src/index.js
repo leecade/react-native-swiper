@@ -731,12 +731,12 @@ export default class extends Component {
           if (i >= (index + loopVal - loadMinimalSize) &&
             i <= (index + loopVal + loadMinimalSize)) {
             return <View style={[pageStyle, {
-                    opacity: this.state.hasScrolled ? 1 : 0
+                    opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
                 }]} key={i}>{children[page]}</View>
           } else {
             return (
               <View style={[pageStyleLoading, {
-                      opacity: this.state.hasScrolled ? 1 : 0
+                      opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
                   }]} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
@@ -744,7 +744,7 @@ export default class extends Component {
           }
         } else {
           return <View style={[pageStyle, {
-                  opacity: this.state.hasScrolled ? 1 : 0
+                  opacity: this.state.hasScrolled || i == this.props.index ? 1 : 0
               }]} key={i}>{children[page]}</View>
         }
       })
