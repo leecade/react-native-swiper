@@ -1,6 +1,8 @@
 /**
  * react-native-swiper
  * @author leecade<leecade@163.com>
+ * @author nart<unknown-email>
+ * @author Vin <vin@8sistemas.com>
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -15,6 +17,8 @@ import {
   Platform,
   ActivityIndicator
 } from 'react-native'
+
+import VertViewPager from 'react-native-vertical-view-pager'
 
 /**
  * Default styles
