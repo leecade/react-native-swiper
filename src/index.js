@@ -298,7 +298,7 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if (Platform.OS === 'ios' || (Platform.OS === 'android' && this.props.horizontal === false) ) {
+    if (Platform.OS === 'ios' || Platform.OS === "web" || (Platform.OS === 'android' && this.props.horizontal === false) ) {
       if (this.initialRender && this.state.total > 1) {
         this.scrollView.scrollTo({...offset, animated: false})
         this.initialRender = false;
@@ -467,7 +467,7 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS !== 'ios') {
+    if (Platform.OS !== 'ios' && Platform.OS !== "web") {
       this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
       this.scrollView && this.scrollView.scrollTo({ x, y, animated })
@@ -480,7 +480,7 @@ export default class extends Component {
     })
 
     // trigger onScrollEnd manually in android
-    if (!animated || Platform.OS !== 'ios') {
+    if (!animated || (Platform.OS !== 'ios' && Platform.OS !== "web")) {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {
