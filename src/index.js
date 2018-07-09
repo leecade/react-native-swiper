@@ -384,6 +384,7 @@ export default class extends Component {
       (index === 0 || index === children.length - 1)) {
       this.internals.isScrolling = false
     }
+    this.props.onScrollEndDrag && this.props.onScrollEndDrag(e, this.fullState(), this)
   }
 
   /**
