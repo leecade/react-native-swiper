@@ -256,11 +256,16 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
+    let offset = initState.dir === 'y'
+      ? {y: height * props.index}
+      : {x: width * props.index}
 
     this.internals = {
       ...this.internals,
       isScrolling: false,
-    };
+      offset
+    }
+
     return initState
   }
 
