@@ -194,7 +194,10 @@ export default class extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    const indexUpdated = this.props.index !== nextProps.index;
+    this.setState(this.initState(nextProps, indexUpdated), () => {
+      indexUpdated && this.androidPageIndexChangeFix();
+    })
   }
 
   componentDidMount() {
@@ -208,7 +211,11 @@ export default class extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     // If the index has changed, we notify the parent via the onIndexChanged callback
-    if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
+    if (this.state.index !== nextState.index) {
+      this.props.onIndexChanged(nextState.index);
+      return true
+    }
+    return false;
   }
 
   initState(props, updateIndex = false) {
@@ -262,7 +269,7 @@ export default class extends Component {
     this.internals = {
       ...this.internals,
       isScrolling: false,
-      offset
+      offset,
     }
 
     return initState
@@ -622,6 +629,13 @@ export default class extends Component {
 
   refScrollView = view => {
     this.scrollView = view;
+    this.androidPageIndexChangeFix();
+  }
+
+  androidPageIndexChangeFix() {
+    if(this.scrollView && Platform.OS !== 'ios') {
+      this.scrollView.setPage(this.props.loop ? this.state.index + 1 : this.state.index);
+    }
   }
 
   renderScrollView = pages => {
