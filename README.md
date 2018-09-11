@@ -6,7 +6,7 @@
 
 「全新团队, 全新产品, 全新技术栈, 不设技术边界, 不设管理, 不装」
 
-要求: 211 / 985 / 大厂经验 / 技术亮点 (重度: `Node` / `RN` / `Vue` / `React` / `微服务` 等技术应用)
+要求: 参考头条面试标准 (重度: `Node` / `RN` / `Vue` / `React` / `微服务` 等技术向)
 
 <img style="float: left" alt="react-native-swiper" src="https://user-images.githubusercontent.com/533360/45361035-c620de00-b603-11e8-9fa7-cb7586e08b66.png" width="150">
 
