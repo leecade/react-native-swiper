@@ -220,6 +220,9 @@ AppRegistry.registerComponent('myproject', () => Swiper);
 | dotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotColor | - | `string` | Allow custom the active-dot element. |
 | activeDotStyle | - | `object` | Allow custom the active-dot element. |
+| shrinkPagination | false | `bool` | Set to `true` make shrinkPagination mode. Of course, the total number of the carousel figure must be greater than the value of `visibleDotQuantity`. |
+| paginationDotCount | 7 | `number` | Set to display the number of dots in shrink mode. Values can take the following values `3`、`5`、`7`、`9`. |
+| dotSize | 14 | `number` | This means `width` and `height`. If you set the style of the dot, you must modify this value, otherwise it will cause slip errors. We usually render the dot's height equal to the width. This value is generally `width` + `padding` + `margin` |
 
 #### Autoplay
 
