@@ -227,7 +227,7 @@ export default class extends Component {
       // retain the index
       initState.index = state.index
     } else {
-      initState.index = initState.total > 1 ? Math.min(props.index, initState.total - 1) : 0
+      initState.index = initState.total > 1 ? Math.min(props.index, initState.total) : 0
     }
 
     // Default: horizontal
