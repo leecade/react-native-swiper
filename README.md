@@ -267,6 +267,8 @@ AppRegistry.registerComponent('myproject', () => Swiper);
 | Prop  | Params  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | onScrollBeginDrag | `e` / `state` / `context` | `function` | When animation begins after letting up |
+| onScrollSettlingDrag | `e` / `state` | `function` | Right before drag animation ends [Android] |
+| onScrollEndDrag | `e` / `state` / `context` | `function` | When animation ends after dragging |
 | onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce |
 | onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd` |
 | onTouchStart | `e` / `state` / `context` | `function` | Same, but bubble phase |

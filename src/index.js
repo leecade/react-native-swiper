@@ -333,6 +333,26 @@ export default class extends Component {
   }
 
   /**
+   * [Android Only] Listens for scroll events
+   * @param  {string} e native event of values: 'dragging', 'settling', 'idle'
+   */
+  onPageScrollStateChanged(e) {
+    switch (e) {
+      case 'dragging':
+        this.internals.isScrolling = true
+        this.props.onScrollBeginDrag && this.props.onScrollBeginDrag(e, this.fullState())
+        break;
+      case 'settling':
+        this.props.onScrollSettlingDrag && this.props.onScrollSettlingDrag(e, this.fullState())
+        break;
+      case 'idle':
+        this.internals.isScrolling = false
+        this.props.onScrollEndDrag && this.props.onScrollEndDrag(e, this.fullState())
+        break;
+    }
+  }
+
+  /**
    * Scroll begin handle
    * @param  {object} e native event
    */
@@ -639,6 +659,7 @@ export default class extends Component {
       <ViewPagerAndroid ref={this.refScrollView}
         {...this.props}
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+        onPageScrollStateChanged={this.onPageScrollStateChanged.bind(this)}
         onPageSelected={this.onScrollEnd}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
