@@ -2,6 +2,8 @@
  * react-native-swiper
  * @author leecade<leecade@163.com>
  */
+import { StyleSheet } from 'react-native'
+import VertViewPager from 'react-native-vertical-view-pager'
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -635,16 +637,30 @@ export default class extends Component {
         </ScrollView>
        )
     }
-    return (
-      <ViewPagerAndroid ref={this.refScrollView}
-        {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageSelected={this.onScrollEnd}
-        key={pages.length}
-        style={[styles.wrapperAndroid, this.props.style]}>
-        {pages}
-      </ViewPagerAndroid>
-    )
+    if (this.props.horizontal === false) {
+          return (
+            <VertViewPager ref={this.refScrollView}
+                           {...this.props}
+                           initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+                           onPageSelected={this.onScrollEnd}
+                           key={pages.length}
+                           style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style])}>
+              {pages}
+            </VertViewPager>
+          )
+        } else {
+          return (
+            <ViewPagerAndroid ref={this.refScrollView}
+                              {...this.props}
+                              initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+                              onPageSelected={this.onScrollEnd}
+                              key={pages.length}
+                              style={[styles.wrapperAndroid, this.props.style]}>
+              {pages}
+            </ViewPagerAndroid>
+          )
+
+        }
   }
 
   /**
