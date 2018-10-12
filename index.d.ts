@@ -27,9 +27,9 @@ declare module 'react-native-swiper' {
         // Only load current index slide , loadMinimalSize slides before and after.
         loadMinimal?: boolean
         // see loadMinimal
-        loadMinimalSize?: boolean
+        loadMinimalSize?: number
         // Custom loader to display when slides aren't loaded
-        loadMinimalLoader?: boolean
+        loadMinimalLoader?: JSX.Element
 
         // Pagination
         // Set to true make pagination visible.
