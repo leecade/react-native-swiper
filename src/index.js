@@ -560,11 +560,19 @@ export default class extends Component {
   renderTitle = () => {
     const child = this.props.children[this.state.index]
     const title = child && child.props && child.props.title
+
+    console.warn('Deprecated: Please now use renderStickyContent instead of title prop')
     return title
       ? (<View style={styles.title}>
         {this.props.children[this.state.index].props.title}
       </View>)
       : null
+  }
+
+  renderStickyContent = () => {
+    const child = this.props.children[this.state.index]
+    const renderStickyContent = child && child.props && child.props.renderStickyContent
+    return renderStickyContent ? renderStickyContent() : null
   }
 
   renderNextButton = () => {
@@ -721,6 +729,7 @@ export default class extends Component {
           ? renderPagination(index, total, this)
           : this.renderPagination())}
         {this.renderTitle()}
+        {this.renderStickyContent()}
         {showsButtons && this.renderButtons()}
       </View>
     )

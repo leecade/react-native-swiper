@@ -244,7 +244,8 @@ AppRegistry.registerComponent('myproject', () => Swiper);
 | Prop  | Default  | Type | Description |
 | :------------ |:---------------:| :---------------:| :-----|
 | style | {...} | `style` | Custom styles will merge with the default styles. |
-| title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. |
+| title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. (Deprecated in favor of renderStickyContent) |
+| renderStickyContent | null | `function` | This parameter allow you to render sticky content over the slider. |
 
 #### Basic props of `<ScrollView />`
 
