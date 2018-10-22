@@ -725,11 +725,11 @@ export default class extends Component {
     return (
       <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
         {this.renderScrollView(pages)}
+        {this.renderTitle()}
+        {this.renderStickyContent()}
         {showsPagination && (renderPagination
           ? renderPagination(index, total, this)
           : this.renderPagination())}
-        {this.renderTitle()}
-        {this.renderStickyContent()}
         {showsButtons && this.renderButtons()}
       </View>
     )
