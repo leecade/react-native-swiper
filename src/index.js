@@ -619,6 +619,17 @@ export default class extends Component {
     this.scrollView = view;
   }
 
+  onPageScrollStateChanged = state => {
+    switch (state) {
+      case 'dragging':
+        return this.onScrollBegin();
+
+      case 'idle':
+      case 'settling':
+        if (this.props.onTouchEnd) this.props.onTouchEnd();
+    }
+  }
+
   renderScrollView = pages => {
     if (Platform.OS === 'ios') {
       return (
@@ -639,6 +650,7 @@ export default class extends Component {
       <ViewPagerAndroid ref={this.refScrollView}
         {...this.props}
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+        onPageScrollStateChanged={this.onPageScrollStateChanged}
         onPageSelected={this.onScrollEnd}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
