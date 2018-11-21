@@ -625,7 +625,7 @@ export default class extends Component {
     switch (state) {
       case 'dragging':
         return this.onScrollBegin();
-        case 'idle':
+      case 'idle':
       case 'settling':
         if (this.props.onTouchEnd) this.props.onTouchEnd();
     }
