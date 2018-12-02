@@ -563,7 +563,7 @@ export default class extends Component {
     const child = this.props.children[this.state.index]
     const title = child && child.props && child.props.title
     return title
-      ? (<View style={styles.title}>
+      ? (<View style={[styles.title, child.props.titleWrapperStyle]}>
         {this.props.children[this.state.index].props.title}
       </View>)
       : null
