@@ -6,7 +6,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   Text,
-  View,
+  SafeAreaView,
   ViewPropTypes,
   ScrollView,
   Dimensions,
@@ -729,14 +729,14 @@ export default class extends Component {
     }
 
     return (
-      <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
+      <SafeAreaView style={[styles.container, containerStyle]} onLayout={this.onLayout}>
         {this.renderScrollView(pages)}
         {showsPagination && (renderPagination
           ? renderPagination(index, total, this)
           : this.renderPagination())}
         {this.renderTitle()}
         {showsButtons && this.renderButtons()}
-      </View>
+      </SafeAreaView>
     )
   }
 }
