@@ -535,25 +535,30 @@ export default class extends Component {
       marginTop: 3,
       marginBottom: 3
     }, this.props.activeDotStyle]} />
-    const Dot = this.props.dot || <View style={[{
-      backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
-      width: 8,
-      height: 8,
-      borderRadius: 4,
-      marginLeft: 3,
-      marginRight: 3,
-      marginTop: 3,
-      marginBottom: 3
-    }, this.props.dotStyle ]} />
+    const dotProps = {
+      style: [{
+          backgroundColor: this.props.dotColor || 'rgba(0,0,0,.2)',
+          width: 8,
+          height: 8,
+          borderRadius: 4,
+          marginLeft: 3,
+          marginRight: 3,
+          marginTop: 3,
+          marginBottom: 3
+        }, this.props.dotStyle ]
+    };
+    const {touchableDot} = this.props;
+    const Dot = this.props.dot || (touchableDot ? <TouchableOpacity {...dotProps} /> : <View {...dotProps} />)
     for (let i = 0; i < this.state.total; i++) {
       dots.push(i === this.state.index
         ? React.cloneElement(ActiveDot, {key: i})
-        : React.cloneElement(Dot, {key: i})
+        : React.cloneElement(Dot, {key: i, onPress: touchableDot ? () => {this.scrollBy(i - this.state.index)} : null})
       )
     }
 
     return (
-      <View pointerEvents='none' style={[styles['pagination_' + this.state.dir], this.props.paginationStyle]}>
+      <View pointerEvents='box-none'
+            style={[styles['pagination_' + this.state.dir], this.props.paginationStyle]}>
         {dots}
       </View>
     )
