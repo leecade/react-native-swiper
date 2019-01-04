@@ -1,5 +1,5 @@
 declare module 'react-native-swiper' {
-    import { ViewStyle, ScrollViewProps } from "react-native";
+    import { ViewStyle, ScrollViewProps } from 'react-native';
     import { Component } from 'react'
 
     interface SwiperProps extends ScrollViewProps {
