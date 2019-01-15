@@ -1,6 +1,6 @@
 > Hi there:
 
-[**头条财经前端团队急招**] 了解团队 / 投简历请联系: 
+[**头条财经前端团队急招**] 了解团队 / 投简历请联系:
 
 微信: 103024979 / 邮箱: leecade@163.com
 
@@ -39,7 +39,7 @@
 - **[1.5.6]**
   + Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
   + Add containerStyle prop to customize the view container.
-  
+
 - [1.5.5]
   + Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
@@ -259,6 +259,7 @@ AppRegistry.registerComponent('myproject', () => Swiper);
 | removeClippedSubviews | true | `bool` | If true, offscreen child views (whose overflow value is hidden) are removed from their native backing superview when offscreen. This canimprove scrolling performance on long lists.  |
 | automaticallyAdjustContentInsets | false | `bool` | Set to `true` if you need adjust content insets automation. |
 | scrollEnabled | true | `bool` | Enables/Disables swiping |
+| useViewPager | true | `bool` | Enables/Disables the use of `ViewPagerAndroid` component on Android in favour of `ScrollView` |
 
 > @see: http://facebook.github.io/react-native/docs/scrollview.html
 
