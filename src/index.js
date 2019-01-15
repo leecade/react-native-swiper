@@ -467,10 +467,10 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS !== 'ios' && Platform.OS !== "web") {
-      this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
+    if (Platform.OS !== 'ios' && Platform.OS !== "web" && this.props.horizontal === true) {
+        this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
-      this.scrollView && this.scrollView.scrollTo({ x, y, animated })
+        this.scrollView && this.scrollView.scrollTo({ x, y, animated })
     }
 
     // update scroll state
@@ -479,8 +479,8 @@ export default class extends Component {
       autoplayEnd: false
     })
 
-    // trigger onScrollEnd manually in android
-    if (!animated || (Platform.OS !== 'ios' && Platform.OS !== "web")) {
+    // trigger onScrollEnd manually in android and web
+    if (!animated || (Platform.OS !== 'ios')) {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {
