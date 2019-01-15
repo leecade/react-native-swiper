@@ -140,6 +140,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    useViewPager: PropTypes.bool,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -170,6 +171,7 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
+    useViewPager: true,
     onIndexChanged: () => null
   }
 
@@ -463,7 +465,7 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS !== 'ios') {
+    if (Platform.OS !== 'ios' && this.props.useViewPager) {
       this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
       this.scrollView && this.scrollView.scrollTo({ x, y, animated })
@@ -633,7 +635,7 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || !this.props.useViewPager) {
       return (
         <ScrollView ref={this.refScrollView}
           {...this.props}
