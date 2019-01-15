@@ -1,6 +1,8 @@
 /**
  * react-native-swiper
  * @author leecade<leecade@163.com>
+ * @author nart<unknown-email>
+ * @author Vin <vin@8sistemas.com>
  */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
@@ -13,8 +15,11 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  StyleSheet
 } from 'react-native'
+
+import VertViewPager from 'react-native-vertical-view-pager'
 
 /**
  * Default styles
@@ -255,6 +260,7 @@ export default class extends Component {
       ? height * props.index
       : width * props.index
 
+    initState.offsetDone = false;
 
     this.internals = {
       ...this.internals,
@@ -292,7 +298,7 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || Platform.OS === "web" || (Platform.OS === 'android' && this.props.horizontal === false) ) {
       if (this.initialRender && this.state.total > 1) {
         this.scrollView.scrollTo({...offset, animated: false})
         this.initialRender = false;
@@ -463,10 +469,10 @@ export default class extends Component {
     if (state.dir === 'x') x = diff * state.width
     if (state.dir === 'y') y = diff * state.height
 
-    if (Platform.OS !== 'ios') {
-      this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
+    if (Platform.OS !== 'ios' && Platform.OS !== "web" && this.props.horizontal === true) {
+        this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
-      this.scrollView && this.scrollView.scrollTo({ x, y, animated })
+        this.scrollView && this.scrollView.scrollTo({ x, y, animated })
     }
 
     // update scroll state
@@ -475,8 +481,8 @@ export default class extends Component {
       autoplayEnd: false
     })
 
-    // trigger onScrollEnd manually in android
-    if (!animated || Platform.OS !== 'ios') {
+    // trigger onScrollEnd manually in android and web
+    if (!animated || (Platform.OS !== 'ios')) {
       setImmediate(() => {
         this.onScrollEnd({
           nativeEvent: {
@@ -619,6 +625,14 @@ export default class extends Component {
 
   refScrollView = view => {
     this.scrollView = view;
+
+    if ( Platform.OS === 'android' && this.props.horizontal === false ) {
+        setTimeout(function() {
+          this.setState({
+              offsetDone: true
+          })
+        }.bind(this), 25)
+    }
   }
 
   onPageScrollStateChanged = state => {
@@ -633,7 +647,7 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
-    if (Platform.OS === 'ios') {
+    if (Platform.OS === 'ios' || Platform.OS === "web") {
       return (
         <ScrollView ref={this.refScrollView}
           {...this.props}
@@ -648,17 +662,31 @@ export default class extends Component {
         </ScrollView>
        )
     }
-    return (
-      <ViewPagerAndroid ref={this.refScrollView}
-        {...this.props}
-        initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
-        onPageScrollStateChanged={this.onPageScrollStateChanged}
-        onPageSelected={this.onScrollEnd}
-        key={pages.length}
-        style={[styles.wrapperAndroid, this.props.style]}>
-        {pages}
-      </ViewPagerAndroid>
-    )
+
+    return this.props.horizontal === false ?
+             (
+                 <VertViewPager ref={this.refScrollView}
+                    {...this.props}
+                    contentOffset={this.state.offset}
+                    onPageSelected={this.onScrollEnd}
+                    onMomentumScrollEnd={this.onScrollEnd}
+                    key={pages.length}
+                    style={StyleSheet.flatten([styles.wrapperAndroid, this.props.style, {
+                        opacity: this.state.offsetDone ? 1 : 0
+                    }])}>
+                    {pages}
+                </VertViewPager>
+            ) : (
+             <ViewPagerAndroid ref={this.refScrollView}
+               {...this.props}
+               initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
+               onPageScrollStateChanged={this.onPageScrollStateChanged}
+               onPageSelected={this.onScrollEnd}
+               key={pages.length}
+               style={[styles.wrapperAndroid, this.props.style]}>
+               {pages}
+             </ViewPagerAndroid>
+         )
   }
 
   /**
