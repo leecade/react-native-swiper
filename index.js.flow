@@ -1,8 +1,5 @@
 // @flow strict
 
-// eslint-disable-next-line
-import type { Component, Node } from 'react';
-
 declare module 'react-native-swiper' {
   // eslint-disable-next-line no-undef
   declare export type SwiperProps = $ReadOnly<{|
@@ -40,11 +37,11 @@ declare module 'react-native-swiper' {
     // Custom styles will merge with the default styles.
     paginationStyle?: ?Object,
     // Complete control how to render pagination with three params (index, total, context) ref to this.state.index / this.state.total / this, For example: show numbers instead of dots.
-    renderPagination?: ?(index: number, total: number, context: any) => Node,
+    renderPagination?: ?(index: number, total: number, context: any) => React$Node,
     // Allow custom the dot element.
-    dot?: ?Node,
+    dot?: ?React$Node,
     // Allow custom the active-dot element.
-    activeDot?: ?Node,
+    activeDot?: ?React$Node,
     // Allow custom the active-dot element.
     dotStyle?: ?Object,
     // Allow custom the active-dot element.
@@ -64,9 +61,9 @@ declare module 'react-native-swiper' {
     // Set to true make control buttons visible.
     buttonWrapperStyle?: ?Object,
     // Allow custom the next button.
-    nextButton?: ?Node,
+    nextButton?: ?React$Node,
     // Allow custom the prev button.
-    prevButton?: ?Node,
+    prevButton?: ?React$Node,
 
     // Supported ScrollResponder
     // When animation begins after letting up
@@ -105,7 +102,7 @@ declare module 'react-native-swiper' {
   |}>;
 
   // eslint-disable-next-line no-undef
-  declare export default class Swiper extends Component<SwiperProps> {
+  declare export default class Swiper extends React$Component<SwiperProps> {
     scrollBy(index: number, animated?: boolean): void;
   }
 }
