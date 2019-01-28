@@ -5,7 +5,7 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.13",
+  "version": "1.5.14",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -46,7 +46,7 @@
     "url": "git+https://github.com/leecade/react-native-swiper.git"
   },
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/leecade/react-native-swiper/issues"
   },
