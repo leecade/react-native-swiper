@@ -667,7 +667,7 @@ export default class extends Component {
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
         onPageScrollStateChanged={this.onPageScrollStateChanged}
         onPageSelected={this.onScrollEnd}
-        onScroll={this.onScroll}
+        onPageScroll={this.onAndroidScroll}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
         {pages}
