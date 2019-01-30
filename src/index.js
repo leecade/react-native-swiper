@@ -136,6 +136,7 @@ export default class extends Component {
     autoplayDirection: PropTypes.bool,
     index: PropTypes.number,
     renderPagination: PropTypes.func,
+    onScroll: PropTypes.func,
     dotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
@@ -384,6 +385,16 @@ export default class extends Component {
       (index === 0 || index === children.length - 1)) {
       this.internals.isScrolling = false
     }
+  }
+
+  onScroll(e) {
+    this.props.onScroll({ x: e.nativeEvent.contentOffset.x });
+  }
+
+  onAndroidScroll(e) {
+    const event = e.nativeEvent;
+    const x = event.position * this.state.width + event.offset * this.state.width;
+    this.props.onScroll({ x });
   }
 
   /**
@@ -643,6 +654,8 @@ export default class extends Component {
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}
+          onScroll={this.onScroll}
+          scrollEventThrottle={16}
           style={this.props.scrollViewStyle}>
           {pages}
         </ScrollView>
@@ -654,6 +667,7 @@ export default class extends Component {
         initialPage={this.props.loop ? this.state.index + 1 : this.state.index}
         onPageScrollStateChanged={this.onPageScrollStateChanged}
         onPageSelected={this.onScrollEnd}
+        onScroll={this.onScroll}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
         {pages}
