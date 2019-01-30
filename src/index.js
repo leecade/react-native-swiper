@@ -654,7 +654,7 @@ export default class extends Component {
           onScrollBeginDrag={this.onScrollBegin}
           onMomentumScrollEnd={this.onScrollEnd}
           onScrollEndDrag={this.onScrollEndDrag}
-          onScroll={this.onScroll}
+          onScroll={(e) => this.onScroll(e)}
           scrollEventThrottle={16}
           style={this.props.scrollViewStyle}>
           {pages}
