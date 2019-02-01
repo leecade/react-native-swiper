@@ -656,6 +656,7 @@ export default class extends Component {
           onScrollEndDrag={this.onScrollEndDrag}
           onScroll={(e) => this.onScroll(e)}
           scrollEventThrottle={16}
+          scrollEnabled={this.props.scrollEnabled}
           style={this.props.scrollViewStyle}>
           {pages}
         </ScrollView>
@@ -668,6 +669,7 @@ export default class extends Component {
         onPageScrollStateChanged={this.onPageScrollStateChanged}
         onPageSelected={this.onScrollEnd}
         onPageScroll={(e) => this.onAndroidScroll(e)}
+        scrollEnabled={this.props.scrollEnabled}
         key={pages.length}
         style={[styles.wrapperAndroid, this.props.style]}>
         {pages}
