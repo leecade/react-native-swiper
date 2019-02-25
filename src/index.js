@@ -194,11 +194,17 @@ export default class extends Component {
 
   componentWillReceiveProps (nextProps) {
     if (!nextProps.autoplay && this.autoplayTimer) clearTimeout(this.autoplayTimer)
-    this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
+    if (this.props.index !== nextProps.index) {
+      this.setState(this.initState(nextProps, true))
+    }
   }
 
   componentDidMount () {
     this.autoplay()
+  }
+
+  componentDidUpdate (prevProps) {
+    this.props.autoplay && !prevProps.autoplay && this.autoplay();
   }
 
   componentWillUnmount () {
@@ -252,9 +258,8 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
-
+      ? height * (props.index + props.loop ? 1 : 0)
+      : width * (props.index + props.loop ? 1 : 0);
 
     this.internals = {
       ...this.internals,
