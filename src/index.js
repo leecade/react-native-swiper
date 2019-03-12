@@ -38,7 +38,7 @@ const styles = {
 
   slide: {
     backgroundColor: 'transparent',
-  },
+ },
 
   pagination_x: {
     position: 'absolute',
@@ -626,8 +626,9 @@ export default class extends Component {
       case 'dragging':
         return this.onScrollBegin();
 
-      case 'idle':
-      case 'settling':
+      	case 'idle':
+	case 'settling':
+	this.internals.isScrolling = false;
         if (this.props.onTouchEnd) this.props.onTouchEnd();
     }
   }
