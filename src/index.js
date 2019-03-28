@@ -197,10 +197,6 @@ export default class extends Component {
     this.setState(this.initState(nextProps, this.props.index !== nextProps.index))
   }
 
-  componentDidMount () {
-    this.autoplay()
-  }
-
   componentWillUnmount () {
     this.autoplayTimer && clearTimeout(this.autoplayTimer)
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
@@ -209,6 +205,10 @@ export default class extends Component {
   componentWillUpdate (nextProps, nextState) {
     // If the index has changed, we notify the parent via the onIndexChanged callback
     if (this.state.index !== nextState.index) this.props.onIndexChanged(nextState.index)
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    this.autoplay()
   }
 
   initState (props, updateIndex = false) {
@@ -252,8 +252,8 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] = initState.dir === 'y'
-      ? height * props.index
-      : width * props.index
+      ? initState.width * (props.index + props.loop ? 1: 0)
+      : initState.width * (props.index + props.loop ? 1: 0)
 
 
     this.internals = {
