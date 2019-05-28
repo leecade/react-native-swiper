@@ -417,6 +417,8 @@ export default class extends Component {
         index = 0
         offset[dir] = step
         loopJump = true
+      } else {
+        index = Math.max(0, index)
       }
     }
 
