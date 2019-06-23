@@ -5,10 +5,11 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.14",
+  "version": "1.5.15-dev",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
+    "commit": "npx git-cz",
     "start": "react-native start",
     "lint": "standard | snazzy",
     "update": "updtr",
@@ -60,5 +61,10 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
