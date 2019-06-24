@@ -143,7 +143,8 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    buttonTextStyle:PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
   }
 
   /**
@@ -170,7 +171,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    buttonTextStyle:undefined,
   }
 
   /**
@@ -574,7 +576,7 @@ export default class extends Component {
 
     if (this.props.loop ||
       this.state.index !== this.state.total - 1) {
-      button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
+      button = this.props.nextButton || <Text style={[styles.buttonText, this.props.buttonTextStyle]}>›</Text>
     }
 
     return (
@@ -593,7 +595,7 @@ export default class extends Component {
     let button = null
 
     if (this.props.loop || this.state.index !== 0) {
-      button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
+      button = this.props.prevButton || <Text style={[styles.buttonText, this.props.buttonTextStyle]}>‹</Text>
     }
 
     return (
