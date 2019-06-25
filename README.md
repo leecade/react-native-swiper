@@ -207,6 +207,7 @@ AppRegistry.registerComponent('myproject', () => Swiper);
 | loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize | 1 | `number` | see `loadMinimal`   |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
+| activityColor | `string` | Defines a color for the <ActivityIndicator/> on the loading page. |
 
 #### Pagination
 

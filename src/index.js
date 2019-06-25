@@ -140,6 +140,7 @@ export default class extends Component {
     activeDotStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    activityColor: PropTypes.string,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -716,7 +717,7 @@ export default class extends Component {
           } else {
             return (
               <View style={pageStyleLoading} key={i}>
-                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
+                {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator color={this.props.activityColor} />}
               </View>
             )
           }
