@@ -5,7 +5,7 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.15-dev",
+  "version": "1.6.0-dev",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -60,6 +60,7 @@
     "updtr": "^2.0.0"
   },
   "dependencies": {
+    "@react-native-community/viewpager": "^1.1.7",
     "prop-types": "^15.5.10"
   },
   "config": {
