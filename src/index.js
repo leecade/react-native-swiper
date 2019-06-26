@@ -710,8 +710,6 @@ export default class extends Component {
    * @return {object} react-dom
    */
   render() {
-    const state = this.state
-    const props = this.props
     const { index, total, width, height } = this.state
     const {
       children,
