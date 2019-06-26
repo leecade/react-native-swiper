@@ -32,13 +32,3 @@ build/Release
 *.xcuserstate
 examples/swiper.xcodeproj/project.xcworkspace/
 examples/swiper.xcodeproj/xcuserdata
-
-# IntelliJ
-.idea/
-
-# Vim
-*.sw*
-dist/
-
-# yarn
-yarn.lock
