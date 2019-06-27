@@ -208,6 +208,13 @@ export default class extends Component {
       this.props.onIndexChanged(nextState.index)
   }
 
+  componentDidUpdate(prevProps) {
+    // If autoplay props updated to true, autoplay immediately
+    if (this.props.autoplay && !prevProps.autoplay) {
+      this.autoplay()
+    }
+  }
+
   initState(props, updateIndex = false) {
     // set the current state
     const state = this.state || { width: 0, height: 0, offset: { x: 0, y: 0 } }
@@ -511,7 +518,12 @@ export default class extends Component {
    */
 
   scrollTo = (index, animated = true) => {
-    if (this.internals.isScrolling || this.state.total < 2 || index == this.state.index) return
+    if (
+      this.internals.isScrolling ||
+      this.state.total < 2 ||
+      index == this.state.index
+    )
+      return
 
     const state = this.state
     const diff = this.state.index + (index - this.state.index)
@@ -522,7 +534,8 @@ export default class extends Component {
     if (state.dir === 'y') y = diff * state.height
 
     if (Platform.OS !== 'ios') {
-      this.scrollView && this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
+      this.scrollView &&
+        this.scrollView[animated ? 'setPage' : 'setPageWithoutAnimation'](diff)
     } else {
       this.scrollView && this.scrollView.scrollTo({ x, y, animated })
     }
