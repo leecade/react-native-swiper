@@ -5,10 +5,11 @@
     "react-native",
     "ios"
   ],
-  "version": "1.5.13",
+  "version": "1.6.0-nightly.1",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
+    "commit": "npx git-cz",
     "start": "react-native start",
     "lint": "standard | snazzy",
     "update": "updtr",
@@ -55,10 +56,16 @@
     "babel-eslint": "^8.0.1",
     "rimraf": "^2.5.4",
     "snazzy": "^7.1.0",
-    "standard": "^10.0.3",
+    "standard": "^11.0.0",
     "updtr": "^2.0.0"
   },
   "dependencies": {
+    "@react-native-community/viewpager": "^1.1.7",
     "prop-types": "^15.5.10"
+  },
+  "config": {
+    "commitizen": {
+      "path": "cz-conventional-changelog"
+    }
   }
 }
