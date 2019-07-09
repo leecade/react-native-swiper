@@ -429,6 +429,19 @@ export default class extends Component {
    * @param  {string} dir    'x' || 'y'
    */
   updateIndex = (offset, dir, cb) => {
+    // Android ScrollView will not scrollTo certain offset when props change
+    const callback = () => {
+      cb()
+      if (Platform.OS === 'android') {
+        this.state.index === 0 &&
+          this.scrollView.scrollTo({ x: state.width, y: 0, animated: false })
+        this.state.index === this.state.total - 1 &&
+          this.scrollView.scrollTo({
+            x: state.width * this.state.total,
+            animated: false
+          })
+      }
+    }
     const state = this.state
     let index = state.index
     if (!this.internals.offset)
@@ -475,14 +488,14 @@ export default class extends Component {
         newState.offset = { x: 0, y: 0 }
         newState.offset[dir] = offset[dir] + 1
         this.setState(newState, () => {
-          this.setState({ offset: offset }, cb)
+          this.setState({ offset: offset }, callback)
         })
       } else {
         newState.offset = offset
-        this.setState(newState, cb)
+        this.setState(newState, callback)
       }
     } else {
-      this.setState(newState, cb)
+      this.setState(newState, callback)
     }
   }
 
