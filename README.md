@@ -23,29 +23,41 @@
 
 ## Changelogs
 
-- **[1.6.0-dev]**
-  - ViewPagerAndroid: react-native => @react-native-community/viewpager
-  - add TypeScript typing of containerStyle
-- [1.5.6]
+- **[1.6.0-nightly]**
+  - Dependency
+    - Remove ViewPagerAndroid, use ScrollView #1009
+  - TypeScript
+    - correct the wrong types #1000
+    - Add missing scrollBy TypeScript definition #931
+  - New Feature
+    - add scrollTo #831
+    - Added prop to disable the PrevButton #749
+    - Optionally render page #1004
+  - Bug Fix
+    - ES6 and CommonJS compatibility #717
+    - Solves the issue of state messing up when parent component calls setState #939
+    - replay when autoplay is setted to true #1002
+
+* [1.5.6]
 
   - Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
   - Add containerStyle prop to customize the view container.
 
-- [1.5.5]
+* [1.5.5]
   - Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
-* [1.5.4]
+- [1.5.4]
 
   - Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
   - Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
 
-* [1.5.3]
+- [1.5.3]
 
   - Add loadMinimalLoader prop to customize `<ActivityIndicator />` (thanks [@Exilz](https://github.com/Exilz))
   - Disable autoplay timer when prop changes to false (thanks [@dizlexik](https://github.com/dizlexik))
   - Special thanks to [@hypatiah](https://github.com/dizlexik) for fixed some grammatical errors in README
 
-* [1.5.2]
+- [1.5.2]
   - Add yarn lock
   - Fix jitter when quickly swiping back and forth between pages (iOS) (thanks [@nemophrost](https://github.com/nemophrost))
   - The first webview always reloaded when injecting the rest of the children (thanks [@eosterberg](https://github.com/eosterberg))
@@ -100,13 +112,10 @@
 $ npm i react-native-swiper --save
 ```
 
-> v1.6.0-dev
+> v1.6.0-nightly
 
 ```
-npm i --save react-native-swiper@next
-# Linking @react-native-community/viewpager
-react-native link @react-native-community/viewpager
-# Linking manually: https://github.com/react-native-community/react-native-viewpager#manual-installation
+npm i --save react-native-swiper@nightly
 ```
 
 ### Basic Usage
@@ -159,7 +168,7 @@ const styles = StyleSheet.create({
 })
 
 export default class SwiperComponent extends Component {
-  render(){
+  render() {
     return (
       <Swiper style={styles.wrapper} showsButtons={true}>
         <View style={styles.slide1}>
@@ -176,7 +185,7 @@ export default class SwiperComponent extends Component {
   }
 }
 
-AppRegistry.registerComponent('myproject', () => SwiperComponent);
+AppRegistry.registerComponent('myproject', () => SwiperComponent)
 ```
 
 ### Properties
