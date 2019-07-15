@@ -244,7 +244,9 @@ export default class extends Component {
     }
 
     // Support Optional render page
-    initState.children = props.children.filter(child => child)
+    initState.children = Array.isArray(props.children)
+      ? props.children.filter(child => child)
+      : props.children
 
     initState.total = initState.children ? initState.children.length || 1 : 0
 
