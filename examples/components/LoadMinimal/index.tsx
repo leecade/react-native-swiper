@@ -65,18 +65,16 @@ const SlideSchema: ModelType<SlideState, SlideActions> = {
 };
 
 const Slide = props => {
-  const [loaded, setLoaded] = useState(false);
   return (
     <View style={styles.slide}>
       <Image
         onLoad={() => {
           props.loadHandle(props.i);
-          setLoaded(true);
         }}
         style={styles.image}
         source={{ uri: props.uri }}
       />
-      {!loaded && (
+      {!props.loaded && (
         <View style={styles.loadingView}>
           <Image style={styles.loadingImage} source={loading} />
         </View>
@@ -91,16 +89,22 @@ const Page = () => {
   const loadHandle = useCallback((i: number) => {
     actions.loaded(i);
   }, []);
-  // render() {
   return (
     <View style={{ flex: 1 }}>
       <Swiper
         loadMinimal
         loadMinimalSize={1}
+        // index={0}
         style={styles.wrapper}
-        loop={false}>
+        loop={true}>
         {state.imgList.map((item, i) => (
-          <Slide loadHandle={loadHandle} uri={item} i={i} key={i} />
+          <Slide
+            loadHandle={loadHandle}
+            uri={item}
+            i={i}
+            key={i}
+            loaded={state.loadQueue[i]}
+          />
         ))}
       </Swiper>
       <View>
@@ -108,7 +112,6 @@ const Page = () => {
       </View>
     </View>
   );
-  // }
 };
 
 export default Page;

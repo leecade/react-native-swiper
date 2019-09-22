@@ -1,8 +1,8 @@
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, StyleSheet } from 'react-native';
 import Swiper from 'react-native-swiper';
 
-var styles = {
+var styles = StyleSheet.create({
   wrapper: {},
   slide1: {
     flex: 1,
@@ -27,10 +27,10 @@ var styles = {
     fontSize: 30,
     fontWeight: 'bold',
   },
-};
+});
 
 export default () => (
-  <Swiper style={styles.wrapper} loop={true} showsButtons>
+  <Swiper style={styles.wrapper} loop={true} index={0} showsButtons>
     <View style={styles.slide1}>
       <Text style={styles.text}>Hello Swiper</Text>
     </View>

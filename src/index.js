@@ -226,9 +226,13 @@ export default class extends Component {
       this.autoplay()
     }
     if (this.props.children !== prevProps.children) {
-      this.setState(
-        this.initState({ ...this.props, index: this.state.index }, true)
-      )
+      if (this.props.loadMinimal && Platform.OS === 'ios') {
+        this.setState({ ...this.props, index: this.state.index })
+      } else {
+        this.setState(
+          this.initState({ ...this.props, index: this.state.index }, true)
+        )
+      }
     }
   }
 
@@ -310,11 +314,7 @@ export default class extends Component {
 
     // only update the offset in state if needed, updating offset while swiping
     // causes some bad jumping / stuttering
-    if (
-      !this.state.offset ||
-      width !== this.state.width ||
-      height !== this.state.height
-    ) {
+    if (!this.state.offset) {
       state.offset = offset
     }
 
@@ -439,8 +439,7 @@ export default class extends Component {
     // Android ScrollView will not scrollTo certain offset when props change
     const callback = async () => {
       cb()
-      // TODO: support loadMinimal
-      if (Platform.OS === 'android' && !this.props.loadMinimal) {
+      if (Platform.OS === 'android' && this.props.loop) {
         if (this.state.index === 0) {
           this.props.horizontal
             ? this.scrollView.scrollTo({
