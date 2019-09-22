@@ -439,7 +439,8 @@ export default class extends Component {
     // Android ScrollView will not scrollTo certain offset when props change
     const callback = async () => {
       cb()
-      if (Platform.OS === 'android') {
+      // TODO: support loadMinimal
+      if (Platform.OS === 'android' && !this.props.loadMinimal) {
         if (this.state.index === 0) {
           this.props.horizontal
             ? this.scrollView.scrollTo({
