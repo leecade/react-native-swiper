@@ -832,8 +832,12 @@ export default class extends Component {
       pages = pages.map((page, i) => {
         if (loadMinimal) {
           if (
-            i >= index + loopVal - loadMinimalSize &&
-            i <= index + loopVal + loadMinimalSize
+            (i >= index + loopVal - loadMinimalSize &&
+              i <= index + loopVal + loadMinimalSize) ||
+            // The real first swiper should be keep
+            i === loopVal ||
+            // The real last swiper should be keep
+            i === total - 1 + loopVal
           ) {
             return (
               <View style={pageStyle} key={i}>
