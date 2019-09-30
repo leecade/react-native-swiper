@@ -835,9 +835,9 @@ export default class extends Component {
             (i >= index + loopVal - loadMinimalSize &&
               i <= index + loopVal + loadMinimalSize) ||
             // The real first swiper should be keep
-            i === loopVal ||
+            (loop && i === 1) ||
             // The real last swiper should be keep
-            i === total - 1 + loopVal
+            (loop && i === total - 1)
           ) {
             return (
               <View style={pageStyle} key={i}>
