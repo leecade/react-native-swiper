@@ -143,6 +143,7 @@ export default class extends Component {
     ]),
     dotColor: PropTypes.string,
     activeDotColor: PropTypes.string,
+    refPages: PropTypes.func,
     /**
      * Called when the index has changed because the user swiped.
      */
@@ -174,7 +175,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    refPages: () => null
   }
 
   /**
@@ -207,6 +209,7 @@ export default class extends Component {
 
   componentDidMount() {
     this.autoplay()
+    this.props.refPages({ next: () => this.nextPage(), prev: () => this.prevPage() })
   }
 
   componentWillUnmount() {
@@ -704,10 +707,27 @@ export default class extends Component {
     ) : null
   }
 
+  allowNextPage = () =>
+    this.props.loop || this.state.index !== this.state.total - 1
+
+  allowPrevPage = () => this.props.loop || this.state.index !== 0
+
+  nextPage = () => {
+    if (this.allowNextPage()) {
+      return this.scrollBy(1)
+    }
+  }
+
+  prevPage = () => {
+    if (this.allowPrevPage()) {
+      return this.scrollBy(-1)
+    }
+  }
+
   renderNextButton = () => {
     let button = null
 
-    if (this.props.loop || this.state.index !== this.state.total - 1) {
+    if (this.allowNextPage()) {
       button = this.props.nextButton || <Text style={styles.buttonText}>›</Text>
     }
 
@@ -724,7 +744,7 @@ export default class extends Component {
   renderPrevButton = () => {
     let button = null
 
-    if (this.props.loop || this.state.index !== 0) {
+    if (this.allowPrevPage()) {
       button = this.props.prevButton || <Text style={styles.buttonText}>‹</Text>
     }
 

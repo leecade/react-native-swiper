@@ -93,6 +93,8 @@ declare module 'react-native-swiper' {
     nextButton?: React.ReactNode
     // Allow custom the prev button.
     prevButton?: React.ReactNode
+    // Reference to handle page actions
+    refPages?: (ref: object) => { next?: () => void; prev?: () => void }
 
     // Supported ScrollResponder
     // When animation begins after letting up
