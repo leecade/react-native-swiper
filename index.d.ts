@@ -138,7 +138,7 @@ declare module 'react-native-swiper' {
     scrollEnabled?: boolean
   }
 
-  export default class Swiper extends Component<SwiperProps> {
+  export default class Swiper extends Component<SwiperProps, SwiperStates> {
     scrollBy: (index?: number, animated?: boolean) => void;
     scrollTo: (index: number, animated?: boolean) => void;
   }
