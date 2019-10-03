@@ -1,9 +1,9 @@
-import React, { useState, useCallback } from 'react';
-import { Text, View, Image, Dimensions, StyleSheet } from 'react-native';
-import Swiper from 'react-native-swiper';
-import { Model } from 'react-model';
-const { width } = Dimensions.get('window');
-const loading = require('./img/loading.gif');
+import React, { useState, useCallback } from 'react'
+import { Text, View, Image, Dimensions, StyleSheet } from 'react-native'
+import Swiper from 'react-native-swiper'
+import { Model } from 'react-model'
+const { width } = Dimensions.get('window')
+const loading = require('./img/loading.gif')
 
 const styles = StyleSheet.create({
   wrapper: {},
@@ -11,12 +11,12 @@ const styles = StyleSheet.create({
   slide: {
     flex: 1,
     justifyContent: 'center',
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
   image: {
     width,
     flex: 1,
-    backgroundColor: 'transparent',
+    backgroundColor: 'transparent'
   },
 
   loadingView: {
@@ -27,22 +27,22 @@ const styles = StyleSheet.create({
     right: 0,
     top: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0,0,0,.5)',
+    backgroundColor: 'rgba(0,0,0,.5)'
   },
 
   loadingImage: {
     width: 60,
-    height: 60,
-  },
-});
+    height: 60
+  }
+})
 
 interface SlideState {
-  imgList: string[];
-  loadQueue: number[];
+  imgList: string[]
+  loadQueue: number[]
 }
 
 interface SlideActions {
-  loaded: number;
+  loaded: number
 }
 
 const SlideSchema: ModelType<SlideState, SlideActions> = {
@@ -51,25 +51,25 @@ const SlideSchema: ModelType<SlideState, SlideActions> = {
       'https://www.mordeo.org/files/uploads/2016/10/Cute-Angry-Birds-Mobile-Wallpaper.jpg',
       'http://www.glittergraphics.org/img/74/743564/cute-wallpapers-for-mobile.jpg',
       'https://wallpapercave.com/wp/wp2807409.jpg',
-      'https://preppywallpapers.com/wp-content/uploads/2018/08/Gorgeous-iPhone-Wallpaper-Collection-11.jpg',
+      'https://preppywallpapers.com/wp-content/uploads/2018/08/Gorgeous-iPhone-Wallpaper-Collection-11.jpg'
     ],
-    loadQueue: [0, 0, 0, 0],
+    loadQueue: [0, 0, 0, 0]
   },
   actions: {
     loaded: index => {
       return state => {
-        state.loadQueue[index] = 1;
-      };
-    },
-  },
-};
+        state.loadQueue[index] = 1
+      }
+    }
+  }
+}
 
 const Slide = props => {
   return (
     <View style={styles.slide}>
       <Image
         onLoad={() => {
-          props.loadHandle(props.i);
+          props.loadHandle(props.i)
         }}
         style={styles.image}
         source={{ uri: props.uri }}
@@ -80,15 +80,15 @@ const Slide = props => {
         </View>
       )}
     </View>
-  );
-};
+  )
+}
 
 const Page = () => {
-  const [{ useStore }] = useState(() => Model(SlideSchema));
-  const [state, actions] = useStore();
+  const [{ useStore }] = useState(() => Model(SlideSchema))
+  const [state, actions] = useStore()
   const loadHandle = useCallback((i: number) => {
-    actions.loaded(i);
-  }, []);
+    actions.loaded(i)
+  }, [])
   return (
     <View style={{ flex: 1 }}>
       <Swiper
@@ -96,7 +96,8 @@ const Page = () => {
         loadMinimalSize={1}
         // index={0}
         style={styles.wrapper}
-        loop={true}>
+        loop={true}
+      >
         {state.imgList.map((item, i) => (
           <Slide
             loadHandle={loadHandle}
@@ -111,7 +112,7 @@ const Page = () => {
         <Text>Current Loaded Images: {state.loadQueue}</Text>
       </View>
     </View>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page
