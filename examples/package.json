@@ -20,6 +20,7 @@
     "@types/react": "^16.9.2",
     "@types/react-native": "^0.60.15",
     "babel-jest": "^24.9.0",
+    "detox": "^14.3.4",
     "eslint": "^6.4.0",
     "jest": "^24.9.0",
     "metro-react-native-babel-preset": "^0.56.0",
@@ -27,5 +28,16 @@
   },
   "jest": {
     "preset": "react-native"
+  },
+  "detox": {
+    "test-runner": "jest",
+    "configurations": {
+      "ios.sim.debug": {
+        "binaryPath": "ios/build/examples/Build/Products/Debug-iphonesimulator/examples.app",
+        "build": "xcodebuild -workspace ios/examples.xcworkspace -scheme examples -configuration Debug -sdk iphonesimulator -derivedDataPath ios/build",
+        "type": "ios.simulator",
+        "name": "iPhone 7"
+      }
+    }
   }
 }

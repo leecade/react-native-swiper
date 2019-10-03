@@ -14,4 +14,4 @@ import Phone from './components/Phone/'
 // import PhotoView from './components/PhotoView/'; // not working
 import Swiper from './components/Swiper/' // working but no title displayed, direction vertical not work well on android
 import SwiperNumber from './components/SwiperNumber/' // working but no title displayed
-AppRegistry.registerComponent(appName, () => LoadMinimal)
+AppRegistry.registerComponent(appName, () => Basic)
