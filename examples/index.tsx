@@ -14,6 +14,7 @@ import {
 import { createStackNavigator } from 'react-navigation-stack'
 import { name as appName } from './app.json'
 
+import AutoPlay from './components/AutoPlay'
 import Basic from './components/Basic' // Only update index when scrollEnd
 import DisableButton from './components/DisableButton'
 import Loop from './components/Loop'
@@ -26,6 +27,9 @@ import SwiperNumber from './components/SwiperNumber' // working but no title dis
 import { createAppContainer } from 'react-navigation'
 
 const DATA = [
+  {
+    name: 'AutoPlay'
+  },
   {
     name: 'Basic'
   },
@@ -79,6 +83,7 @@ const Home = ({ navigation }) => {
 const AppNavigator = createStackNavigator(
   {
     Home,
+    AutoPlay,
     Basic,
     DisableButton,
     Loop,
