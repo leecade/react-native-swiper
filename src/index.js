@@ -334,10 +334,34 @@ export default class extends Component {
     const i = this.state.index + (this.props.loop ? 1 : 0)
     const scrollView = this.scrollView
     this.loopJumpTimer = setTimeout(
-      () =>
-        scrollView.setPageWithoutAnimation &&
-        scrollView.setPageWithoutAnimation(i),
-      50
+      () => {
+        if (scrollView.setPageWithoutAnimation) {
+          scrollView.setPageWithoutAnimation(i)
+        } else {
+          if (this.state.index === 0) {
+            scrollView.scrollTo(
+              this.props.horizontal === false
+                ? { x: 0, y: this.state.height, animated: false }
+                : { x: this.state.width, y: 0, animated: false }
+            )
+          } else if (this.state.index === this.state.total - 1) {
+            this.props.horizontal === false
+              ? this.scrollView.scrollTo({
+                  x: 0,
+                  y: this.state.height * this.state.total,
+                  animated: false
+                })
+              : this.scrollView.scrollTo({
+                  x: this.state.width * this.state.total,
+                  y: 0,
+                  animated: false
+                })
+          }
+        }
+      },
+      // Important Parameter
+      // ViewPager 50ms, ScrollView 300ms
+      scrollView.setPageWithoutAnimation ? 50 : 300
     )
   }
 
@@ -437,36 +461,6 @@ export default class extends Component {
   updateIndex = (offset, dir, cb) => {
     const state = this.state
     // Android ScrollView will not scrollTo certain offset when props change
-    const callback = async () => {
-      cb()
-      if (Platform.OS === 'android' && this.props.loop) {
-        if (this.state.index === 0) {
-          this.props.horizontal
-            ? this.scrollView.scrollTo({
-                x: state.width,
-                y: 0,
-                animated: false
-              })
-            : this.scrollView.scrollTo({
-                x: 0,
-                y: state.height,
-                animated: false
-              })
-        } else if (this.state.index === this.state.total - 1) {
-          this.props.horizontal
-            ? this.scrollView.scrollTo({
-                x: state.width * this.state.total,
-                y: 0,
-                animated: false
-              })
-            : this.scrollView.scrollTo({
-                x: 0,
-                y: state.height * this.state.total,
-                animated: false
-              })
-        }
-      }
-    }
     let index = state.index
     if (!this.internals.offset)
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
@@ -512,14 +506,14 @@ export default class extends Component {
         newState.offset = { x: 0, y: 0 }
         newState.offset[dir] = offset[dir] + 1
         this.setState(newState, () => {
-          this.setState({ offset: offset }, callback)
+          this.setState({ offset: offset }, cb)
         })
       } else {
         newState.offset = offset
-        this.setState(newState, callback)
+        this.setState(newState, cb)
       }
     } else {
-      this.setState(newState, callback)
+      this.setState(newState, cb)
     }
   }
 
