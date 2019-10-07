@@ -379,6 +379,14 @@ export default class extends Component {
   }
 
   /**
+   * Scroll handle
+   * @param  {object} e native event
+   */
+  onScroll = e => {
+    this.props.onScroll && this.props.onScroll(e, this.fullState(), this);
+  }
+
+  /**
    * Scroll end handle
    * @param  {object} e native event
    */
@@ -780,6 +788,7 @@ export default class extends Component {
         {...this.scrollViewPropOverrides()}
         contentContainerStyle={[styles.wrapperIOS, this.props.style]}
         contentOffset={this.state.offset}
+        onScroll={this.onScroll}
         onScrollBeginDrag={this.onScrollBegin}
         onMomentumScrollEnd={this.onScrollEnd}
         onScrollEndDrag={this.onScrollEndDrag}
