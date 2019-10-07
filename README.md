@@ -1,17 +1,3 @@
-> Hi there:
-
-[**头条财经前端团队急招**] 了解团队 / 投简历请联系: 
-
-微信: 103024979 / 邮箱: leecade@163.com
-
-「全新团队, 全新产品, 全新技术栈, 不设技术边界, 不设管理, 不装」
-
-要求: 参考头条面试标准 (重度: `Node` / `RN` / `Vue` / `React` / `微服务` 等技术向)
-
-<img style="float: left" alt="react-native-swiper" src="https://user-images.githubusercontent.com/533360/45361035-c620de00-b603-11e8-9fa7-cb7586e08b66.png" width="150">
-
-----
-
 <p align="center">
   <img alt="react-native-swiper" src="http://i.imgur.com/P4cRUgD.png" width="208">
 </p>
@@ -36,27 +22,45 @@
 > see: [ROADMAP.md](ROADMAP.md)
 
 ## Changelogs
-- **[1.5.6]**
-  + Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
-  + Add containerStyle prop to customize the view container.
-  
-- [1.5.5]
-  + Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
+- **[1.6.0-nightly]**
+  - Dependency
+    - Remove ViewPagerAndroid, use ScrollView #1009
+  - TypeScript
+    - correct the wrong types #1000
+    - Add missing scrollBy TypeScript definition #931
+  - New Feature
+    - add scrollTo #831
+    - Added prop to disable the PrevButton #749
+    - Optionally render page #1004
+  - Bug Fix
+    - ES6 and CommonJS compatibility #717
+    - Solves the issue of state messing up when parent component calls setState #939
+    - replay when autoplay is setted to true #1002
+
+* [1.5.6]
+
+  - Fix [#16](https://github.com/leecade/react-native-swiper/issues/16), [#36](https://github.com/leecade/react-native-swiper/issues/36), [#371](https://github.com/leecade/react-native-swiper/issues/371), [#410](https://github.com/leecade/react-native-swiper/issues/410), [#411](https://github.com/leecade/react-native-swiper/issues/411), [#422](https://github.com/leecade/react-native-swiper/issues/422), [#468](https://github.com/leecade/react-native-swiper/issues/468) Fix landscape orientation auto resize! (thanks [@ahmed3mar](https://github.com/ahmed3mar), [@timmywil](https://github.com/timmywil))
+  - Add containerStyle prop to customize the view container.
+
+* [1.5.5]
+  - Update: using PropTypes from prop-types and Change View.propTypes to ViewPropTypes
 
 - [1.5.4]
-  + Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
-  + Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
+
+  - Added easily accessible pagination point manipulation: use `dotColor` / `activeDotColor` and `dotStyle` / `activeDotStyle` (thanks [@denizs](https://github.com/denizs))
+  - Added scrollEnabled prop to documentation (thanks [@ibandominguez](https://github.com/ibandominguez))
 
 - [1.5.3]
-  + Add loadMinimalLoader prop to customize `<ActivityIndicator />` (thanks [@Exilz](https://github.com/Exilz))
-  + Disable autoplay timer when prop changes to false (thanks [@dizlexik](https://github.com/dizlexik))
-  + Special thanks to [@hypatiah](https://github.com/dizlexik) for fixed some grammatical errors in README
+
+  - Add loadMinimalLoader prop to customize `<ActivityIndicator />` (thanks [@Exilz](https://github.com/Exilz))
+  - Disable autoplay timer when prop changes to false (thanks [@dizlexik](https://github.com/dizlexik))
+  - Special thanks to [@hypatiah](https://github.com/dizlexik) for fixed some grammatical errors in README
 
 - [1.5.2]
-  + Add yarn lock
-  + Fix jitter when quickly swiping back and forth between pages (iOS) (thanks [@nemophrost](https://github.com/nemophrost))
-  + The first webview always reloaded when injecting the rest of the children (thanks [@eosterberg](https://github.com/eosterberg))
+  - Add yarn lock
+  - Fix jitter when quickly swiping back and forth between pages (iOS) (thanks [@nemophrost](https://github.com/nemophrost))
+  - The first webview always reloaded when injecting the rest of the children (thanks [@eosterberg](https://github.com/eosterberg))
 
 > see more: [CHANGELOG.md](CHANGELOG.md)
 
@@ -84,27 +88,34 @@
 
 ![](http://i.imgur.com/LAOHbJA.gif=300x)
 
-
 ## Getting Started
 
 - [Installation](#installation)
 - [Basic Usage](#basic-usage)
 - [Properties](#properties)
-  + [Basic](#basic)
-  + [Custom basic style & content](#custom-basic-style--content)
-  + [Pagination](#pagination)
-  + [Autoplay](#autoplay)
-  + [Control buttons](#control-buttons)
-  + [Props of Children](#props-of-children)
-  + [Basic props of `<ScrollView />`](#basic-props-of-scrollview-)
-  + [Supported ScrollResponder](#supported-scrollresponder)
+  - [Basic](#basic)
+  - [Custom basic style & content](#custom-basic-style--content)
+  - [Pagination](#pagination)
+  - [Autoplay](#autoplay)
+  - [Control buttons](#control-buttons)
+  - [Props of Children](#props-of-children)
+  - [Basic props of `<ScrollView />`](#basic-props-of-scrollview-)
+  - [Supported ScrollResponder](#supported-scrollresponder)
 - [Examples](#examples)
 - [Development](#development)
 
 ### Installation
 
+> v1.5.14
+
 ```bash
 $ npm i react-native-swiper --save
+```
+
+> v1.6.0-nightly
+
+```
+npm i --save react-native-swiper@nightly
 ```
 
 ### Basic Usage
@@ -124,46 +135,40 @@ $ react-native init myproject
 - Then, edit `myproject/index.ios.js`, like this:
 
 ```jsx
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
+import React, { Component } from 'react'
+import { AppRegistry, StyleSheet, Text, View } from 'react-native'
 
-import Swiper from 'react-native-swiper';
+import Swiper from 'react-native-swiper'
 
 const styles = StyleSheet.create({
-  wrapper: {
-  },
+  wrapper: {},
   slide1: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#9DD6EB',
+    backgroundColor: '#9DD6EB'
   },
   slide2: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#97CAE5',
+    backgroundColor: '#97CAE5'
   },
   slide3: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#92BBD9',
+    backgroundColor: '#92BBD9'
   },
   text: {
     color: '#fff',
     fontSize: 30,
-    fontWeight: 'bold',
+    fontWeight: 'bold'
   }
 })
 
-export default class Swiper extends Component {
-  render(){
+export default class SwiperComponent extends Component {
+  render() {
     return (
       <Swiper style={styles.wrapper} showsButtons={true}>
         <View style={styles.slide1}>
@@ -176,102 +181,102 @@ export default class Swiper extends Component {
           <Text style={styles.text}>And simple</Text>
         </View>
       </Swiper>
-    );
+    )
   }
 }
 
-AppRegistry.registerComponent('myproject', () => Swiper);
+AppRegistry.registerComponent('myproject', () => SwiperComponent)
 ```
 
 ### Properties
 
 #### Basic
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| horizontal | true | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
-| loop | true | `bool` | Set to `false` to disable continuous loop mode. |
-| index | 0 | `number` | Index number of initial slide. |
-| showsButtons | false | `bool` | Set to `true` make control buttons visible. |
-| autoplay | false | `bool` | Set to `true` enable auto play mode. |
-| onIndexChanged | (index) => null | `func` | Called with the new index when the user swiped |
+| Prop           |     Default     |   Type   | Description                                                                                                 |
+| :------------- | :-------------: | :------: | :---------------------------------------------------------------------------------------------------------- |
+| horizontal     |      true       |  `bool`  | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
+| loop           |      true       |  `bool`  | Set to `false` to disable continuous loop mode.                                                             |
+| index          |        0        | `number` | Index number of initial slide.                                                                              |
+| showsButtons   |      false      |  `bool`  | Set to `true` make control buttons visible.                                                                 |
+| autoplay       |      false      |  `bool`  | Set to `true` enable auto play mode.                                                                        |
+| onIndexChanged | (index) => null |  `func`  | Called with the new index when the user swiped                                                              |
 
 #### Custom basic style & content
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| width | - | `number` | If no specify default enable fullscreen mode by `flex: 1`. |
-| height | - | `number` | If no specify default fullscreen mode by `flex: 1`. |
-| style | {...} | `style` | See default style in source. |
-| containerStyle | {...} | `style` | See default container style in source. |
-| loadMinimal | false | `bool` | Only load current index slide , `loadMinimalSize` slides before and after. |
-| loadMinimalSize | 1 | `number` | see `loadMinimal`   |
-| loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded
+| Prop              |         Default         |   Type    | Description                                                                |
+| :---------------- | :---------------------: | :-------: | :------------------------------------------------------------------------- |
+| width             |            -            | `number`  | If no specify default enable fullscreen mode by `flex: 1`.                 |
+| height            |            -            | `number`  | If no specify default fullscreen mode by `flex: 1`.                        |
+| style             |          {...}          |  `style`  | See default style in source.                                               |
+| containerStyle    |          {...}          |  `style`  | See default container style in source.                                     |
+| loadMinimal       |          false          |  `bool`   | Only load current index slide , `loadMinimalSize` slides before and after. |
+| loadMinimalSize   |            1            | `number`  | see `loadMinimal`                                                          |
+| loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded                         |
 
 #### Pagination
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| showsPagination | true | `bool` | Set to `true` make pagination visible. |
-| paginationStyle | {...} | `style` | Custom styles will merge with the default styles. |
-| renderPagination | - | `function` | Complete control how to render pagination with three params (`index`, `total`, `context`) ref to `this.state.index` / `this.state.total` / `this`, For example: show numbers instead of dots. |
-| dot | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the dot element. |
-| activeDot | `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element` | Allow custom the active-dot element. |
-| dotStyle | - | `object` | Allow custom the active-dot element. |
-| dotColor | - | `string` | Allow custom the active-dot element. |
-| activeDotColor | - | `string` | Allow custom the active-dot element. |
-| activeDotStyle | - | `object` | Allow custom the active-dot element. |
+| Prop             |                                                                          Default                                                                          |    Type    | Description                                                                                                                                                                                   |
+| :--------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| showsPagination  |                                                                           true                                                                            |   `bool`   | Set to `true` make pagination visible.                                                                                                                                                        |
+| paginationStyle  |                                                                           {...}                                                                           |  `style`   | Custom styles will merge with the default styles.                                                                                                                                             |
+| renderPagination |                                                                             -                                                                             | `function` | Complete control how to render pagination with three params (`index`, `total`, `context`) ref to `this.state.index` / `this.state.total` / `this`, For example: show numbers instead of dots. |
+| dot              | `<View style={{backgroundColor:'rgba(0,0,0,.2)', width: 8, height: 8,borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />` | `element`  | Allow custom the dot element.                                                                                                                                                                 |
+| activeDot        |   `<View style={{backgroundColor: '#007aff', width: 8, height: 8, borderRadius: 4, marginLeft: 3, marginRight: 3, marginTop: 3, marginBottom: 3,}} />`    | `element`  | Allow custom the active-dot element.                                                                                                                                                          |
+| dotStyle         |                                                                             -                                                                             |  `object`  | Allow custom the active-dot element.                                                                                                                                                          |
+| dotColor         |                                                                             -                                                                             |  `string`  | Allow custom the active-dot element.                                                                                                                                                          |
+| activeDotColor   |                                                                             -                                                                             |  `string`  | Allow custom the active-dot element.                                                                                                                                                          |
+| activeDotStyle   |                                                                             -                                                                             |  `object`  | Allow custom the active-dot element.                                                                                                                                                          |
 
 #### Autoplay
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| autoplay | true | `bool` | Set to `true` enable auto play mode. |
-| autoplayTimeout | 2.5 | `number` | Delay between auto play transitions (in second). |
-| autoplayDirection | true | `bool` | Cycle direction control. |
+| Prop              | Default |   Type   | Description                                      |
+| :---------------- | :-----: | :------: | :----------------------------------------------- |
+| autoplay          |  true   |  `bool`  | Set to `true` enable auto play mode.             |
+| autoplayTimeout   |   2.5   | `number` | Delay between auto play transitions (in second). |
+| autoplayDirection |  true   |  `bool`  | Cycle direction control.                         |
 
 #### Control buttons
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| showsButtons | true | `bool` | Set to `true` make control buttons visible. |
-| buttonWrapperStyle | `{backgroundColor: 'transparent', flexDirection: 'row', position: 'absolute', top: 0, left: 0, flex: 1, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', alignItems: 'center'}` | `style` | Custom styles. |
-| nextButton | `<Text style={styles.buttonText}>›</Text>` | `element` | Allow custom the next button. |
-| prevButton | `<Text style={styles.buttonText}>‹</Text>` | `element` | Allow custom the prev button. |
+| Prop               |                                                                                                   Default                                                                                                   |   Type    | Description                                 |
+| :----------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------: | :------------------------------------------ |
+| showsButtons       |                                                                                                    true                                                                                                     |  `bool`   | Set to `true` make control buttons visible. |
+| buttonWrapperStyle | `{backgroundColor: 'transparent', flexDirection: 'row', position: 'absolute', top: 0, left: 0, flex: 1, paddingHorizontal: 10, paddingVertical: 10, justifyContent: 'space-between', alignItems: 'center'}` |  `style`  | Custom styles.                              |
+| nextButton         |                                                                                 `<Text style={styles.buttonText}>›</Text>`                                                                                  | `element` | Allow custom the next button.               |
+| prevButton         |                                                                                 `<Text style={styles.buttonText}>‹</Text>`                                                                                  | `element` | Allow custom the prev button.               |
 
 #### Props of Children
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| style | {...} | `style` | Custom styles will merge with the default styles. |
+| Prop  |               Default                |   Type    | Description                                                    |
+| :---- | :----------------------------------: | :-------: | :------------------------------------------------------------- |
+| style |                {...}                 |  `style`  | Custom styles will merge with the default styles.              |
 | title | {<Text numberOfLines={1}>...</Text>} | `element` | If this parameter is not specified, will not render the title. |
 
 #### Basic props of `<ScrollView />`
 
-| Prop  | Default  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| horizontal | true | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column. |
-| pagingEnabled | true | `bool` | If true, the scroll view stops on multiples of the scroll view's size when scrolling. This can be used for horizontal pagination.  |
-| showsHorizontalScrollIndicator | false | `bool` | Set to `true` if you want to show horizontal scroll bar. |
-| showsVerticalScrollIndicator | false | `bool` |  Set to `true` if you want to show vertical scroll bar. |
-| bounces | false | `bool` | If `true`, the scroll view bounces when it reaches the end of the content if the content is larger then the scroll view along the axis of the scroll direction. If `false`, it disables all bouncing even if the alwaysBounce* props are true.  |
-| scrollsToTop | false | `bool` | If true, the scroll view scrolls to top when the status bar is tapped.  |
-| removeClippedSubviews | true | `bool` | If true, offscreen child views (whose overflow value is hidden) are removed from their native backing superview when offscreen. This canimprove scrolling performance on long lists.  |
-| automaticallyAdjustContentInsets | false | `bool` | Set to `true` if you need adjust content insets automation. |
-| scrollEnabled | true | `bool` | Enables/Disables swiping |
+| Prop                             | Default |  Type  | Description                                                                                                                                                                                                                                     |
+| :------------------------------- | :-----: | :----: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| horizontal                       |  true   | `bool` | If `true`, the scroll view's children are arranged horizontally in a row instead of vertically in a column.                                                                                                                                     |
+| pagingEnabled                    |  true   | `bool` | If true, the scroll view stops on multiples of the scroll view's size when scrolling. This can be used for horizontal pagination.                                                                                                               |
+| showsHorizontalScrollIndicator   |  false  | `bool` | Set to `true` if you want to show horizontal scroll bar.                                                                                                                                                                                        |
+| showsVerticalScrollIndicator     |  false  | `bool` | Set to `true` if you want to show vertical scroll bar.                                                                                                                                                                                          |
+| bounces                          |  false  | `bool` | If `true`, the scroll view bounces when it reaches the end of the content if the content is larger then the scroll view along the axis of the scroll direction. If `false`, it disables all bouncing even if the alwaysBounce\* props are true. |
+| scrollsToTop                     |  false  | `bool` | If true, the scroll view scrolls to top when the status bar is tapped.                                                                                                                                                                          |
+| removeClippedSubviews            |  true   | `bool` | If true, offscreen child views (whose overflow value is hidden) are removed from their native backing superview when offscreen. This canimprove scrolling performance on long lists.                                                            |
+| automaticallyAdjustContentInsets |  false  | `bool` | Set to `true` if you need adjust content insets automation.                                                                                                                                                                                     |
+| scrollEnabled                    |  true   | `bool` | Enables/Disables swiping                                                                                                                                                                                                                        |
 
 > @see: http://facebook.github.io/react-native/docs/scrollview.html
 
 #### Supported ScrollResponder
 
-| Prop  | Params  | Type | Description |
-| :------------ |:---------------:| :---------------:| :-----|
-| onScrollBeginDrag | `e` / `state` / `context` | `function` | When animation begins after letting up |
-| onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce |
-| onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd` |
-| onTouchStart | `e` / `state` / `context` | `function` | Same, but bubble phase |
-| onTouchEnd | `e` / `state` / `context` | `function` | You could hold the touch start for a long time |
-| onResponderRelease | `e` / `state` / `context` | `function` | When lifting up - you could pause forever before * lifting |
+| Prop                |          Params           |    Type    | Description                                                 |
+| :------------------ | :-----------------------: | :--------: | :---------------------------------------------------------- |
+| onScrollBeginDrag   | `e` / `state` / `context` | `function` | When animation begins after letting up                      |
+| onMomentumScrollEnd | `e` / `state` / `context` | `function` | Makes no sense why this occurs first during bounce          |
+| onTouchStartCapture | `e` / `state` / `context` | `function` | Immediately after `onMomentumScrollEnd`                     |
+| onTouchStart        | `e` / `state` / `context` | `function` | Same, but bubble phase                                      |
+| onTouchEnd          | `e` / `state` / `context` | `function` | You could hold the touch start for a long time              |
+| onResponderRelease  | `e` / `state` / `context` | `function` | When lifting up - you could pause forever before \* lifting |
 
 > Note: each ScrollResponder be injected with two params: `state` and `context`, you can get `state` and `context`(ref to swiper's `this`) from params, for example:
 
@@ -301,10 +306,10 @@ Scroll by relative index.
 
 Parameters:
 
-| Name  | Type     | default | Description |
-| :---- | :------: | :------: | :--- |
-| index | `number`   | `undefined` | offset index |
-| animated | `bool`   | `true` | offset index |
+| Name     |   Type   |   default   | Description  |
+| :------- | :------: | :---------: | :----------- |
+| index    | `number` | `undefined` | offset index |
+| animated |  `bool`  |   `true`    | offset index |
 
 ### Examples
 

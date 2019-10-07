@@ -1,7 +1,7 @@
 // @flow strict
 
 // eslint-disable-next-line
-import type { Component, Node } from 'react';
+import { Component, type Node } from 'react';
 
 declare module 'react-native-swiper' {
   // eslint-disable-next-line no-undef
