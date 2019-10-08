@@ -20,6 +20,7 @@ import DisableButton from './components/DisableButton'
 import Loop from './components/Loop'
 import Dynamic from './components/Dynamic'
 import LoadMinimal from './components/LoadMinimal' // flicker existing when shift from last to first on Android (or last to first)
+import NestSwiper from './components/NestSwiper'
 import Phone from './components/Phone'
 // import PhotoView from './components/PhotoView/'; // not working
 import Swiper from './components/Swiper' // working but no title displayed, direction vertical not work well on android
@@ -44,6 +45,9 @@ const DATA = [
   },
   {
     name: 'LoadMinimal'
+  },
+  {
+    name: 'NestSwiper'
   },
   {
     name: 'Phone'
@@ -89,6 +93,7 @@ const AppNavigator = createStackNavigator(
     Loop,
     Dynamic,
     LoadMinimal,
+    NestSwiper,
     Phone,
     Swiper,
     SwiperNumber
