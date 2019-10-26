@@ -118,6 +118,7 @@ export default class extends Component {
     scrollsToTop: PropTypes.bool,
     removeClippedSubviews: PropTypes.bool,
     automaticallyAdjustContentInsets: PropTypes.bool,
+    skipInitialRender: PropTypes.bool,
     showsPagination: PropTypes.bool,
     showsButtons: PropTypes.bool,
     disableNextButton: PropTypes.bool,
@@ -804,6 +805,7 @@ export default class extends Component {
       loadMinimalLoader,
       renderPagination,
       showsButtons,
+      skipInitialRender,
       showsPagination
     } = this.props
     // let dir = state.dir
@@ -821,7 +823,11 @@ export default class extends Component {
     }
 
     // For make infinite at least total > 1
-    if (total > 1) {
+    if (this.initialRender && skipInitialRender) {
+      pages = (
+        <View style={pageStyle} key={0}/>
+      )
+    } else if (total > 1) {
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
       if (loop) {
