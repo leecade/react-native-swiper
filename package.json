@@ -11,7 +11,7 @@
   "scripts": {
     "commit": "npx git-cz",
     "start": "react-native start",
-    "lint": "standard | snazzy",
+    "lint": "standard --fix | snazzy",
     "update": "updtr",
     "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
     "test": "npm run lint"
