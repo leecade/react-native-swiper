@@ -36,6 +36,9 @@
       "dist/",
       "mock/",
       "node_modules/"
+    ],
+    "env": [
+      "mocha"
     ]
   },
   "ava": {
