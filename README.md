@@ -315,7 +315,7 @@ Parameters:
 
 ```bash
 $ cd examples
-$ npm i
+$ yarn
 $ react-native run-ios
 ```
 
@@ -325,8 +325,8 @@ $ react-native run-ios
 
 ```bash
 $ cd examples
-$ npm i
-$ npm run dev
+$ yarn
+$ yarn dev
 $ react-native run-ios
 ```
 
