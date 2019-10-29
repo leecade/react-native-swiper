@@ -6,4 +6,4 @@ import Basic from './components/Basic/'
 // import PhotoView from './components/PhotoView/' // not working
 // import Swiper from './components/Swiper/'  // working but no title displayed
 // import SwiperNumber from './components/SwiperNumber/' // working but no title displayed
-AppRegistry.registerComponent('examples', () => Basic);
+AppRegistry.registerComponent('examples', () => Basic)

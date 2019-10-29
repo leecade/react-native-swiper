@@ -43,7 +43,7 @@ const styles = {
 
 const Slide = props => {
   return (<View style={styles.slide}>
-    <Image onLoad={props.loadHandle.bind(null, props.i)} style={styles.image} source={{uri: props.uri}} />
+    <Image onLoad={props.loadHandle.bind(null, props.i)} style={styles.image} source={{ uri: props.uri }} />
     {
       !props.loaded && <View style={styles.loadingView}>
         <Image style={styles.loadingImage} source={loading} />
@@ -66,16 +66,18 @@ export default class extends Component {
     }
     this.loadHandle = this.loadHandle.bind(this)
   }
+
   loadHandle (i) {
-    let loadQueue = this.state.loadQueue
+    const loadQueue = this.state.loadQueue
     loadQueue[i] = 1
     this.setState({
       loadQueue
     })
   }
+
   render () {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Swiper loadMinimal loadMinimalSize={1} style={styles.wrapper} loop={false}>
           {
             this.state.imgList.map((item, i) => <Slide

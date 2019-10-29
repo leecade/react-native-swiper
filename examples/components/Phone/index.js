@@ -18,7 +18,7 @@ const styles = {
     backgroundColor: 'transparent'
   },
   container: {
-    flex: 1,
+    flex: 1
   },
 
   imgBackground: {
@@ -30,7 +30,7 @@ const styles = {
 
   image: {
     width,
-    height,
+    height
   }
 }
 
@@ -44,8 +44,8 @@ export default class extends Component {
           style={styles.imgBackground}
         />
         <Swiper style={styles.wrapper}
-          dot={<View style={{backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
-          activeDot={<View style={{backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7}} />}
+          dot={<View style={{ backgroundColor: 'rgba(255,255,255,.3)', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7 }} />}
+          activeDot={<View style={{ backgroundColor: '#fff', width: 13, height: 13, borderRadius: 7, marginLeft: 7, marginRight: 7 }} />}
           paginationStyle={{
             bottom: 70
           }}
