@@ -41,6 +41,7 @@ export default class extends Component {
       items: []
     }
   }
+
   componentDidMount () {
     this.setState({
       items: [
@@ -50,6 +51,7 @@ export default class extends Component {
       ]
     })
   }
+
   render () {
     return (
       <Swiper showsButtons>
