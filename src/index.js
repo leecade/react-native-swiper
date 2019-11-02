@@ -146,7 +146,9 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    overlayComponent: PropTypes.func
+
   }
 
   /**
@@ -174,7 +176,9 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    overlayComponent: () => null
+
   }
 
   /**
@@ -872,6 +876,7 @@ export default class extends Component {
             : this.renderPagination())}
         {this.renderTitle()}
         {showsButtons && this.renderButtons()}
+        {this.props.overlayComponent()}
       </View>
     )
   }
