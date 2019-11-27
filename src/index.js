@@ -7,13 +7,14 @@ import PropTypes from 'prop-types'
 import {
   Text,
   View,
-  ViewPropTypes,
+  ViewPropTypes, 
   ScrollView,
   Dimensions,
   TouchableOpacity,
   Platform,
   ActivityIndicator
 } from 'react-native'
+import ViewPagerAndroid from "@react-native-community/viewpager"
 
 /**
  * Default styles
