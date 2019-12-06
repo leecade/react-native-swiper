@@ -118,6 +118,7 @@ export default class extends Component {
     scrollsToTop: PropTypes.bool,
     removeClippedSubviews: PropTypes.bool,
     automaticallyAdjustContentInsets: PropTypes.bool,
+    skipInitialRender: PropTypes.bool,
     showsPagination: PropTypes.bool,
     showsButtons: PropTypes.bool,
     disableNextButton: PropTypes.bool,
@@ -443,25 +444,25 @@ export default class extends Component {
         if (this.state.index === 0) {
           this.props.horizontal
             ? this.scrollView.scrollTo({
-                x: state.width,
+                x: this.fullState().width,
                 y: 0,
                 animated: false
               })
             : this.scrollView.scrollTo({
                 x: 0,
-                y: state.height,
+                y: this.fullState().height,
                 animated: false
               })
         } else if (this.state.index === this.state.total - 1) {
           this.props.horizontal
             ? this.scrollView.scrollTo({
-                x: state.width * this.state.total,
+                x: this.fullState().width * this.state.total,
                 y: 0,
                 animated: false
               })
             : this.scrollView.scrollTo({
                 x: 0,
-                y: state.height * this.state.total,
+                y: this.fullState().height * this.fullState().state.total,
                 animated: false
               })
         }
@@ -779,7 +780,7 @@ export default class extends Component {
         {...this.props}
         {...this.scrollViewPropOverrides()}
         contentContainerStyle={[styles.wrapperIOS, this.props.style]}
-        contentOffset={this.state.offset}
+        contentOffset={this.fullState().offset}
         onScrollBeginDrag={this.onScrollBegin}
         onMomentumScrollEnd={this.onScrollEnd}
         onScrollEndDrag={this.onScrollEndDrag}
@@ -804,6 +805,7 @@ export default class extends Component {
       loadMinimalLoader,
       renderPagination,
       showsButtons,
+      skipInitialRender,
       showsPagination
     } = this.props
     // let dir = state.dir
@@ -821,7 +823,11 @@ export default class extends Component {
     }
 
     // For make infinite at least total > 1
-    if (total > 1) {
+    if (this.initialRender && skipInitialRender) {
+      pages = (
+        <View style={pageStyle} key={0}/>
+      )
+    } else if (total > 1) {
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
       if (loop) {

@@ -210,6 +210,7 @@ AppRegistry.registerComponent('myproject', () => SwiperComponent)
 | style             |          {...}          |  `style`  | See default style in source.                                               |
 | containerStyle    |          {...}          |  `style`  | See default container style in source.                                     |
 | loadMinimal       |          false          |  `bool`   | Only load current index slide , `loadMinimalSize` slides before and after. |
+| skipInitialRender |          false          |  `bool`   | Prevents rendering slides until onLayout completes to prevent flickering.  |
 | loadMinimalSize   |            1            | `number`  | see `loadMinimal`                                                          |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded                         |
 
