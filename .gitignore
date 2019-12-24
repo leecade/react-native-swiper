@@ -39,3 +39,6 @@ examples/swiper.xcodeproj/xcuserdata
 # Vim
 *.sw*
 dist/
+
+# yarn
+yarn.lock
