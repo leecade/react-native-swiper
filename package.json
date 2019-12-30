@@ -1,5 +1,5 @@
 {
-  "name": "react-native-swiper",
+  "name": "@friends-indeed/react-native-swiper",
   "keywords": [
     "react-component",
     "react-native",
@@ -46,7 +46,7 @@
     "type": "git",
     "url": "git+https://github.com/leecade/react-native-swiper.git"
   },
-  "author": "",
+  "author": "friends-indeed",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/leecade/react-native-swiper/issues"
@@ -66,5 +66,8 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
+  },
+  "directories": {
+    "example": "examples"
   }
 }
