@@ -311,17 +311,6 @@ Parameters:
 | index    | `number` | `undefined` | offset index |
 | animated |  `bool`  |   `true`    | offset index |
 
-#### scrollTo(index, animated)
-
-Scroll to a particular index.
-
-Parameters:
-
-| Name     |   Type   |   default   | Description  |
-| :------- | :------: | :---------: | :----------- |
-| index    | `number` | `undefined` | offset index |
-| animated |  `bool`  |   `true`    | offset index |
-
 ### Examples
 
 ```bash
