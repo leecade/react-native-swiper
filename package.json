@@ -46,7 +46,7 @@
     "type": "git",
     "url": "git+https://github.com/leecade/react-native-swiper.git"
   },
-  "author": "friends-indeed",
+  "author": "",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/leecade/react-native-swiper/issues"
@@ -66,8 +66,5 @@
     "commitizen": {
       "path": "cz-conventional-changelog"
     }
-  },
-  "directories": {
-    "example": "examples"
   }
 }
