@@ -61,7 +61,7 @@
   },
   "dependencies": {
     "prop-types": "^15.5.10",
-    "@react-native-community/viewpager": "^3.1.0",
+    "@react-native-community/viewpager": "^3.1.0"
   },
   "config": {
     "commitizen": {
