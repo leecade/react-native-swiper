@@ -1,145 +1,111 @@
-import {
-  ViewStyle,
-  StyleProp,
-  NativeSyntheticEvent,
-  NativeScrollEvent
-} from 'react-native'
-import { Component } from 'react'
+// @flow strict
+
+// eslint-disable-next-line
+import { Component, type Node } from 'react';
 
 declare module 'react-native-swiper' {
-  interface SwiperState {
-    autoplayEnd: false
-    loopJump: false
-    width: number
-    height: number
-    offset: {
-      x: number
-      y: number
-    }
-    total: number
-    index: number
-    dir: 'x' | 'y'
-  }
-
-  interface SwiperInternals extends SwiperState {
-    isScrolling: boolean
-  }
-
-  interface SwiperProps {
+  // eslint-disable-next-line no-undef
+  declare export type SwiperProps = $ReadOnly<{|
     // Basic
     // If true, the scroll view's children are arranged horizontally in a row instead of vertically in a column.
-    horizontal?: boolean
+    horizontal?: ?boolean,
     // If no specify default enable fullscreen mode by flex: 1.
-    loop?: boolean
+    loop?: ?boolean,
     // Index number of initial slide.
-    index?: number
+    index?: ?number,
     // Set to true make control buttons visible.
-    showsButtons?: boolean
+    showsButtons?: ?boolean,
     // Set to false to disable continuous loop mode.
-    autoplay?: boolean
+    autoplay?: ?boolean,
     // Called with the new index when the user swiped
-    onIndexChanged?: (index: number) => void
+    onIndexChanged?: ?(index?: number) => void,
 
     // Custom basic style & content
     // Set to true enable auto play mode.
-    width?: number
+    width?: ?number,
     // If no specify default fullscreen mode by flex: 1.
-    height?: number
+    height?: ?number,
     // See default style in source.
-    style?: StyleProp<ViewStyle>
-    // Customize the View container.
-    containerStyle?: StyleProp<ViewStyle>
+    style?: ?Object,
     // Only load current index slide , loadMinimalSize slides before and after.
-    loadMinimal?: boolean
+    loadMinimal?: ?boolean,
     // see loadMinimal
-    loadMinimalSize?: number
+    loadMinimalSize?: ?boolean,
     // Custom loader to display when slides aren't loaded
-    loadMinimalLoader?: React.ReactNode
+    loadMinimalLoader?: ?boolean,
 
     // Pagination
     // Set to true make pagination visible.
-    showsPagination?: boolean
+    showsPagination?: ?boolean,
     // Custom styles will merge with the default styles.
-    paginationStyle?: StyleProp<ViewStyle>
+    paginationStyle?: ?Object,
     // Complete control how to render pagination with three params (index, total, context) ref to this.state.index / this.state.total / this, For example: show numbers instead of dots.
-    renderPagination?: (
-      index: number,
-      total: number,
-      swiper: Swiper
-    ) => React.ReactNode
+    renderPagination?: ?(index: number, total: number, context: any) => Node,
     // Allow custom the dot element.
-    dot?: React.ReactNode
+    dot?: ?Node,
     // Allow custom the active-dot element.
-    activeDot?: React.ReactNode
+    activeDot?: ?Node,
     // Allow custom the active-dot element.
-    dotStyle?: StyleProp<ViewStyle>
+    dotStyle?: ?Object,
     // Allow custom the active-dot element.
-    dotColor?: string
+    dotColor?: ?string,
     // Allow custom the active-dot element.
-    activeDotColor?: string
+    activeDotColor?: ?string,
     // Allow custom the active-dot element.
-    activeDotStyle?: StyleProp<ViewStyle>
+    activeDotStyle?: ?Object,
 
     // Autoplay
     // Delay between auto play transitions (in second).
-    autoplayTimeout?: number
+    autoplayTimeout?: ?number,
     // Cycle direction control.
-    autoplayDirection?: boolean
+    autoplayDirection?: ?boolean,
 
     // Control buttons
     // Set to true make control buttons visible.
-    buttonWrapperStyle?: StyleProp<ViewStyle>
+    buttonWrapperStyle?: ?Object,
     // Allow custom the next button.
-    nextButton?: React.ReactNode
+    nextButton?: ?Node,
     // Allow custom the prev button.
-    prevButton?: React.ReactNode
+    prevButton?: ?Node,
 
     // Supported ScrollResponder
     // When animation begins after letting up
-    onScrollBeginDrag?: (
-      e: NativeSyntheticEvent<NativeScrollEvent>,
-      state: SwiperInternals,
-      swiper: Swiper
-    ) => void
+    onScrollBeginDrag?: ?(event?: any, state?: any, context?: any) => void,
     // Makes no sense why this occurs first during bounce
-    onMomentumScrollEnd?: (
-      e: NativeSyntheticEvent<NativeScrollEvent>,
-      state: SwiperInternals,
-      swiper: Swiper
-    ) => void
+    onMomentumScrollEnd?: ?(event?: any, state?: any, context?: any) => void,
     // Immediately after onMomentumScrollEnd
-    onTouchStartCapture?: any
+    onTouchStartCapture?: ?(event?: any, state?: any, context?: any) => void,
     // Same, but bubble phase
-    onTouchStart?: any
+    onTouchStart?: ?(event?: any, state?: any, context?: any) => void,
     // You could hold the touch start for a long time
-    onTouchEnd?: any
+    onTouchEnd?: ?(event?: any, state?: any, context?: any) => void,
     // When lifting up - you could pause forever before * lifting
-    onResponderRelease?: any
+    onResponderRelease?: ?(event?: any, state?: any, context?: any) => void,
 
     // If true, the scroll view stops on multiples of the scroll view's size when scrolling. This can be used for
     // horizontal pagination.
-    pagingEnabled?: boolean
+    pagingEnabled?: ?boolean,
     // Set to true if you want to show horizontal scroll bar.
-    showsHorizontalScrollIndicator?: boolean
+    showsHorizontalScrollIndicator?: ?boolean,
     // Set to true if you want to show vertical scroll bar.
-    showsVerticalScrollIndicator?: boolean
+    showsVerticalScrollIndicator?: ?boolean,
     // If true, the scroll view bounces when it reaches the end of the content if the content is larger then the
     // scroll view along the axis of the scroll direction. If false, it disables all bouncing even if the
     // alwaysBounce* props are true.
-    bounces?: boolean
+    bounces?: ?boolean,
     // If true, the scroll view scrolls to top when the status bar is tapped.
-    scrollsToTop?: boolean
+    scrollsToTop?: ?boolean,
     // If true, offscreen child views (whose overflow value is hidden) are removed from their native backing
     // superview when offscreen. This canimprove scrolling performance on long lists.
-    removeClippedSubviews?: boolean
+    removeClippedSubviews?: ?boolean,
     // Set to true if you need adjust content insets automation.
-    automaticallyAdjustContentInsets?: boolean
+    automaticallyAdjustContentInsets?: ?boolean,
     // Enables/Disables swiping
-    scrollEnabled?: boolean
-  }
+    scrollEnabled?: ?boolean
+  |}>;
 
-  export default class Swiper extends Component<SwiperProps, SwiperState> {
-    scrollBy: (index?: number, animated?: boolean) => void;
-    scrollTo: (index: number, animated?: boolean) => void;
+  // eslint-disable-next-line no-undef
+  declare export default class Swiper extends Component<SwiperProps> {
+    scrollBy(index: number, animated?: boolean): void;
   }
 }
