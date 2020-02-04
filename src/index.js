@@ -686,7 +686,8 @@ export default class extends Component {
         pointerEvents="none"
         style={[
           styles['pagination_' + this.state.dir],
-          this.props.paginationStyle
+          this.props.paginationStyle,
+          { position: 'absolute', bottom: 12 }
         ]}
       >
         {dots}
