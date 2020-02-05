@@ -17,6 +17,8 @@
 
 # react-native-swiper
 
+It is a fork of https://github.com/leecade/react-native-swiper with added react-native-viewpager (it fixes Android bug). After installation of react-native-swiper you need manually link react-native-viewpager https://github.com/react-native-community/react-native-viewpager#manual-linking
+
 ## Roadmap
 
 > see: [ROADMAP.md](ROADMAP.md)
