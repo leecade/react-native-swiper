@@ -60,6 +60,7 @@
     "updtr": "^2.0.0"
   },
   "dependencies": {
+    "@react-native-community/viewpager": "^3.3.0",
     "prop-types": "^15.5.10"
   },
   "config": {
