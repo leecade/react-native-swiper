@@ -23,9 +23,11 @@
 
 ## Changelogs
 
-- **[1.6.0-nightly]**
+- **[1.6.0-rc]**
   - Dependency
     - Remove ViewPagerAndroid, use ScrollView #1009
+  - Test Integration
+    - Setup e2e test
   - TypeScript
     - correct the wrong types #1000
     - Add missing scrollBy TypeScript definition #931
@@ -37,6 +39,9 @@
     - ES6 and CommonJS compatibility #717
     - Solves the issue of state messing up when parent component calls setState #939
     - replay when autoplay is setted to true #1002
+    - fix broken examples and migrate to react-native 0.60.x
+    - fix bad jumping on ios when loadMinimal set true
+    - fix fliker when loop and loadMinimal are enabled #1062
 
 * [1.5.6]
 
@@ -112,10 +117,10 @@
 $ npm i react-native-swiper --save
 ```
 
-> v1.6.0-nightly
+> v1.6.0-rc
 
 ```
-npm i --save react-native-swiper@nightly
+npm i --save react-native-swiper@next
 ```
 
 ### Basic Usage
@@ -325,14 +330,14 @@ $ react-native run-ios
 
 ```bash
 $ cd examples
-$ npm i
-$ npm run dev
+$ yarn
+$ yarn start
 $ react-native run-ios
 ```
 
 Then launch simulator to preview. Note that you just need to edit the source file `src/index.js`, the change will auto sync to examples.
 
-And now that this project follows the [standard](https://github.com/feross/standard) code style, you'd better prepare it for IDE.
+After development, you should add test for your modification and make all tests passed to prevent other contributors break the feature in the future accidentally. We use detox + jest for e2e test now, you can read [Detox](https://github.com/wix/Detox) for more detail.
 
 ## Contribution
 

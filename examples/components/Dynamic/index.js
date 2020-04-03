@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import {
-  Text,
-  View
-} from 'react-native'
+import { Text, View } from 'react-native'
 import Swiper from 'react-native-swiper'
 
 const styles = {
@@ -35,13 +32,13 @@ const styles = {
 }
 
 export default class extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       items: []
     }
   }
-  componentDidMount () {
+  componentDidMount() {
     this.setState({
       items: [
         { title: 'Hello Swiper', css: styles.slide1 },
@@ -50,7 +47,7 @@ export default class extends Component {
       ]
     })
   }
-  render () {
+  render() {
     return (
       <Swiper showsButtons>
         {this.state.items.map((item, key) => {
