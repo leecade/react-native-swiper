@@ -249,7 +249,7 @@ export default class extends Component {
 
     // Support Optional render page
     initState.children = Array.isArray(props.children)
-      ? props.children.filter(child => child)
+      ? props.children.filter(child => child).flat()
       : props.children
 
     initState.total = initState.children ? initState.children.length || 1 : 0
@@ -300,7 +300,7 @@ export default class extends Component {
 
   onLayout = event => {
     const { width, height } = event.nativeEvent.layout
-    const offset = (this.internals.offset = {})
+    const offset = (this.internals.offset = {x: 0, y: 0})
     const state = { width, height }
 
     if (this.state.total > 1) {
