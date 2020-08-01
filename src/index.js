@@ -461,6 +461,7 @@ export default class extends Component {
    * @param  {string} dir    'x' || 'y'
    */
   updateIndex = (offset, dir, cb) => {
+    if (typeof offset === 'undefined' || typeof this.internals.offset === 'undefined') return
     const state = this.state
     // Android ScrollView will not scrollTo certain offset when props change
     let index = state.index
