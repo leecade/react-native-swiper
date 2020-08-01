@@ -287,7 +287,7 @@ export default class extends Component {
       initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
 
     this.internals = {
-      ...this.internals,
+      offset: initState.offset,
       isScrolling: false
     }
     return initState
