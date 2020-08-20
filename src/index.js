@@ -563,8 +563,7 @@ export default class extends Component {
   scrollTo = (index, animated = true) => {
     if (
       this.internals.isScrolling ||
-      this.state.total < 2 ||
-      index == this.state.index
+      this.state.total < 2
     )
       return
 
