@@ -12,7 +12,8 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated
 } from 'react-native'
 
 /**
@@ -146,7 +147,11 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    /**
+     * Whether the ScrollView component will be Animated or not
+     */
+    animated: PropTypes.bool
   }
 
   /**
@@ -174,7 +179,8 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+    animated: false,
   }
 
   /**
@@ -769,6 +775,23 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
+    if(this.props.animated)
+      return(
+        <Animated.ScrollView
+        ref={this.refScrollView}
+        {...this.props}
+        {...this.scrollViewPropOverrides()}
+        contentContainerStyle={[styles.wrapperIOS, this.props.style]}
+        contentOffset={this.state.offset}
+        onScrollBeginDrag={this.onScrollBegin}
+        onMomentumScrollEnd={this.onScrollEnd}
+        onScrollEndDrag={this.onScrollEndDrag}
+        style={this.props.scrollViewStyle}
+      >
+        {pages}
+      </Animated.ScrollView>
+      )
+      
     return (
       <ScrollView
         ref={this.refScrollView}
