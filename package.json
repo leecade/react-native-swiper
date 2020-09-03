@@ -1,11 +1,11 @@
 {
-  "name": "react-native-swiper",
+  "name": "react-native-syt-swiper",
   "keywords": [
     "react-component",
     "react-native",
     "ios"
   ],
-  "version": "1.6.0-rc.2",
+  "version": "0.0.1",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -44,14 +44,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leecade/react-native-swiper.git"
+    "url": "https://github.com/AngryBaby/react-native-swiper/#refs/heads/Bugfix/bad_layout_ios"
   },
-  "author": "",
+  "author": "sf",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/leecade/react-native-swiper/issues"
+    "url": "https://github.com/AngryBaby/react-native-swiper/issues"
   },
-  "homepage": "https://github.com/leecade/react-native-swiper#readme",
+  "homepage": "https://github.com/AngryBaby/react-native-swiper#readme",
   "devDependencies": {
     "babel-eslint": "^8.0.1",
     "rimraf": "^2.5.4",
