@@ -7,7 +7,7 @@ import {
 } from 'react-native'
 import { Component } from 'react'
 
-declare module 'react-native-swiper' {
+declare module 'react-native-syt-swiper' {
   interface SwiperState {
     autoplayEnd: false
     loopJump: false
