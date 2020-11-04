@@ -709,7 +709,7 @@ export default class extends Component {
 
     return (
       <TouchableOpacity
-	style={this.props.nextButtonStyle}
+        style={this.props.nextButtonStyle}
         onPress={() => button !== null && this.scrollBy(1)}
         disabled={this.props.disableNextButton}
       >
@@ -727,7 +727,7 @@ export default class extends Component {
 
     return (
       <TouchableOpacity
-	style={this.props.prevButtonStyle}
+        style={this.props.prevButtonStyle}
         onPress={() => button !== null && this.scrollBy(-1)}
         disabled={this.props.disablePrevButton}
       >
