@@ -146,7 +146,8 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+    nestedScrollEnabled: PropTypes.bool
   }
 
   /**
@@ -174,6 +175,7 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
+    nestedScrollEnabled: false,
     onIndexChanged: () => null
   }
 
