@@ -152,7 +152,7 @@ export default class extends Component {
   /**
    * Default props
    * @return {object} props
-   * @see http://facebook.github.io/react-native/docs/scrollview.html
+   * @see https://reactnative.dev/docs/scrollview
    */
   static defaultProps = {
     horizontal: true,
