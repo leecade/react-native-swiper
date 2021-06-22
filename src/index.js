@@ -146,7 +146,11 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+
+    showAdjacentViews: PropTypes.bool,
+    adjacentViewsWidth: PropTypes.number,
+    adjacentViewsPadding: PropTypes.number,
   }
 
   /**
@@ -174,7 +178,11 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+
+    showAdjacentViews: false,
+    adjacentViewsWidth: 8,
+    adjacentViewsPadding: 4,
   }
 
   /**
@@ -267,12 +275,19 @@ export default class extends Component {
 
     initState.dir = props.horizontal === false ? 'y' : 'x'
 
+    // By default RN-Swiper spreads the whole element to full-width,
+    // So adjacentViewsWidth indicates number of px we need to show of adjacent View
+    // and adjacentViewsPadding works like margin between these elements
+    // So we take both of these and subtract with full-width to get new width
+    const adjacentViewDiffWidth = this.props.showAdjacentViews ?
+      this.props.adjacentViewsPadding + this.props.adjacentViewsWidth : 0
+
     if (props.width) {
       initState.width = props.width
     } else if (this.state && this.state.width) {
       initState.width = this.state.width
     } else {
-      initState.width = width
+      initState.width = width - (2 * adjacentViewDiffWidth)
     }
 
     if (props.height) {
@@ -284,11 +299,13 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y' ? height * props.index : (width * (props.index + this.props.showAdjacentViews && this.props.loop ? 1 : 0))
+        - (adjacentViewDiffWidth)
 
     this.internals = {
       ...this.internals,
-      isScrolling: false
+      isScrolling: false,
+      adjacentViewDiffWidth: adjacentViewDiffWidth
     }
     return initState
   }
@@ -300,16 +317,18 @@ export default class extends Component {
 
   onLayout = event => {
     const { width, height } = event.nativeEvent.layout
-    const offset = (this.internals.offset = {})
-    const state = { width, height }
+    const offset = this.internals.offset = { x: 0, y: 0 }
+    const state = { width: width - (2 * this.internals.adjacentViewDiffWidth), height }
 
     if (this.state.total > 1) {
       let setup = this.state.index
       if (this.props.loop) {
         setup++
       }
-      offset[this.state.dir] =
-        this.state.dir === 'y' ? height * setup : width * setup
+      /// ScrollView renders from 0 pixels but we want an custom offset to scrollTo so our adjacent views can be displayed
+      offset[this.state.dir] = this.state.dir === 'y'
+        ? height * setup
+        : (width * setup) - (3 * this.internals.adjacentViewDiffWidth)
     }
 
     // only update the offset in state if needed, updating offset while swiping
@@ -321,10 +340,10 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if(this.state.total > 1) {
+    if (this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
     }
-	
+
     if (this.initialRender) {
       this.initialRender = false
     }
@@ -350,15 +369,15 @@ export default class extends Component {
           } else if (this.state.index === this.state.total - 1) {
             this.props.horizontal === false
               ? this.scrollView.scrollTo({
-                  x: 0,
-                  y: this.state.height * this.state.total,
-                  animated: false
-                })
+                x: 0,
+                y: this.state.height * this.state.total,
+                animated: false
+              })
               : this.scrollView.scrollTo({
-                  x: this.state.width * this.state.total,
-                  y: 0,
-                  animated: false
-                })
+                x: this.state.width * this.state.total,
+                y: 0,
+                animated: false
+              })
           }
         }
       },
@@ -424,6 +443,10 @@ export default class extends Component {
           y: e.nativeEvent.position * this.state.height
         }
       }
+    }
+
+    if (this.props.showAdjacentViews && this.state.dir === 'x') {
+      e.nativeEvent.contentOffset.x = e.nativeEvent.contentOffset.x - (3 * this.internals.adjacentViewDiffWidth)
     }
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir, () => {
@@ -531,7 +554,7 @@ export default class extends Component {
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
-    if (state.dir === 'x') x = diff * state.width
+    if (state.dir === 'x') x = (diff * state.width) - this.internals.adjacentViewDiffWidth
     if (state.dir === 'y') y = diff * state.height
 
     this.scrollView && this.scrollView.scrollTo({ x, y, animated })
@@ -769,6 +792,8 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
+    // snapDiff is calculated to define our offset on every swipe 
+    // this.state.width is initial width of the item so we subtract padding and adjacentView port widths to derive our snapDifference
     return (
       <ScrollView
         ref={this.refScrollView}
@@ -780,6 +805,9 @@ export default class extends Component {
         onMomentumScrollEnd={this.onScrollEnd}
         onScrollEndDrag={this.onScrollEndDrag}
         style={this.props.scrollViewStyle}
+        snapToOffsets={pages.map((x, i) => (i * (this.state.width) - this.props.adjacentViewsWidth - this.props.adjacentViewsPadding))}
+        snapToAlignment={'center'}
+        decelerationRate={0}
       >
         {pages}
       </ScrollView>
