@@ -355,6 +355,11 @@ export default class extends Component {
     if (!this.state.loopJump) return
     const i = this.state.index + (this.props.loop ? 1 : 0)
     const scrollView = this.scrollView
+    const offsetDiff = this.props.adjacentViewsWidth + this.props.adjacentViewsPadding
+    // RN-SWIPER duplicates last element in start and first element in last
+    // So when we swipe from 0 to last-element (Which is duplicate element) or last-element to 0 (Which is duplicate element), 
+    // RN-SWIPER will fire this function to manually scroll to actual element 
+    // So we need to add our customOffset which is considered while loop jumping
     this.loopJumpTimer = setTimeout(
       () => {
         if (scrollView.setPageWithoutAnimation) {
@@ -364,7 +369,7 @@ export default class extends Component {
             scrollView.scrollTo(
               this.props.horizontal === false
                 ? { x: 0, y: this.state.height, animated: false }
-                : { x: this.state.width, y: 0, animated: false }
+                : { x: this.state.width - offsetDiff, y: 0, animated: false }
             )
           } else if (this.state.index === this.state.total - 1) {
             this.props.horizontal === false
@@ -374,7 +379,7 @@ export default class extends Component {
                 animated: false
               })
               : this.scrollView.scrollTo({
-                x: this.state.width * this.state.total,
+                x: (this.state.width * this.state.total) - offsetDiff,
                 y: 0,
                 animated: false
               })
