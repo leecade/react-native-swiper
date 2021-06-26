@@ -502,6 +502,17 @@ export default class extends Component {
     // Do nothing if offset no change.
     if (!diff) return
 
+    const {
+      showAdjacentViews,
+      adjacentViewsPadding,
+      adjacentViewsWidth,
+    } = this.props;
+    const { total, width } = state;
+    // Some time when our swipe goes from last element to duplicate of first elemet it doesn't update index to over total limit
+    // So it will never autoScroll to our orignal element that's why totalOffsetScreen ensures if we go out of the bounds
+    // it will update the index to 0 and therefore our loop will start working absolutely fine
+    const totalOffsetScreen = total * width;
+
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     // parseInt() ensures it's always an integer
@@ -509,12 +520,18 @@ export default class extends Component {
 
     if (this.props.loop) {
       if (index <= -1) {
-        index = state.total - 1
-        offset[dir] = step * state.total
+        index = total - 1
+        offset[dir] = step * total
         loopJump = true
-      } else if (index >= state.total) {
+      } else if (index >= total || offset[dir] > totalOffsetScreen) {
+         // During onLayout we fire one autoScroll and we need to maintain that same offset when we loop through
+         // to give us accurate index, so step is full width of element including the padding
+         // therefore we deduct the adjacentViewWidth and it's padding to get the accurate offset as before and get accurate index
+        const diffOffset = showAdjacentViews
+          ? adjacentViewsWidth + adjacentViewsPadding
+          : 0;
         index = 0
-        offset[dir] = step
+        offset[dir] = step - diffOffset;
         loopJump = true
       }
     }
@@ -833,18 +850,21 @@ export default class extends Component {
       loadMinimalLoader,
       renderPagination,
       showsButtons,
-      showsPagination
+      showsPagination,
+      showAdjacentViews,
+      adjacentViewsPadding,
     } = this.props
     // let dir = state.dir
     // let key = 0
     const loopVal = loop ? 1 : 0
     let pages = []
+    let paddingHorizontal = showAdjacentViews ? adjacentViewsPadding : 0;
 
-    const pageStyle = [{ width: width, height: height }, styles.slide]
+    const pageStyle = [{ width: width, height: height, paddingHorizontal }, styles.slide]
     const pageStyleLoading = {
       width,
       height,
-      flex: 1,
+      paddingHorizontal,
       justifyContent: 'center',
       alignItems: 'center'
     }
@@ -866,7 +886,11 @@ export default class extends Component {
             // The real first swiper should be keep
             (loop && i === 1) ||
             // The real last swiper should be keep
-            (loop && i === total - 1)
+            (loop && i === total - 1) ||
+            // To make sure duplicate and orignals of first,last element is always visible
+            (loop && i === pages.length - 1) ||
+            (loop && i === pages.length - 2) ||
+            (loop && i === 0)
           ) {
             return (
               <View style={pageStyle} key={i}>
