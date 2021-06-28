@@ -476,10 +476,10 @@ export default class extends Component {
         }
       }
     }
-
-    if (this.props.showAdjacentViews && this.state.dir === 'x') {
-      e.nativeEvent.contentOffset.x = e.nativeEvent.contentOffset.x - (3 * this.internals.adjacentViewDiffWidth)
-    }
+    // It breaks index values with greater adjacentWidth and padding
+    // if (this.props.showAdjacentViews && this.state.dir === 'x') {
+    //   e.nativeEvent.contentOffset.x = e.nativeEvent.contentOffset.x - (3 * this.internals.adjacentViewDiffWidth)
+    // }
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir, () => {
       this.autoplay()
