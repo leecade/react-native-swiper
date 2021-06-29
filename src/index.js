@@ -551,7 +551,7 @@ export default class extends Component {
         // If swiping hard to from orignal 0 element user might end up seeing first duplicate element,
         // which is actually second last element of array so we manually scroll to particular that element 
         // otherwise we will scroll to 0 element
-        if (offset[dir] < 0) {
+        if (offset[dir] <= 0) {
           index = total - 2;
           offset[dir] = step * total;
           loopJump = true;
@@ -570,7 +570,7 @@ export default class extends Component {
         // If swiping hard to from orignal last element user might end up seeing last duplicate element,
         // which is actually second element of array so we manually scroll to particular that element 
         // otherwise we will scroll to last element
-        if (offset[dir] >= totalOffsetScreen + width) {
+        if (offset[dir] > totalOffsetScreen + width) {
           index = 1;
           offset[dir] = step * 3 - diffOffset;
           loopJump = true;
@@ -902,7 +902,7 @@ export default class extends Component {
     } = this.props
     // let dir = state.dir
     // let key = 0
-    const loopVal = loop ? 1 : 0
+    const loopVal = loop ? 2 : 0
     let pages = []
     let paddingHorizontal = showAdjacentViews ? adjacentViewsPadding : 0;
 
@@ -935,14 +935,14 @@ export default class extends Component {
           if (
             (i >= index + loopVal - loadMinimalSize &&
               i <= index + loopVal + loadMinimalSize) ||
-            // We make sure our duplicate elements which are added in 
-            // start and end of swiper are always visible along with real first and last element
-            (loop && i === 0) ||
-            (loop && i === 1) ||
-            (loop && i === 2) ||
-            (loop && i === pages.length - 1) ||
-            (loop && i === pages.length - 2) ||
-            (loop && i === pages.length - 3)
+            // when at 0 index we will force render the real last element and first duplicate element of end list so we don't see any blank jumps when looping,
+            // also when we are at last index value, we will force render the real first element and first duplicate element of start list so we don't see any blank jumps when looping.
+            // this approach will give less re-renders and we can lazy load more elements
+            (loop && i === pages.length - 3 && index === 0) ||
+            (loop && i === pages.length - 2 && index === 0) ||
+            (loop && i === 2 && index === total - 1) ||
+            (loop && i === 1 && index === total - 1) ||
+            (loop && i === 1 && index === 0)
           ) {
             return (
               <View style={pageStyle} key={i}>
