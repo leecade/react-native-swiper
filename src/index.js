@@ -546,6 +546,10 @@ export default class extends Component {
     // parseInt() ensures it's always an integer
     index = parseInt(index + Math.round(diff / step))
 
+    // During onLayout we fire one autoScroll and we need to maintain that same offset when we loop through
+    // to give us accurate index, so step is full width of element including the padding
+    // therefore we deduct the adjacentViewWidth and it's padding to get the accurate offset as before and get accurate index
+    const diffOffset = showAdjacentViews ? adjacentViewsWidth + adjacentViewsPadding : 0;
     if (this.props.loop) {
       if (index <= -1) {
         // If swiping hard to from orignal 0 element user might end up seeing first duplicate element,
@@ -553,20 +557,15 @@ export default class extends Component {
         // otherwise we will scroll to 0 element
         if (offset[dir] <= 0) {
           index = total - 2;
-          offset[dir] = step * total;
+          offset[dir] = step * total - diffOffset;
           loopJump = true;
         } else{
           index = total - 1
-          offset[dir] = step * (total + 1);
+          offset[dir] = step * (total + 1) - diffOffset;
           loopJump = true
         }
       } else if (index >= total || offset[dir] > totalOffsetScreen) {
-         // During onLayout we fire one autoScroll and we need to maintain that same offset when we loop through
-         // to give us accurate index, so step is full width of element including the padding
-         // therefore we deduct the adjacentViewWidth and it's padding to get the accurate offset as before and get accurate index
-        const diffOffset = showAdjacentViews
-          ? adjacentViewsWidth + adjacentViewsPadding
-          : 0;
+
         // If swiping hard to from orignal last element user might end up seeing last duplicate element,
         // which is actually second element of array so we manually scroll to particular that element 
         // otherwise we will scroll to last element
@@ -832,7 +831,7 @@ export default class extends Component {
         style={[
           styles.buttonWrapper,
           {
-            width: this.state.width,
+            width: Dimensions.get('window').width,
             height: this.state.height
           },
           this.props.buttonWrapperStyle
@@ -941,8 +940,7 @@ export default class extends Component {
             (loop && i === pages.length - 3 && index === 0) ||
             (loop && i === pages.length - 2 && index === 0) ||
             (loop && i === 2 && index === total - 1) ||
-            (loop && i === 1 && index === total - 1) ||
-            (loop && i === 1 && index === 0)
+            (loop && i === 1 && index === total - 1)
           ) {
             return (
               <View style={pageStyle} key={i}>
