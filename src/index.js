@@ -96,6 +96,9 @@ const styles = {
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
+
+const decelerationRate=0.7
+
 export default class extends Component {
   /**
    * Props Validation
@@ -874,7 +877,7 @@ export default class extends Component {
         style={this.props.scrollViewStyle}
         snapToOffsets={pages.map((x, i) => (i * (this.state.width) - this.props.adjacentViewsWidth - this.props.adjacentViewsPadding))}
         snapToAlignment={'center'}
-        decelerationRate={0}
+        decelerationRate={decelerationRate}
       >
         {pages}
       </ScrollView>
