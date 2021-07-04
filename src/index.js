@@ -709,9 +709,14 @@ export default class extends Component {
     }
   }
 
-  scrollViewPropOverrides = () => {
+  scrollViewPropOverrides = (pages) => {
     const props = this.props
     let overrides = {}
+
+    // snapDiff is calculated to define our offset on every swipe
+    // this.state.width is initial width of the item so we subtract padding and adjacentView port widths to derive our snapDifference
+    const snappDiff = this.internals.adjacentViewDiffWidth
+    const step = this.props.horizontal ? this.state.width : this.state.height
 
     /*
     const scrollResponders = [
@@ -733,6 +738,13 @@ export default class extends Component {
       ) {
         let originResponder = props[prop]
         overrides[prop] = (e) => originResponder(e, this.fullState(), this)
+      }
+      if (prop === 'pagingEnabled') {
+        if (props[prop] && props.showAdjacentViews) {
+          overrides[prop] = false
+          overrides['snapToOffsets'] = pages.map((x, i) => i * step - snappDiff)
+          overrides['snapToAlignment'] = 'center'
+        }
       }
     }
 
@@ -882,23 +894,17 @@ export default class extends Component {
   }
 
   renderScrollView = (pages) => {
-    // snapDiff is calculated to define our offset on every swipe
-    // this.state.width is initial width of the item so we subtract padding and adjacentView port widths to derive our snapDifference
-    const snappDiff = this.internals.adjacentViewDiffWidth
-    const step = this.props.horizontal ? this.state.width : this.state.height
     return (
       <ScrollView
         ref={this.refScrollView}
         {...this.props}
-        {...this.scrollViewPropOverrides()}
+        {...this.scrollViewPropOverrides(pages)}
         contentContainerStyle={[styles.wrapperIOS, this.props.style]}
         contentOffset={this.state.offset}
         onScrollBeginDrag={this.onScrollBegin}
         onMomentumScrollEnd={this.onScrollEnd}
         onScrollEndDrag={this.onScrollEndDrag}
         style={this.props.scrollViewStyle}
-        snapToOffsets={pages.map((x, i) => i * step - snappDiff)}
-        snapToAlignment={'center'}
       >
         {pages}
       </ScrollView>

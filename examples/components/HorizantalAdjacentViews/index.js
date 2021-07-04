@@ -24,6 +24,7 @@ export default function App() {
         showAdjacentViews={true}
         adjacentViewsWidth={40}
         adjacentViewsPadding={2}
+        decelerationRate={0.7}
       >
         {data.map((item, index) => {
           return (
