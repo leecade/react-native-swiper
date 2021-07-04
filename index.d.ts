@@ -145,6 +145,8 @@ declare module 'react-native-swiper' {
     adjacentViewsWidth?: number
     // It works like margin between the adjacent-view
     adjacentViewsPadding?: number
+    
+    decelerationRate?: 'fast' | 'normal' | number;
   }
 
   export default class Swiper extends Component<SwiperProps, SwiperState> {

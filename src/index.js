@@ -97,8 +97,6 @@ const styles = {
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
 
-const decelerationRate = 0.7
-
 export default class extends Component {
   /**
    * Props Validation
@@ -153,7 +151,11 @@ export default class extends Component {
 
     showAdjacentViews: PropTypes.bool,
     adjacentViewsWidth: PropTypes.number,
-    adjacentViewsPadding: PropTypes.number
+    adjacentViewsPadding: PropTypes.number,
+    decelerationRate: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.oneOf(['fast', 'normal'])
+    ])
   }
 
   /**
@@ -185,7 +187,8 @@ export default class extends Component {
 
     showAdjacentViews: false,
     adjacentViewsWidth: 8,
-    adjacentViewsPadding: 4
+    adjacentViewsPadding: 4,
+    decelerationRate: 'normal'
   }
 
   /**
@@ -260,7 +263,7 @@ export default class extends Component {
 
     // Support Optional render page
     initState.children = Array.isArray(props.children)
-      ? props.children.filter(child => child)
+      ? props.children.filter((child) => child)
       : props.children
 
     initState.total = initState.children ? initState.children.length || 1 : 0
@@ -311,8 +314,8 @@ export default class extends Component {
     let loopVal = this.props.loop ? 2 : 0
     initState.offset[initState.dir] =
       initState.dir === 'y'
-        ? initState.height * (props.index + loopVal) 
-        : initState.width * (props.index + loopVal);
+        ? initState.height * (props.index + loopVal)
+        : initState.width * (props.index + loopVal)
 
     this.internals = {
       ...this.internals,
@@ -896,7 +899,6 @@ export default class extends Component {
         style={this.props.scrollViewStyle}
         snapToOffsets={pages.map((x, i) => i * step - snappDiff)}
         snapToAlignment={'center'}
-        decelerationRate={decelerationRate}
       >
         {pages}
       </ScrollView>
