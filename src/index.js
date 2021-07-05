@@ -311,6 +311,9 @@ export default class extends Component {
       initState.height = height - verticalDiff
     }
 
+    // We duplicate 2 elements on both ends of list, so we need to consider this value
+    // while calculating offset because 1 element is actually now positioned at 3 element in list
+    // that's why 1+2=3
     let loopVal = this.props.loop ? 2 : 0
     initState.offset[initState.dir] =
       initState.dir === 'y'
@@ -320,7 +323,7 @@ export default class extends Component {
     this.internals = {
       ...this.internals,
       isScrolling: false,
-      adjacentViewDiffWidth: adjacentViewDiffWidth
+      adjacentViewDiffWidth
     }
     return initState
   }
@@ -334,11 +337,11 @@ export default class extends Component {
     const { width, height } = event.nativeEvent.layout
     const offset = (this.internals.offset = { x: 0, y: 0 })
     const isHorizontal = this.props.horizontal
-    const diffOffset = this.internals.adjacentViewDiffWidth
-    const adjacentViewDiffWidth = 2 * diffOffset
+    const { adjacentViewDiffWidth } = this.internals
+    const totalAdjacentWidth = 2 * adjacentViewDiffWidth
     const state = {
-      width: width - (isHorizontal ? adjacentViewDiffWidth : 0),
-      height: height - (isHorizontal ? 0 : adjacentViewDiffWidth)
+      width: width - (isHorizontal ? totalAdjacentWidth : 0),
+      height: height - (isHorizontal ? 0 : totalAdjacentWidth)
     }
 
     if (this.state.total > 1) {
@@ -346,11 +349,11 @@ export default class extends Component {
       if (this.props.loop) {
         setup += 2
       }
-      /// ScrollView renders from 0 pixels but we want an custom offset to scrollTo so our adjacent views can be displayed
+      /// ScrollView renders from 0 pixels but we want a custom offset to scrollTo so our adjacent views can be displayed
       offset[this.state.dir] =
         this.state.dir === 'y'
-          ? state.height * setup - diffOffset
-          : state.width * setup - diffOffset
+          ? state.height * setup - adjacentViewDiffWidth
+          : state.width * setup - adjacentViewDiffWidth
     }
 
     // only update the offset in state if needed, updating offset while swiping
