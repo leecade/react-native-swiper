@@ -317,8 +317,8 @@ export default class extends Component {
     let loopVal = this.props.loop ? 2 : 0
     initState.offset[initState.dir] =
       initState.dir === 'y'
-        ? initState.height * (props.index + loopVal)
-        : initState.width * (props.index + loopVal)
+        ? (initState.height * (props.index + loopVal)) - adjacentViewDiffWidth
+        : (initState.width * (props.index + loopVal)) - adjacentViewDiffWidth
 
     this.internals = {
       ...this.internals,
