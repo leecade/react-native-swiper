@@ -138,6 +138,15 @@ declare module 'react-native-swiper' {
     automaticallyAdjustContentInsets?: boolean
     // Enables/Disables swiping
     scrollEnabled?: boolean
+    
+    // If true, it will showcase adjacentViews
+    showAdjacentViews?: boolean
+    // It indicates the visible width of adjacent-view
+    adjacentViewsWidth?: number
+    // It works like margin between the adjacent-view
+    adjacentViewsPadding?: number
+    
+    decelerationRate?: 'fast' | 'normal' | number;
   }
 
   export default class Swiper extends Component<SwiperProps, SwiperState> {

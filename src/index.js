@@ -96,6 +96,7 @@ const styles = {
 
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
+
 export default class extends Component {
   /**
    * Props Validation
@@ -146,7 +147,15 @@ export default class extends Component {
     /**
      * Called when the index has changed because the user swiped.
      */
-    onIndexChanged: PropTypes.func
+    onIndexChanged: PropTypes.func,
+
+    showAdjacentViews: PropTypes.bool,
+    adjacentViewsWidth: PropTypes.number,
+    adjacentViewsPadding: PropTypes.number,
+    decelerationRate: PropTypes.oneOfType([
+      PropTypes.number,
+      PropTypes.oneOf(['fast', 'normal'])
+    ])
   }
 
   /**
@@ -174,7 +183,12 @@ export default class extends Component {
     autoplayTimeout: 2.5,
     autoplayDirection: true,
     index: 0,
-    onIndexChanged: () => null
+    onIndexChanged: () => null,
+
+    showAdjacentViews: false,
+    adjacentViewsWidth: 8,
+    adjacentViewsPadding: 4,
+    decelerationRate: 'normal'
   }
 
   /**
@@ -249,7 +263,7 @@ export default class extends Component {
 
     // Support Optional render page
     initState.children = Array.isArray(props.children)
-      ? props.children.filter(child => child)
+      ? props.children.filter((child) => child)
       : props.children
 
     initState.total = initState.children ? initState.children.length || 1 : 0
@@ -267,28 +281,49 @@ export default class extends Component {
 
     initState.dir = props.horizontal === false ? 'y' : 'x'
 
+    // By default RN-Swiper spreads the whole element to full-width,
+    // So adjacentViewsWidth indicates number of px we need to show of adjacent View
+    // and adjacentViewsPadding works like margin between these elements
+    // So we take both of these and subtract with full-width to get new width
+
+    const isHorizontal = props.horizontal
+
+    const adjacentViewDiffWidth = this.props.showAdjacentViews
+      ? this.props.adjacentViewsPadding + this.props.adjacentViewsWidth
+      : 0
+
+    const horizontalDiff = isHorizontal ? 2 * adjacentViewDiffWidth : 0
+    const verticalDiff = isHorizontal ? 0 : 2 * adjacentViewDiffWidth
+
     if (props.width) {
-      initState.width = props.width
+      initState.width = props.width - horizontalDiff
     } else if (this.state && this.state.width) {
       initState.width = this.state.width
     } else {
-      initState.width = width
+      initState.width = width - horizontalDiff
     }
 
     if (props.height) {
-      initState.height = props.height
+      initState.height = props.height - verticalDiff
     } else if (this.state && this.state.height) {
       initState.height = this.state.height
     } else {
-      initState.height = height
+      initState.height = height - verticalDiff
     }
 
+    // We duplicate 2 elements on both ends of list, so we need to consider this value
+    // while calculating offset because 1 element is actually now positioned at 3 element in list
+    // that's why 1+2=3
+    let loopVal = this.props.loop ? 2 : 0
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y'
+        ? (initState.height * (props.index + loopVal)) - adjacentViewDiffWidth
+        : (initState.width * (props.index + loopVal)) - adjacentViewDiffWidth
 
     this.internals = {
       ...this.internals,
-      isScrolling: false
+      isScrolling: false,
+      adjacentViewDiffWidth
     }
     return initState
   }
@@ -298,18 +333,27 @@ export default class extends Component {
     return Object.assign({}, this.state, this.internals)
   }
 
-  onLayout = event => {
+  onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
-    const offset = (this.internals.offset = {})
-    const state = { width, height }
+    const offset = (this.internals.offset = { x: 0, y: 0 })
+    const isHorizontal = this.props.horizontal
+    const { adjacentViewDiffWidth } = this.internals
+    const totalAdjacentWidth = 2 * adjacentViewDiffWidth
+    const state = {
+      width: width - (isHorizontal ? totalAdjacentWidth : 0),
+      height: height - (isHorizontal ? 0 : totalAdjacentWidth)
+    }
 
     if (this.state.total > 1) {
       let setup = this.state.index
       if (this.props.loop) {
-        setup++
+        setup += 2
       }
+      /// ScrollView renders from 0 pixels but we want a custom offset to scrollTo so our adjacent views can be displayed
       offset[this.state.dir] =
-        this.state.dir === 'y' ? height * setup : width * setup
+        this.state.dir === 'y'
+          ? state.height * setup - adjacentViewDiffWidth
+          : state.width * setup - adjacentViewDiffWidth
     }
 
     // only update the offset in state if needed, updating offset while swiping
@@ -321,10 +365,10 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if(this.state.total > 1) {
+    if (this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
     }
-	
+
     if (this.initialRender) {
       this.initialRender = false
     }
@@ -334,8 +378,13 @@ export default class extends Component {
 
   loopJump = () => {
     if (!this.state.loopJump) return
-    const i = this.state.index + (this.props.loop ? 1 : 0)
+    const i = this.state.index + (this.props.loop ? 2 : 0)
     const scrollView = this.scrollView
+    const offsetDiff = this.internals.adjacentViewDiffWidth
+    // RN-SWIPER duplicates last element in start and first element in last
+    // So when we swipe from 0 to last-element (Which is duplicate element) or last-element to 0 (Which is duplicate element),
+    // RN-SWIPER will fire this function to manually scroll to actual element
+    // So we need to add our customOffset which is considered while loop jumping
     this.loopJumpTimer = setTimeout(
       () => {
         if (scrollView.setPageWithoutAnimation) {
@@ -344,18 +393,50 @@ export default class extends Component {
           if (this.state.index === 0) {
             scrollView.scrollTo(
               this.props.horizontal === false
-                ? { x: 0, y: this.state.height, animated: false }
-                : { x: this.state.width, y: 0, animated: false }
+                ? {
+                    x: 0,
+                    y: 2 * this.state.height - offsetDiff,
+                    animated: false
+                  }
+                : {
+                    x: 2 * this.state.width - offsetDiff,
+                    y: 0,
+                    animated: false
+                  }
             )
+          } else if (this.state.index === 1) {
+            this.props.horizontal === false
+              ? this.scrollView.scrollTo({
+                  x: 0,
+                  y: 3 * this.state.height - offsetDiff,
+                  animated: false
+                })
+              : this.scrollView.scrollTo({
+                  x: 3 * this.state.width - offsetDiff,
+                  y: 0,
+                  animated: false
+                })
           } else if (this.state.index === this.state.total - 1) {
             this.props.horizontal === false
               ? this.scrollView.scrollTo({
                   x: 0,
-                  y: this.state.height * this.state.total,
+                  y: this.state.height * (this.state.total + 1) - offsetDiff,
                   animated: false
                 })
               : this.scrollView.scrollTo({
-                  x: this.state.width * this.state.total,
+                  x: this.state.width * (this.state.total + 1) - offsetDiff,
+                  y: 0,
+                  animated: false
+                })
+          } else if (this.state.index === this.state.total - 2) {
+            this.props.horizontal === false
+              ? this.scrollView.scrollTo({
+                  x: 0,
+                  y: this.state.height * this.state.total - offsetDiff,
+                  animated: false
+                })
+              : this.scrollView.scrollTo({
+                  x: this.state.width * this.state.total - offsetDiff,
                   y: 0,
                   animated: false
                 })
@@ -398,7 +479,7 @@ export default class extends Component {
    * Scroll begin handle
    * @param  {object} e native event
    */
-  onScrollBegin = e => {
+  onScrollBegin = (e) => {
     // update scroll state
     this.internals.isScrolling = true
     this.props.onScrollBeginDrag &&
@@ -409,7 +490,7 @@ export default class extends Component {
    * Scroll end handle
    * @param  {object} e native event
    */
-  onScrollEnd = e => {
+  onScrollEnd = (e) => {
     // update scroll state
     this.internals.isScrolling = false
 
@@ -425,6 +506,10 @@ export default class extends Component {
         }
       }
     }
+    // It breaks index values with greater adjacentWidth and padding
+    // if (this.props.showAdjacentViews && this.state.dir === 'x') {
+    //   e.nativeEvent.contentOffset.x = e.nativeEvent.contentOffset.x - (3 * this.internals.adjacentViewDiffWidth)
+    // }
 
     this.updateIndex(e.nativeEvent.contentOffset, this.state.dir, () => {
       this.autoplay()
@@ -439,7 +524,7 @@ export default class extends Component {
    * Drag end handle
    * @param {object} e native event
    */
-  onScrollEndDrag = e => {
+  onScrollEndDrag = (e) => {
     const { contentOffset } = e.nativeEvent
     const { horizontal } = this.props
     const { children, index } = this.state
@@ -467,6 +552,7 @@ export default class extends Component {
     if (!this.internals.offset)
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
       this.internals.offset = {}
+
     const diff = offset[dir] - (this.internals.offset[dir] || 0)
     const step = dir === 'x' ? state.width : state.height
     let loopJump = false
@@ -474,20 +560,48 @@ export default class extends Component {
     // Do nothing if offset no change.
     if (!diff) return
 
+    const { total } = state
+    // Some time when our swipe goes from last element to duplicate of first elemet it doesn't update index to over total limit
+    // So it will never autoScroll to our orignal element that's why totalOffsetScreen ensures if we go out of the bounds
+    // it will update the index to 0 and therefore our loop will start working absolutely fine
+    const totalOffsetScreen = (total + 1) * step
+
     // Note: if touch very very quickly and continuous,
     // the variation of `index` more than 1.
     // parseInt() ensures it's always an integer
     index = parseInt(index + Math.round(diff / step))
 
+    // During onLayout we fire one autoScroll and we need to maintain that same offset when we loop through
+    // to give us accurate index, so step is full width of element including the padding
+    // therefore we deduct the adjacentViewWidth and it's padding to get the accurate offset as before and get accurate index
+    const diffOffset = this.internals.adjacentViewDiffWidth
     if (this.props.loop) {
       if (index <= -1) {
-        index = state.total - 1
-        offset[dir] = step * state.total
-        loopJump = true
-      } else if (index >= state.total) {
-        index = 0
-        offset[dir] = step
-        loopJump = true
+        // If swiping hard to from orignal 0 element user might end up seeing first duplicate element,
+        // which is actually second last element of array so we manually scroll to particular that element
+        // otherwise we will scroll to 0 element
+        if (offset[dir] <= 0) {
+          index = total - 2
+          offset[dir] = step * total - diffOffset
+          loopJump = true
+        } else {
+          index = total - 1
+          offset[dir] = step * (total + 1) - diffOffset
+          loopJump = true
+        }
+      } else if (index >= total || offset[dir] > totalOffsetScreen) {
+        // If swiping hard to from orignal last element user might end up seeing last duplicate element,
+        // which is actually second element of array so we manually scroll to particular that element
+        // otherwise we will scroll to last element
+        if (offset[dir] > totalOffsetScreen + step) {
+          index = 1
+          offset[dir] = step * 3 - diffOffset
+          loopJump = true
+        } else {
+          index = 0
+          offset[dir] = step * 2 - diffOffset
+          loopJump = true
+        }
       }
     }
 
@@ -528,11 +642,13 @@ export default class extends Component {
   scrollBy = (index, animated = true) => {
     if (this.internals.isScrolling || this.state.total < 2) return
     const state = this.state
-    const diff = (this.props.loop ? 1 : 0) + index + this.state.index
+    const diff = (this.props.loop ? 2 : 0) + index + this.state.index
     let x = 0
     let y = 0
-    if (state.dir === 'x') x = diff * state.width
-    if (state.dir === 'y') y = diff * state.height
+    if (state.dir === 'x')
+      x = diff * state.width - this.internals.adjacentViewDiffWidth
+    if (state.dir === 'y')
+      y = diff * state.height - this.internals.adjacentViewDiffWidth
 
     this.scrollView && this.scrollView.scrollTo({ x, y, animated })
 
@@ -596,9 +712,14 @@ export default class extends Component {
     }
   }
 
-  scrollViewPropOverrides = () => {
+  scrollViewPropOverrides = (pages) => {
     const props = this.props
     let overrides = {}
+
+    // snapDiff is calculated to define our offset on every swipe
+    // this.state.width is initial width of the item so we subtract padding and adjacentView port widths to derive our snapDifference
+    const snappDiff = this.internals.adjacentViewDiffWidth
+    const step = this.props.horizontal ? this.state.width : this.state.height
 
     /*
     const scrollResponders = [
@@ -619,7 +740,14 @@ export default class extends Component {
         prop !== 'onScrollBeginDrag'
       ) {
         let originResponder = props[prop]
-        overrides[prop] = e => originResponder(e, this.fullState(), this)
+        overrides[prop] = (e) => originResponder(e, this.fullState(), this)
+      }
+      if (prop === 'pagingEnabled') {
+        if (props[prop] && props.showAdjacentViews) {
+          overrides[prop] = false
+          overrides['snapToOffsets'] = pages.map((x, i) => i * step - snappDiff)
+          overrides['snapToAlignment'] = 'center'
+        }
       }
     }
 
@@ -741,7 +869,7 @@ export default class extends Component {
         style={[
           styles.buttonWrapper,
           {
-            width: this.state.width,
+            width: Dimensions.get('window').width,
             height: this.state.height
           },
           this.props.buttonWrapperStyle
@@ -753,11 +881,11 @@ export default class extends Component {
     )
   }
 
-  refScrollView = view => {
+  refScrollView = (view) => {
     this.scrollView = view
   }
 
-  onPageScrollStateChanged = state => {
+  onPageScrollStateChanged = (state) => {
     switch (state) {
       case 'dragging':
         return this.onScrollBegin()
@@ -768,12 +896,12 @@ export default class extends Component {
     }
   }
 
-  renderScrollView = pages => {
+  renderScrollView = (pages) => {
     return (
       <ScrollView
         ref={this.refScrollView}
         {...this.props}
-        {...this.scrollViewPropOverrides()}
+        {...this.scrollViewPropOverrides(pages)}
         contentContainerStyle={[styles.wrapperIOS, this.props.style]}
         contentOffset={this.state.offset}
         onScrollBeginDrag={this.onScrollBegin}
@@ -800,29 +928,46 @@ export default class extends Component {
       loadMinimalLoader,
       renderPagination,
       showsButtons,
-      showsPagination
+      showsPagination,
+      showAdjacentViews,
+      adjacentViewsPadding,
+      horizontal
     } = this.props
     // let dir = state.dir
     // let key = 0
-    const loopVal = loop ? 1 : 0
+    const loopVal = loop ? 2 : 0
     let pages = []
+    let paddingHorizontal =
+      horizontal && showAdjacentViews ? adjacentViewsPadding : 0
+    let paddingVertical =
+      !horizontal && showAdjacentViews ? adjacentViewsPadding : 0
 
-    const pageStyle = [{ width: width, height: height }, styles.slide]
+    const pageStyle = [
+      { width: width, height, paddingHorizontal, paddingVertical },
+      styles.slide
+    ]
+
     const pageStyleLoading = {
       width,
       height,
-      flex: 1,
+      paddingHorizontal,
+      paddingVertical,
       justifyContent: 'center',
       alignItems: 'center'
     }
-
     // For make infinite at least total > 1
     if (total > 1) {
       // Re-design a loop model for avoid img flickering
       pages = Object.keys(children)
       if (loop) {
+        // added 2 duplicate elements in start and end of swiper
+        // so when we swipe to duplicate element we will no longer see
+        // readjusting, though we will see when touch speed is strong and
+        // we end up scrolling to last duplicate element
         pages.unshift(total - 1 + '')
+        pages.unshift(total - 2 + '')
         pages.push('0')
+        pages.push('1')
       }
 
       pages = pages.map((page, i) => {
@@ -830,10 +975,13 @@ export default class extends Component {
           if (
             (i >= index + loopVal - loadMinimalSize &&
               i <= index + loopVal + loadMinimalSize) ||
-            // The real first swiper should be keep
-            (loop && i === 1) ||
-            // The real last swiper should be keep
-            (loop && i === total - 1)
+            // when at 0 index we will force render the real last element and first duplicate element of end list so we don't see any blank jumps when looping,
+            // also when we are at last index value, we will force render the real first element and first duplicate element of start list so we don't see any blank jumps when looping.
+            // this approach will give less re-renders and we can lazy load more elements
+            (loop && i === pages.length - 3 && index === 0) ||
+            (loop && i === pages.length - 2 && index === 0) ||
+            (loop && i === 2 && index === total - 1) ||
+            (loop && i === 1 && index === total - 1)
           ) {
             return (
               <View style={pageStyle} key={i}>
@@ -865,7 +1013,7 @@ export default class extends Component {
 
     return (
       <View style={[styles.container, containerStyle]} onLayout={this.onLayout}>
-        {this.renderScrollView(pages)}
+        {pages.length > 1 ? this.renderScrollView(pages) : pages[0]}
         {showsPagination &&
           (renderPagination
             ? renderPagination(index, total, this)
