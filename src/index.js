@@ -283,8 +283,12 @@ export default class extends Component {
       initState.height = height
     }
 
+    let offsetIndex = props.index
+    if (props.loop) {
+      offsetIndex += 1
+    }
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y' ? initState.height * offsetIndex : initState.width * offsetIndex
 
     this.internals = {
       ...this.internals,
@@ -324,7 +328,7 @@ export default class extends Component {
     if(this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
     }
-	
+
     if (this.initialRender) {
       this.initialRender = false
     }
