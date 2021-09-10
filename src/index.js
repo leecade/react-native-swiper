@@ -489,6 +489,14 @@ export default class extends Component {
         offset[dir] = step
         loopJump = true
       }
+    } else {
+      // Note: this is a hack to solve the overflow or underflow of index
+      // when user navigates to quickly
+      if (index <= -1) {
+        index = 0
+      } else if (index >= state.total) {
+        index = state.total - 1
+      }
     }
 
     const newState = {}
