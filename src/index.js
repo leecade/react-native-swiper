@@ -249,7 +249,7 @@ export default class extends Component {
 
     // Support Optional render page
     initState.children = Array.isArray(props.children)
-      ? props.children.filter(child => child)
+      ? props.children.filter((child) => child)
       : props.children
 
     initState.total = initState.children ? initState.children.length || 1 : 0
@@ -284,7 +284,9 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y'
+        ? initState.height * props.index
+        : initState.width * props.index
 
     this.internals = {
       ...this.internals,
@@ -298,7 +300,7 @@ export default class extends Component {
     return Object.assign({}, this.state, this.internals)
   }
 
-  onLayout = event => {
+  onLayout = (event) => {
     const { width, height } = event.nativeEvent.layout
     const offset = (this.internals.offset = {})
     const state = { width, height }
@@ -321,10 +323,10 @@ export default class extends Component {
     // related to https://github.com/leecade/react-native-swiper/issues/570
     // contentOffset is not working in react 0.48.x so we need to use scrollTo
     // to emulate offset.
-    if(this.state.total > 1) {
-      this.scrollView.scrollTo({ ...offset, animated: false })
+    if (this.state.total > 1) {
+      this.scrollView?.scrollTo({ ...offset, animated: false })
     }
-	
+
     if (this.initialRender) {
       this.initialRender = false
     }
@@ -333,7 +335,7 @@ export default class extends Component {
   }
 
   loopJump = () => {
-    if (!this.state.loopJump) return
+    if (!this.state.loopJump || !this.scrollView) return
     const i = this.state.index + (this.props.loop ? 1 : 0)
     const scrollView = this.scrollView
     this.loopJumpTimer = setTimeout(
@@ -398,7 +400,7 @@ export default class extends Component {
    * Scroll begin handle
    * @param  {object} e native event
    */
-  onScrollBegin = e => {
+  onScrollBegin = (e) => {
     // update scroll state
     this.internals.isScrolling = true
     this.props.onScrollBeginDrag &&
@@ -409,7 +411,7 @@ export default class extends Component {
    * Scroll end handle
    * @param  {object} e native event
    */
-  onScrollEnd = e => {
+  onScrollEnd = (e) => {
     // update scroll state
     this.internals.isScrolling = false
 
@@ -439,7 +441,7 @@ export default class extends Component {
    * Drag end handle
    * @param {object} e native event
    */
-  onScrollEndDrag = e => {
+  onScrollEndDrag = (e) => {
     const { contentOffset } = e.nativeEvent
     const { horizontal } = this.props
     const { children, index } = this.state
@@ -619,7 +621,7 @@ export default class extends Component {
         prop !== 'onScrollBeginDrag'
       ) {
         let originResponder = props[prop]
-        overrides[prop] = e => originResponder(e, this.fullState(), this)
+        overrides[prop] = (e) => originResponder(e, this.fullState(), this)
       }
     }
 
@@ -753,11 +755,11 @@ export default class extends Component {
     )
   }
 
-  refScrollView = view => {
+  refScrollView = (view) => {
     this.scrollView = view
   }
 
-  onPageScrollStateChanged = state => {
+  onPageScrollStateChanged = (state) => {
     switch (state) {
       case 'dragging':
         return this.onScrollBegin()
@@ -768,7 +770,7 @@ export default class extends Component {
     }
   }
 
-  renderScrollView = pages => {
+  renderScrollView = (pages) => {
     return (
       <ScrollView
         ref={this.refScrollView}
