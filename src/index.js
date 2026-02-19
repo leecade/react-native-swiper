@@ -104,13 +104,13 @@ export default class extends Component {
   static propTypes = {
     horizontal: PropTypes.bool,
     children: PropTypes.node.isRequired,
-    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     style: PropTypes.oneOfType([
       PropTypes.object,
       PropTypes.number,
       PropTypes.array
     ]),
-    scrollViewStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
+    scrollViewStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number, PropTypes.array]),
     pagingEnabled: PropTypes.bool,
     showsHorizontalScrollIndicator: PropTypes.bool,
     showsVerticalScrollIndicator: PropTypes.bool,
@@ -267,10 +267,10 @@ export default class extends Component {
 
     initState.dir = props.horizontal === false ? 'y' : 'x'
 
-    if (props.width) {
-      initState.width = props.width
-    } else if (this.state && this.state.width) {
+    if (this.state && this.state.width) {
       initState.width = this.state.width
+    } else if (props.width) {
+      initState.width = props.width
     } else {
       initState.width = width
     }
