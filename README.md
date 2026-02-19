@@ -214,6 +214,7 @@ AppRegistry.registerComponent('myproject', () => SwiperComponent)
 | height            |            -            | `number`  | If no specify default fullscreen mode by `flex: 1`.                        |
 | style             |          {...}          |  `style`  | See default style in source.                                               |
 | containerStyle    |          {...}          |  `style`  | See default container style in source.                                     |
+| slideStyle        |          {...}          |  `style`  | See default slide style in source.                                         |
 | loadMinimal       |          false          |  `bool`   | Only load current index slide , `loadMinimalSize` slides before and after. |
 | loadMinimalSize   |            1            | `number`  | see `loadMinimal`                                                          |
 | loadMinimalLoader | `<ActivityIndicator />` | `element` | Custom loader to display when slides aren't loaded                         |
