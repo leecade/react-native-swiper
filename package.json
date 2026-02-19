@@ -59,9 +59,7 @@
     "standard": "^13.0.1",
     "updtr": "^2.0.0"
   },
-  "dependencies": {
-    "prop-types": "^15.5.10"
-  },
+  "dependencies": {},
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"

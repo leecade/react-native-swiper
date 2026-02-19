@@ -3,11 +3,9 @@
  * @author leecade<leecade@163.com>
  */
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
 import {
   Text,
   View,
-  ViewPropTypes,
   ScrollView,
   Dimensions,
   TouchableOpacity,
@@ -97,58 +95,6 @@ const styles = {
 // missing `module.exports = exports['default'];` with babel6
 // export default React.createClass({
 export default class extends Component {
-  /**
-   * Props Validation
-   * @type {Object}
-   */
-  static propTypes = {
-    horizontal: PropTypes.bool,
-    children: PropTypes.node.isRequired,
-    containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-    style: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.number,
-      PropTypes.array
-    ]),
-    scrollViewStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
-    pagingEnabled: PropTypes.bool,
-    showsHorizontalScrollIndicator: PropTypes.bool,
-    showsVerticalScrollIndicator: PropTypes.bool,
-    bounces: PropTypes.bool,
-    scrollsToTop: PropTypes.bool,
-    removeClippedSubviews: PropTypes.bool,
-    automaticallyAdjustContentInsets: PropTypes.bool,
-    showsPagination: PropTypes.bool,
-    showsButtons: PropTypes.bool,
-    disableNextButton: PropTypes.bool,
-    disablePrevButton: PropTypes.bool,
-    loadMinimal: PropTypes.bool,
-    loadMinimalSize: PropTypes.number,
-    loadMinimalLoader: PropTypes.element,
-    loop: PropTypes.bool,
-    autoplay: PropTypes.bool,
-    autoplayTimeout: PropTypes.number,
-    autoplayDirection: PropTypes.bool,
-    index: PropTypes.number,
-    renderPagination: PropTypes.func,
-    dotStyle: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.number,
-      PropTypes.array
-    ]),
-    activeDotStyle: PropTypes.oneOfType([
-      PropTypes.object,
-      PropTypes.number,
-      PropTypes.array
-    ]),
-    dotColor: PropTypes.string,
-    activeDotColor: PropTypes.string,
-    /**
-     * Called when the index has changed because the user swiped.
-     */
-    onIndexChanged: PropTypes.func
-  }
-
   /**
    * Default props
    * @return {object} props
