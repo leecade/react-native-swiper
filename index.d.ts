@@ -51,6 +51,8 @@ declare module 'react-native-swiper' {
     style?: StyleProp<ViewStyle>
     // Customize the View container.
     containerStyle?: StyleProp<ViewStyle>
+    // Customize the ScrollView container.
+    scrollViewStyle?: StyleProp<ViewStyle>
     // Only load current index slide , loadMinimalSize slides before and after.
     loadMinimal?: boolean
     // see loadMinimal
@@ -95,6 +97,8 @@ declare module 'react-native-swiper' {
     nextButton?: React.ReactNode
     // Allow custom the prev button.
     prevButton?: React.ReactNode
+    // Reference to handle page actions
+    refPages?: (ref: object) => { next?: () => void; prev?: () => void }
 
     // Supported ScrollResponder
     // When animation begins after letting up
