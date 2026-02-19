@@ -94,13 +94,7 @@ const styles = {
   }
 }
 
-// missing `module.exports = exports['default'];` with babel6
-// export default React.createClass({
-export default class extends Component {
-  /**
-   * Props Validation
-   * @type {Object}
-   */
+export default class Swiper extends Component {
   static propTypes = {
     horizontal: PropTypes.bool,
     children: PropTypes.node.isRequired,
@@ -177,32 +171,12 @@ export default class extends Component {
     onIndexChanged: () => null
   }
 
-  /**
-   * Init states
-   * @return {object} states
-   */
-  state = this.initState(this.props)
-
-  /**
-   * Initial render flag
-   * @type {bool}
-   */
-  initialRender = true
-
-  /**
-   * autoplay timer
-   * @type {null}
-   */
-  autoplayTimer = null
-  loopJumpTimer = null
-
-  UNSAFE_componentWillReceiveProps(nextProps) {
-    if (!nextProps.autoplay && this.autoplayTimer)
-      clearTimeout(this.autoplayTimer)
-    if (nextProps.index === this.props.index) return
-    this.setState(
-      this.initState(nextProps, this.props.index !== nextProps.index)
-    )
+  constructor(props) {
+    super(props)
+    this.state = this.initState(props)
+    this.initialRender = true
+    this.autoplayTimer = null
+    this.loopJumpTimer = null
   }
 
   componentDidMount() {
@@ -214,14 +188,7 @@ export default class extends Component {
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
-    // If the index has changed, we notify the parent via the onIndexChanged callback
-    if (this.state.index !== nextState.index)
-      this.props.onIndexChanged(nextState.index)
-  }
-
   componentDidUpdate(prevProps) {
-    // If autoplay props updated to true, autoplay immediately
     if (this.props.autoplay && !prevProps.autoplay) {
       this.autoplay()
     }
@@ -233,6 +200,9 @@ export default class extends Component {
           this.initState({ ...this.props, index: this.state.index }, true)
         )
       }
+    }
+    if (this.state.index !== prevProps.index) {
+      this.props.onIndexChanged(this.state.index)
     }
   }
 
@@ -284,7 +254,7 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      initState.dir === 'y' ? height * props.index : width * props.index
 
     this.internals = {
       ...this.internals,
@@ -323,9 +293,6 @@ export default class extends Component {
     // to emulate offset.
     if(this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
-    }
-	
-    if (this.initialRender) {
       this.initialRender = false
     }
 
@@ -467,7 +434,7 @@ export default class extends Component {
     if (!this.internals.offset)
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
       this.internals.offset = {}
-    const diff = offset[dir] - (this.internals.offset[dir] || 0)
+    const diff = offset[dir] - this.internals.offset[dir]
     const step = dir === 'x' ? state.width : state.height
     let loopJump = false
 
@@ -554,64 +521,11 @@ export default class extends Component {
     }
   }
 
-  /**
-   * Scroll to index
-   * @param  {number} index page
-   * @param  {bool} animated
-   */
-
-  scrollTo = (index, animated = true) => {
-    if (
-      this.internals.isScrolling ||
-      this.state.total < 2 ||
-      index == this.state.index
-    )
-      return
-
-    const state = this.state
-    const diff = this.state.index + (index - this.state.index)
-
-    let x = 0
-    let y = 0
-    if (state.dir === 'x') x = diff * state.width
-    if (state.dir === 'y') y = diff * state.height
-
-    this.scrollView && this.scrollView.scrollTo({ x, y, animated })
-
-    // update scroll state
-    this.internals.isScrolling = true
-    this.setState({
-      autoplayEnd: false
-    })
-
-    // trigger onScrollEnd manually in android
-    if (!animated || Platform.OS !== 'ios') {
-      setImmediate(() => {
-        this.onScrollEnd({
-          nativeEvent: {
-            position: diff
-          }
-        })
-      })
-    }
-  }
-
   scrollViewPropOverrides = () => {
     const props = this.props
     let overrides = {}
 
-    /*
-    const scrollResponders = [
-      'onMomentumScrollBegin',
-      'onTouchStartCapture',
-      'onTouchStart',
-      'onTouchEnd',
-      'onResponderRelease',
-    ]
-    */
-
     for (let prop in props) {
-      // if(~scrollResponders.indexOf(prop)
       if (
         typeof props[prop] === 'function' &&
         prop !== 'onMomentumScrollEnd' &&
@@ -631,7 +545,6 @@ export default class extends Component {
    * @return {object} react-dom
    */
   renderPagination = () => {
-    // By default, dots only show when `total` >= 2
     if (this.state.total <= 1) return null
 
     let dots = []
@@ -791,7 +704,13 @@ export default class extends Component {
    * @return {object} react-dom
    */
   render() {
-    const { index, total, width, height, children } = this.state
+    const {
+      index,
+      total,
+      width,
+      height,
+      children
+    } = this.state
     const {
       containerStyle,
       loop,
@@ -802,8 +721,6 @@ export default class extends Component {
       showsButtons,
       showsPagination
     } = this.props
-    // let dir = state.dir
-    // let key = 0
     const loopVal = loop ? 1 : 0
     let pages = []
 
