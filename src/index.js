@@ -214,13 +214,10 @@ export default class extends Component {
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
-    // If the index has changed, we notify the parent via the onIndexChanged callback
-    if (this.state.index !== nextState.index)
-      this.props.onIndexChanged(nextState.index)
-  }
-
   componentDidUpdate(prevProps) {
+
+    this.props.onIndexChanged(this.state.index)
+
     // If autoplay props updated to true, autoplay immediately
     if (this.props.autoplay && !prevProps.autoplay) {
       this.autoplay()
@@ -324,7 +321,7 @@ export default class extends Component {
     if(this.state.total > 1) {
       this.scrollView.scrollTo({ ...offset, animated: false })
     }
-	
+
     if (this.initialRender) {
       this.initialRender = false
     }
