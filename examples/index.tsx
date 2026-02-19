@@ -25,6 +25,8 @@ import Phone from './components/Phone'
 // import PhotoView from './components/PhotoView/'; // not working
 import Swiper from './components/Swiper' // working but no title displayed, direction vertical not work well on android
 import SwiperNumber from './components/SwiperNumber' // working but no title displayed
+import VerticalAdjacentViews from './components/VerticalAdjacentViews'
+import HorizantalAdjacentViews from './components/HorizantalAdjacentViews'
 import { createAppContainer } from 'react-navigation'
 
 const DATA = [
@@ -57,7 +59,13 @@ const DATA = [
   },
   {
     name: 'SwiperNumber'
-  }
+  },
+  {
+    name: 'HorizantalAdjacentViews'
+  },
+  {
+    name: 'VerticalAdjacentViews'
+  },
 ]
 
 function Item({ title, navigation }) {
@@ -96,7 +104,9 @@ const AppNavigator = createStackNavigator(
     NestSwiper,
     Phone,
     Swiper,
-    SwiperNumber
+    SwiperNumber,
+    VerticalAdjacentViews,
+    HorizantalAdjacentViews
   },
   {
     initialRouteName: 'Home'
