@@ -41,7 +41,7 @@
     - replay when autoplay is setted to true #1002
     - fix broken examples and migrate to react-native 0.60.x
     - fix bad jumping on ios when loadMinimal set true
-    - fix fliker when loop and loadMinimal are enabled #1062
+    - fix flicker when loop and loadMinimal are enabled #1062
 
 * [1.5.6]
 
