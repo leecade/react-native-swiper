@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "strict": true,
+    "noEmit": true,
+    "allowJs": true,
+    "checkJs": false,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "types": ["react", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "react-native-swiper": ["./index.d.ts"],
+      "react-native-swiper/nested": ["./nested.d.ts"]
+    }
+  },
+  "include": [
+    "src/nested/**/*.ts",
+    "src/nested/**/*.tsx",
+    "src/index.js",
+    "nested.d.ts",
+    "index.d.ts",
+    "examples/components/CoordinatedNested/index.tsx",
+    "examples/components/SpaceBetween/index.tsx"
+  ]
+}

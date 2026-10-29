@@ -1,3 +1,12 @@
+# 更新日志
+
+## 1.6.1 · 2026-10-29
+
+- 新增横向、纵向 `spaceBetween`，统一布局、原生吸附与程序切页步长。
+- 新增独立可选入口 `react-native-swiper/nested`，提供两层同轴子页优先滑动、双向边界交棒、弹性反馈、单计时器自动播放与实时展开分页。
+- 增加受控 ScrollView 接入点、索引确认接口、公开类型、通用五卡示例与回归测试。
+- 索引通知移至提交后，保持普通入口不加载新增可选原生依赖。
+
 - [1.6.0-dev]
   - ViewPagerAndroid: react-native => @react-native-community/viewpager
   - add TypeScript typing of containerStyle

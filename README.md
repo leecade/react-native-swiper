@@ -316,6 +316,85 @@ Parameters:
 | index    | `number` | `undefined` | offset index |
 | animated |  `bool`  |   `true`    | offset index |
 
+### Space between pages
+
+`spaceBetween` is the distance between page edges in React Native layout units
+(default `0`). It works horizontally and vertically, with or without looping.
+It does not shrink the page content: a 300-wide page with `spaceBetween={10}`
+has a 310-unit snap interval. With a nonzero gap, the component uses
+`snapToInterval` instead of viewport-sized native paging.
+
+```jsx
+<Swiper width={300} height={240} spaceBetween={10} loop={false}>
+  <View><Text>First</Text></View>
+  <View><Text>Second</Text></View>
+</Swiper>
+```
+
+See `examples/components/SpaceBetween/index.tsx` for a runnable component.
+
+### Coordinated nested pages (optional entry point)
+
+Import `react-native-swiper/nested` only when you need same-direction,
+two-level nesting. The ordinary entry point does not import the optional
+native dependencies. Install compatible native versions and rebuild your app:
+
+```sh
+npm install react-native-gesture-handler react-native-reanimated react-native-worklets
+```
+
+The adapter was checked with React Native 0.83.1, Gesture Handler 2.30.0,
+Reanimated 4.2.1 and Worklets 0.7.2 on Android. Follow their native installation
+instructions, add `react-native-worklets/plugin` last in your Babel plugins,
+and wrap the screen in `GestureHandlerRootView` with `flex: 1`. iOS device
+validation is still pending. This is an optional modern-runtime adapter;
+the old example app's native dependencies need upgrading before running it.
+
+```jsx
+import NestedSwiper from 'react-native-swiper/nested'
+
+<NestedSwiper width={300} height={240} spaceBetween={10} bounces>
+  <NestedSwiper width={300} height={240}>
+    <View><Text>A1</Text></View>
+    <View><Text>A2</Text></View>
+  </NestedSwiper>
+  <NestedSwiper width={300} height={240}>
+    <View><Text>B1</Text></View>
+    <View><Text>B2</Text></View>
+    <View><Text>B3</Text></View>
+  </NestedSwiper>
+</NestedSwiper>
+```
+
+The child consumes the drag first. Its remaining distance moves the parent.
+Forward order is A1 → A2 → B1 → B2 → B3; going back from B1 enters A2.
+There is no wrap at either outer boundary. `bounces` enables bounded elastic
+feedback there. Pagination belongs to the root, flattens these five cards,
+and follows the visible UI position rather than waiting for a JS settled
+callback. Native offsets and drag calculations run on the UI thread.
+
+Constraints and options:
+
+- Use at most two levels, the same direction, and one child instance per
+  parent page. Ordinary unnested parent pages are also allowed.
+- `width` and `height` must be positive. Children inherit `horizontal` and
+  `spaceBetween` unless explicitly provided; directions must match.
+- Nested mode supports only `loop={false}`. It does not clone child instances.
+- Set `autoplay` and `autoplayTimeout` (seconds, default `2.5`) on the root.
+  One root timer advances children then parents, stops at the final card,
+  pauses while touched/animating, and restarts a full delay afterward.
+  Child `autoplay` settings do not create additional timers.
+- `index`, `onIndexChanged` and the ref methods `scrollTo`, `scrollBy`,
+  `getIndex` refer to the local swiper. `onNestedIndexChanged(index, total)`
+  reports the zero-based flattened visible page from the root.
+- `showsPagination`, `paginationStyle`, `dotStyle`, `dotColor` and
+  `activeDotColor` customize the root dots; child dots are hidden.
+
+See `examples/components/CoordinatedNested/index.tsx` for a neutral five-card
+example. For advanced adapters, core Swiper also exposes `ScrollViewComponent`,
+`onScrollViewRef`, and `commitIndex(index)`. The last method confirms an index
+after an external transport has moved the view; it does not perform scrolling.
+
 ### Examples
 
 ```bash

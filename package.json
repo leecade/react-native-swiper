@@ -5,7 +5,7 @@
     "react-native",
     "ios"
   ],
-  "version": "1.6.0-rc.2",
+  "version": "1.6.1",
   "description": "Swiper component for React Native.",
   "main": "index.js",
   "scripts": {
@@ -14,7 +14,9 @@
     "lint": "standard | snazzy",
     "update": "updtr",
     "precommit": "git diff --name-only --cached --relative | grep '\\.jsx\\?$' | xargs standard | snazzy; if [ $? -ne 0 ]; then exit 1; fi",
-    "test": "npm run lint"
+    "test": "npm run lint",
+    "test:features": "tsx --test test/*.test.ts",
+    "typecheck:nested": "tsc -p tsconfig.nested.json"
   },
   "pre-commit": {
     "run": [
@@ -57,7 +59,17 @@
     "rimraf": "^2.5.4",
     "snazzy": "^7.1.0",
     "standard": "^13.0.1",
-    "updtr": "^2.0.0"
+    "updtr": "^2.0.0",
+    "tsx": "^4.20.6",
+    "esbuild": "^0.25.11",
+    "typescript": "^5.9.3",
+    "react": "19.2.3",
+    "@types/react": "^19.2.2",
+    "@types/node": "^24.0.0",
+    "react-native": "0.83.1",
+    "react-native-gesture-handler": "2.30.0",
+    "react-native-reanimated": "4.2.1",
+    "react-native-worklets": "0.7.2"
   },
   "dependencies": {
     "prop-types": "^15.5.10"
@@ -65,6 +77,22 @@
   "config": {
     "commitizen": {
       "path": "cz-conventional-changelog"
+    }
+  },
+  "peerDependencies": {
+    "react-native-gesture-handler": ">=2.30.0 <3",
+    "react-native-reanimated": ">=4.2.0 <5",
+    "react-native-worklets": ">=0.7.0 <1"
+  },
+  "peerDependenciesMeta": {
+    "react-native-gesture-handler": {
+      "optional": true
+    },
+    "react-native-reanimated": {
+      "optional": true
+    },
+    "react-native-worklets": {
+      "optional": true
     }
   }
 }
