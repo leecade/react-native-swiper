@@ -9,6 +9,10 @@ declare module 'react-native-swiper' {
     // Basic
     // If true, the scroll view's children are arranged horizontally in a row instead of vertically in a column.
     horizontal?: ?boolean,
+    /** Space between viewport-sized pages. */
+    spaceBetween?: ?number,
+    ScrollViewComponent?: ?any,
+    onScrollViewRef?: ?(view: any) => void,
     // If no specify default enable fullscreen mode by flex: 1.
     loop?: ?boolean,
     // Index number of initial slide.
@@ -106,6 +110,7 @@ declare module 'react-native-swiper' {
 
   // eslint-disable-next-line no-undef
   declare export default class Swiper extends Component<SwiperProps> {
+    commitIndex(index: number): void;
     scrollBy(index: number, animated?: boolean): void;
   }
 }

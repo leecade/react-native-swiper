@@ -5,6 +5,7 @@ import {
   NativeScrollEvent,
   ScrollViewProps
 } from 'react-native'
+import * as React from 'react'
 import { Component } from 'react'
 
 declare module 'react-native-swiper' {
@@ -31,6 +32,10 @@ declare module 'react-native-swiper' {
     // Basic
     // If true, the scroll view's children are arranged horizontally in a row instead of vertically in a column.
     horizontal?: boolean
+    /** Space between viewport-sized pages, in React Native layout units. */
+    spaceBetween?: number
+    ScrollViewComponent?: React.ComponentType<any>
+    onScrollViewRef?: (view: any) => void
     // If no specify default enable fullscreen mode by flex: 1.
     loop?: boolean
     // Index number of initial slide.
@@ -141,6 +146,7 @@ declare module 'react-native-swiper' {
   }
 
   export default class Swiper extends Component<SwiperProps, SwiperState> {
+    commitIndex: (index: number) => void
     scrollBy: (index?: number, animated?: boolean) => void
     scrollTo: (index: number, animated?: boolean) => void
   }

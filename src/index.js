@@ -7,13 +7,13 @@ import PropTypes from 'prop-types'
 import {
   Text,
   View,
-  ViewPropTypes,
   ScrollView,
   Dimensions,
   TouchableOpacity,
   Platform,
   ActivityIndicator
 } from 'react-native'
+import { getSpaceBetween, getPageSize } from './geometry'
 
 /**
  * Default styles
@@ -103,6 +103,9 @@ export default class extends Component {
    */
   static propTypes = {
     horizontal: PropTypes.bool,
+    spaceBetween: PropTypes.number,
+    ScrollViewComponent: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
+    onScrollViewRef: PropTypes.func,
     children: PropTypes.node.isRequired,
     containerStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.number]),
     style: PropTypes.oneOfType([
@@ -156,6 +159,7 @@ export default class extends Component {
    */
   static defaultProps = {
     horizontal: true,
+    spaceBetween: 0,
     pagingEnabled: true,
     showsHorizontalScrollIndicator: false,
     showsVerticalScrollIndicator: false,
@@ -214,13 +218,17 @@ export default class extends Component {
     this.loopJumpTimer && clearTimeout(this.loopJumpTimer)
   }
 
-  UNSAFE_componentWillUpdate(nextProps, nextState) {
-    // If the index has changed, we notify the parent via the onIndexChanged callback
-    if (this.state.index !== nextState.index)
-      this.props.onIndexChanged(nextState.index)
-  }
-
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.index !== prevState.index) {
+      this.props.onIndexChanged(this.state.index)
+    }
+    if (getSpaceBetween(prevProps.spaceBetween) !== getSpaceBetween(this.props.spaceBetween)) {
+      const offset = { [this.state.dir]: (this.state.index + (this.props.loop && this.state.total > 1 ? 1 : 0)) * this.getStep() }
+      this.internals.offset = offset
+      this.internals.isScrolling = false
+      this.scrollView && this.scrollView.scrollTo({ ...offset, animated: false })
+      this.setState({ offset })
+    }
     // If autoplay props updated to true, autoplay immediately
     if (this.props.autoplay && !prevProps.autoplay) {
       this.autoplay()
@@ -284,7 +292,7 @@ export default class extends Component {
     }
 
     initState.offset[initState.dir] =
-      initState.dir === 'y' ? initState.height * props.index : initState.width * props.index
+      getPageSize(initState.dir === 'y' ? initState.height : initState.width, props.spaceBetween) * props.index
 
     this.internals = {
       ...this.internals,
@@ -292,6 +300,10 @@ export default class extends Component {
     }
     return initState
   }
+
+  getStep = (state = this.state) => getPageSize(
+    state.dir === 'y' ? state.height : state.width, this.props.spaceBetween
+  )
 
   // include internals with state
   fullState() {
@@ -309,7 +321,7 @@ export default class extends Component {
         setup++
       }
       offset[this.state.dir] =
-        this.state.dir === 'y' ? height * setup : width * setup
+        this.getStep({ ...this.state, width, height }) * setup
     }
 
     // only update the offset in state if needed, updating offset while swiping
@@ -344,18 +356,18 @@ export default class extends Component {
           if (this.state.index === 0) {
             scrollView.scrollTo(
               this.props.horizontal === false
-                ? { x: 0, y: this.state.height, animated: false }
-                : { x: this.state.width, y: 0, animated: false }
+                ? { x: 0, y: this.getStep(), animated: false }
+                : { x: this.getStep(), y: 0, animated: false }
             )
           } else if (this.state.index === this.state.total - 1) {
             this.props.horizontal === false
               ? this.scrollView.scrollTo({
                   x: 0,
-                  y: this.state.height * this.state.total,
+                  y: this.getStep() * this.state.total,
                   animated: false
                 })
               : this.scrollView.scrollTo({
-                  x: this.state.width * this.state.total,
+                  x: this.getStep() * this.state.total,
                   y: 0,
                   animated: false
                 })
@@ -417,11 +429,11 @@ export default class extends Component {
     if (!e.nativeEvent.contentOffset) {
       if (this.state.dir === 'x') {
         e.nativeEvent.contentOffset = {
-          x: e.nativeEvent.position * this.state.width
+          x: e.nativeEvent.position * this.getStep()
         }
       } else {
         e.nativeEvent.contentOffset = {
-          y: e.nativeEvent.position * this.state.height
+          y: e.nativeEvent.position * this.getStep()
         }
       }
     }
@@ -468,7 +480,7 @@ export default class extends Component {
       // Android not setting this onLayout first? https://github.com/leecade/react-native-swiper/issues/582
       this.internals.offset = {}
     const diff = offset[dir] - (this.internals.offset[dir] || 0)
-    const step = dir === 'x' ? state.width : state.height
+    const step = this.getStep()
     let loopJump = false
 
     // Do nothing if offset no change.
@@ -531,8 +543,8 @@ export default class extends Component {
     const diff = (this.props.loop ? 1 : 0) + index + this.state.index
     let x = 0
     let y = 0
-    if (state.dir === 'x') x = diff * state.width
-    if (state.dir === 'y') y = diff * state.height
+    if (state.dir === 'x') x = diff * this.getStep()
+    if (state.dir === 'y') y = diff * this.getStep()
 
     this.scrollView && this.scrollView.scrollTo({ x, y, animated })
 
@@ -569,12 +581,12 @@ export default class extends Component {
       return
 
     const state = this.state
-    const diff = this.state.index + (index - this.state.index)
+    const diff = index + (this.props.loop ? 1 : 0)
 
     let x = 0
     let y = 0
-    if (state.dir === 'x') x = diff * state.width
-    if (state.dir === 'y') y = diff * state.height
+    if (state.dir === 'x') x = diff * this.getStep()
+    if (state.dir === 'y') y = diff * this.getStep()
 
     this.scrollView && this.scrollView.scrollTo({ x, y, animated })
 
@@ -594,6 +606,14 @@ export default class extends Component {
         })
       })
     }
+  }
+
+  // Advanced controlled transports confirm an index only after moving the view.
+  commitIndex = index => {
+    const next = Math.max(0, Math.min(this.state.total - 1, index))
+    this.internals.offset = { [this.state.dir]: (next + (this.props.loop && this.state.total > 1 ? 1 : 0)) * this.getStep() }
+    this.internals.isScrolling = false
+    this.setState({ index: next, loopJump: false })
   }
 
   scrollViewPropOverrides = () => {
@@ -616,7 +636,9 @@ export default class extends Component {
         typeof props[prop] === 'function' &&
         prop !== 'onMomentumScrollEnd' &&
         prop !== 'renderPagination' &&
-        prop !== 'onScrollBeginDrag'
+        prop !== 'onScrollBeginDrag' &&
+        prop !== 'ScrollViewComponent' &&
+        prop !== 'onScrollViewRef'
       ) {
         let originResponder = props[prop]
         overrides[prop] = e => originResponder(e, this.fullState(), this)
@@ -755,6 +777,7 @@ export default class extends Component {
 
   refScrollView = view => {
     this.scrollView = view
+    this.props.onScrollViewRef && this.props.onScrollViewRef(view)
   }
 
   onPageScrollStateChanged = state => {
@@ -769,20 +792,25 @@ export default class extends Component {
   }
 
   renderScrollView = pages => {
+    const ScrollComponent = this.props.ScrollViewComponent || ScrollView
+    const gap = getSpaceBetween(this.props.spaceBetween)
     return (
-      <ScrollView
+      <ScrollComponent
         ref={this.refScrollView}
         {...this.props}
         {...this.scrollViewPropOverrides()}
         contentContainerStyle={[styles.wrapperIOS, this.props.style]}
         contentOffset={this.state.offset}
+        pagingEnabled={gap ? false : this.props.pagingEnabled}
+        snapToInterval={gap && this.props.pagingEnabled ? this.getStep() : this.props.snapToInterval}
+        decelerationRate={gap && this.props.pagingEnabled ? 'fast' : this.props.decelerationRate}
         onScrollBeginDrag={this.onScrollBegin}
         onMomentumScrollEnd={this.onScrollEnd}
         onScrollEndDrag={this.onScrollEndDrag}
         style={this.props.scrollViewStyle}
       >
         {pages}
-      </ScrollView>
+      </ScrollComponent>
     )
   }
 
@@ -808,6 +836,10 @@ export default class extends Component {
     let pages = []
 
     const pageStyle = [{ width: width, height: height }, styles.slide]
+    const gap = getSpaceBetween(this.props.spaceBetween)
+    const pageSpacing = last => this.state.dir === 'x'
+      ? { marginRight: last ? 0 : gap }
+      : { marginBottom: last ? 0 : gap }
     const pageStyleLoading = {
       width,
       height,
@@ -825,6 +857,7 @@ export default class extends Component {
         pages.push('0')
       }
 
+      const pageCount = pages.length
       pages = pages.map((page, i) => {
         if (loadMinimal) {
           if (
@@ -836,20 +869,20 @@ export default class extends Component {
             (loop && i === total - 1)
           ) {
             return (
-              <View style={pageStyle} key={i}>
+              <View style={[pageStyle, pageSpacing(i === pageCount - 1)]} key={i}>
                 {children[page]}
               </View>
             )
           } else {
             return (
-              <View style={pageStyleLoading} key={i}>
+              <View style={[pageStyleLoading, pageSpacing(i === pageCount - 1)]} key={i}>
                 {loadMinimalLoader ? loadMinimalLoader : <ActivityIndicator />}
               </View>
             )
           }
         } else {
           return (
-            <View style={pageStyle} key={i}>
+            <View style={[pageStyle, pageSpacing(i === pageCount - 1)]} key={i}>
               {children[page]}
             </View>
           )
